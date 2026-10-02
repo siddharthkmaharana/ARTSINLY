@@ -1,0 +1,319 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  BUYER
+  SELLER
+  ADMIN
+}
+
+enum ProductStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum PayoutStatus {
+  PENDING
+  PROCESSING
+  PAID
+  FAILED
+}
+
+model User {
+  id            String          @id @default(cuid())
+  email         String          @unique
+  name          String?
+  passwordHash  String?
+  role          Role            @default(BUYER)
+  avatar        String?
+  phone         String?
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  sellerProfile SellerProfile?
+  addresses     Address[]
+  orders        Order[]
+  cartItems     CartItem[]
+  wishlist      WishlistItem[]
+  reviews       Review[]
+  auditLogs     AuditLog[]
+
+  @@map("users")
+}
+
+model SellerProfile {
+  id              String      @id @default(cuid())
+  userId          String      @unique
+  shopName        String
+  slug            String      @unique
+  bio             String?     @db.Text
+  story           String?     @db.Text
+  craftTradition  String
+  state           String
+  locality        String?
+  isVerified      Boolean     @default(false)
+  bannerUrl       String?
+  avatarUrl       String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  products        Product[]
+  orderItems      OrderItem[]
+  payouts         Payout[]
+
+  @@map("seller_profiles")
+}
+
+model Region {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  state       String
+  description String?   @db.Text
+  imageUrl    String?
+  createdAt   DateTime  @default(now())
+
+  products    Product[]
+
+  @@map("regions")
+}
+
+model Category {
+  id          String      @id @default(cuid())
+  name        String
+  slug        String      @unique
+  description String?     @db.Text
+  imageUrl    String?
+  parentId    String?
+  createdAt   DateTime    @default(now())
+
+  parent      Category?   @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children    Category[]  @relation("CategoryHierarchy")
+  products    Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id                String        @id @default(cuid())
+  sellerId          String
+  categoryId        String
+  regionId          String?
+  title             String
+  slug              String        @unique
+  description       String        @db.Text
+  story             String?       @db.Text
+  dimensions        String?
+  materials         String?
+  careInstructions  String?       @db.Text
+  pricePaise        Int           // integer minor units (paise)
+  stock             Int           @default(0)
+  isMadeToOrder     Boolean       @default(false)
+  leadTimeDays      Int           @default(0)
+  status            ProductStatus @default(DRAFT)
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  seller            SellerProfile @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  category          Category      @relation(fields: [categoryId], references: [id])
+  region            Region?       @relation(fields: [regionId], references: [id])
+  images            ProductImage[]
+  cartItems         CartItem[]
+  orderItems        OrderItem[]
+  wishlistItems     WishlistItem[]
+  reviews           Review[]
+
+  @@map("products")
+}
+
+model ProductImage {
+  id          String    @id @default(cuid())
+  productId   String
+  url         String
+  altText     String?
+  displayOrder Int      @default(0)
+  isPrimary   Boolean   @default(false)
+
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_images")
+}
+
+model Address {
+  id            String    @id @default(cuid())
+  userId        String
+  fullName      String
+  addressLine1  String
+  addressLine2  String?
+  city          String
+  state         String
+  postalCode    String
+  country       String    @default("India")
+  phone         String
+  isDefault     Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("addresses")
+}
+
+model CartItem {
+  id          String    @id @default(cuid())
+  userId      String
+  productId   String
+  quantity    Int       @default(1)
+  createdAt   DateTime  @default(now())
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@map("cart_items")
+}
+
+model WishlistItem {
+  id          String    @id @default(cuid())
+  userId      String
+  productId   String
+  createdAt   DateTime  @default(now())
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@map("wishlist_items")
+}
+
+model Order {
+  id                String       @id @default(cuid())
+  orderNumber       String       @unique
+  buyerId           String
+  status            OrderStatus  @default(PENDING)
+  totalPaise        Int
+  shippingFeePaise  Int          @default(0)
+  taxPaise          Int          @default(0)
+  addressSnapshot   Json
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  buyer             User         @relation(fields: [buyerId], references: [id])
+  items             OrderItem[]
+  payments          Payment[]
+  shipments         Shipment[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id          String        @id @default(cuid())
+  orderId     String
+  productId   String
+  sellerId    String
+  title       String
+  pricePaise  Int
+  quantity    Int
+  createdAt   DateTime      @default(now())
+
+  order       Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product     Product       @relation(fields: [productId], references: [id])
+  seller      SellerProfile @relation(fields: [sellerId], references: [id])
+
+  @@map("order_items")
+}
+
+model Payment {
+  id          String        @id @default(cuid())
+  orderId     String
+  provider    String        // razorpay, stripe, etc.
+  referenceId String?
+  amountPaise Int
+  status      PaymentStatus @default(PENDING)
+  metadata    Json?
+  createdAt   DateTime      @default(now())
+
+  order       Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+model Shipment {
+  id             String    @id @default(cuid())
+  orderId        String
+  carrier        String
+  trackingNumber String?
+  status         String    @default("LABEL_CREATED")
+  shippedAt      DateTime?
+  deliveredAt    DateTime?
+  createdAt      DateTime  @default(now())
+
+  order          Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("shipments")
+}
+
+model Review {
+  id          String    @id @default(cuid())
+  productId   String
+  buyerId     String
+  rating      Int       // 1 to 5
+  title       String?
+  comment     String?   @db.Text
+  createdAt   DateTime  @default(now())
+
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  buyer       User      @relation(fields: [buyerId], references: [id], onDelete: Cascade)
+
+  @@map("reviews")
+}
+
+model Payout {
+  id          String       @id @default(cuid())
+  sellerId    String
+  amountPaise Int
+  status      PayoutStatus @default(PENDING)
+  referenceId String?
+  createdAt   DateTime     @default(now())
+
+  seller      SellerProfile @relation(fields: [sellerId], references: [id])
+
+  @@map("payouts")
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String
+  details   Json?
+  ipAddress String?
+  createdAt DateTime @default(now())
+
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("audit_logs")
+}
