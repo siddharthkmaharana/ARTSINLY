@@ -449,3 +449,48 @@ export const REVIEWS: Review[] = [
     locality: "Chennai, Tamil Nadu",
   },
 ];
+
+export interface GuildPairing {
+  id: string;
+  title: string;
+  categoryTag: string;
+  price: string;
+  imageUrl: string;
+  slug: string;
+}
+
+export const GUILD_PAIRINGS: GuildPairing[] = [
+  {
+    id: "guild-1",
+    title: "Hand-Carved Floral High-Relief Sheesham...",
+    categoryTag: "WOOD CARVING • RAJASTHAN",
+    price: "$700.00",
+    imageUrl: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80",
+    slug: "walnut-wood-intricate-lattice-carved-box",
+  },
+  {
+    id: "guild-2",
+    title: "Sacred Srinathji Gold-Leaf Pichwai...",
+    categoryTag: "MINIATURE PAINTING • RAJASTHAN",
+    price: "$1500.00",
+    imageUrl: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80",
+    slug: "jaipur-persian-quartz-blue-pottery-vessel",
+  },
+  {
+    id: "guild-3",
+    title: "Dhokra Primitive Tribal Bell-Metal Lost-...",
+    categoryTag: "METALWORK • WEST BENGAL",
+    price: "$190.00",
+    imageUrl: "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80",
+    slug: "dhokra-lost-wax-cast-brass-tribal-forest-lamp",
+  },
+  {
+    id: "guild-4",
+    title: "Zardozi Hand-Embroidered Velvet Wall...",
+    categoryTag: "ZARDOZI EMBROIDERY • UTTAR PRADESH",
+    price: "$540.00",
+    imageUrl: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=800&q=80",
+    slug: "heritage-ajrakh-indigo-hand-block-draped-throw",
+  },
+];
+
