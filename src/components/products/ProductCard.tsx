@@ -8,12 +8,14 @@ import { Heart, Check } from "lucide-react";
 
 interface ProductCardProps {
   product: Product;
+  variant?: "catalog" | "default";
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, variant = "default" }: ProductCardProps) {
   const { addToCart, toggleWishlist, isInWishlist } = useCart();
   const [isAdded, setIsAdded] = useState(false);
-  const inWishlist = isInWishlist(product.id);
+  const [localFavorited, setLocalFavorited] = useState(product.initialFavorited ?? false);
+  const inWishlist = isInWishlist(product.id) || localFavorited;
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -26,6 +28,7 @@ export function ProductCard({ product }: ProductCardProps) {
   const handleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    setLocalFavorited(!inWishlist);
     toggleWishlist(product.id);
   };
 
@@ -34,8 +37,92 @@ export function ProductCard({ product }: ProductCardProps) {
     product.images[0]?.url ||
     "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=800&q=80";
 
-  const displayPrice = product.priceDisplay || `$${(product.priceDollars || (product.pricePaise / 100 / 83)).toFixed(2)}`;
+  const displayPrice = product.priceDisplay || `$${(product.priceDollars || (product.pricePaise / 100 / 83)).toFixed(0)}`;
 
+  // Catalog Variant matching uploaded screenshot
+  if (variant === "catalog") {
+    return (
+      <div className="bg-[#ECE6DC]/60 border border-[#DDD5C8] rounded-xl p-3 flex flex-col group transition-all duration-300 hover:shadow-md hover:border-[#CCC2B2]">
+        {/* Product Image with Region Pill */}
+        <Link
+          href={`/products/${product.slug}`}
+          className="block relative aspect-square w-full rounded-lg overflow-hidden bg-[#E2DBD0]"
+        >
+          <img
+            src={primaryImage}
+            alt={product.title}
+            className="w-full h-full object-cover object-center group-hover:scale-103 transition-transform duration-500 ease-out"
+            loading="lazy"
+          />
+
+          {/* Region Tag Pill on top-left of image */}
+          <div className="absolute top-2.5 left-2.5">
+            <span className="bg-white/90 backdrop-blur-xs text-[#2A2926] text-[10px] font-medium px-2.5 py-0.5 rounded-full shadow-2xs border border-black/5">
+              {product.provenanceTag || product.state}
+            </span>
+          </div>
+        </Link>
+
+        {/* Card Content */}
+        <div className="pt-2.5 px-0.5 flex flex-col flex-grow justify-between">
+          <div>
+            {/* Craft on left | Artisan on right in italic */}
+            <div className="flex items-center justify-between text-[11px] mb-1 gap-2">
+              <span className="text-[#7A756D] font-normal truncate">
+                {product.craftType}
+              </span>
+              <span className="text-[#555049] italic truncate shrink-0">
+                {product.byline || product.artisan.artisanName}
+              </span>
+            </div>
+
+            {/* Title */}
+            <h3 className="font-serif text-[13px] sm:text-[14px] font-medium text-[#1E1E1C] leading-snug truncate hover:text-[#89714F] transition-colors mb-2.5">
+              <Link href={`/products/${product.slug}`}>
+                {product.shortTitle || product.title}
+              </Link>
+            </h3>
+          </div>
+
+          {/* Bottom Row: Price on left | Heart + Add button on right */}
+          <div className="pt-1 flex items-center justify-between gap-2">
+            <div className="text-sm sm:text-base font-semibold text-[#1E1E1C] tracking-tight">
+              {displayPrice}
+            </div>
+
+            <div className="flex items-center gap-1.5">
+              {/* Wishlist Button */}
+              <button
+                onClick={handleWishlist}
+                className="w-7 h-7 rounded-full border border-[#D5CFC5] bg-white flex items-center justify-center text-[#20201D] hover:border-[#1E1E1C] transition-colors shadow-2xs"
+                aria-label={inWishlist ? "Remove from wishlist" : "Add to wishlist"}
+              >
+                <Heart
+                  className={`w-3.5 h-3.5 transition-colors ${
+                    inWishlist ? "fill-[#C2410C] text-[#C2410C]" : "text-[#7A756D]"
+                  }`}
+                />
+              </button>
+
+              {/* Add Black Pill Button */}
+              <button
+                onClick={handleAddToCart}
+                className={`px-3.5 py-1 rounded-full text-xs font-semibold transition-all shadow-2xs ${
+                  isAdded
+                    ? "bg-[#52644B] text-white"
+                    : "bg-[#1E1E1C] hover:bg-black text-white"
+                }`}
+              >
+                {isAdded ? "Added" : "Add"}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Default Variant (e.g. for homepage / other sections)
   return (
     <div className="bg-[#FAF7F2] border border-[#E5E0D7] rounded-lg overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-md hover:border-[#D5CFC5]">
       {/* Product Image with Region Pill */}

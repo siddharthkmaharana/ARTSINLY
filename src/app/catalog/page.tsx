@@ -3,7 +3,7 @@
 import React, { Suspense } from "react";
 import { CatalogView } from "@/components/catalog/CatalogView";
 
-export default function ProductsPage() {
+export default function CatalogPage() {
   return (
     <Suspense
       fallback={

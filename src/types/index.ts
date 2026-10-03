@@ -88,6 +88,8 @@ export interface Product {
   status: ProductStatus;
   artisan: Artisan;
   images: ProductImage[];
+  shortTitle?: string;
+  initialFavorited?: boolean;
   rating: number;
   reviewCount: number;
   tags: string[];
