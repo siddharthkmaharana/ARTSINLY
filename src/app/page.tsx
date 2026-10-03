@@ -40,10 +40,10 @@ export default function HomePage() {
 
               <div className="flex flex-wrap items-center gap-4 pt-2">
                 <Link
-                  href="/products"
+                  href="/explore"
                   className="px-6 py-3.5 rounded bg-[#20201D] hover:bg-[#89714F] text-[#FFFFFF] text-sm font-medium transition-all shadow-sm flex items-center gap-2 group"
                 >
-                  <span>Explore Catalogue</span>
+                  <span>Explore</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
 

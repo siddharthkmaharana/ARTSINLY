@@ -127,10 +127,10 @@ export default function CheckoutPage() {
           <ShoppingBag className="w-12 h-12 text-[#89714F] mx-auto" />
           <h2 className="font-serif text-2xl font-medium text-[#20201D]">No items to checkout</h2>
           <Link
-            href="/products"
+            href="/explore"
             className="inline-block px-5 py-2.5 bg-[#20201D] text-white text-xs font-semibold rounded hover:bg-[#89714F]"
           >
-            Explore Catalogue
+            Explore
           </Link>
         </div>
       </div>

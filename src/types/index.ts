@@ -71,6 +71,11 @@ export interface Product {
   materials: string;
   careInstructions: string;
   pricePaise: number; // e.g. 240000 = ₹2,400
+  priceDollars?: number; // e.g. 126.99
+  priceDisplay?: string; // e.g. "$126.99"
+  excerpt?: string;
+  byline?: string;
+  provenanceTag?: string;
   originalPricePaise?: number;
   stock: number;
   isMadeToOrder: boolean;

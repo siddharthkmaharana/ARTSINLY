@@ -37,7 +37,7 @@ export default function CartPage() {
           </p>
           <div>
             <Link
-              href="/products"
+              href="/explore"
               className="inline-flex items-center gap-2 px-6 py-3 rounded bg-[#20201D] text-white text-xs font-semibold hover:bg-[#89714F] transition-colors"
             >
               <span>Explore Handmade Crafts</span>

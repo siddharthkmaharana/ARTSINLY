@@ -2,226 +2,166 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useCart } from "@/context/CartContext";
-import {
-  Search,
-  ShoppingBag,
-  Heart,
-  Menu,
-  X,
-  User,
-  Sparkles,
-  MapPin,
-  Store,
-} from "lucide-react";
+import { Menu, X } from "lucide-react";
 
 export function Header() {
-  const router = useRouter();
-  const { cartCount, wishlist } = useCart();
+  const pathname = usePathname();
+  const { cartCount } = useCart();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      router.push(`/products?q=${encodeURIComponent(searchQuery.trim())}`);
-      setIsSearchOpen(false);
-    }
-  };
+  const isExploreActive = pathname === "/products" || pathname === "/explore";
 
   return (
-    <header className="sticky top-0 z-40 bg-[#F8F5EF]/95 backdrop-blur-md border-b border-[#E8E0D2] transition-colors">
-      {/* Top Banner */}
-      <div className="bg-[#20201D] text-[#F8F5EF] text-xs py-1.5 px-4 text-center font-medium tracking-wide flex items-center justify-center gap-2">
-        <Sparkles className="w-3.5 h-3.5 text-[#DCD0BD]" />
-        <span>Authentic Indian Heritage Crafts • Fair Trade Direct from Master Artisans</span>
-        <span className="hidden md:inline text-[#DCD0BD]">• Pan-India Free Insured Shipping</span>
-      </div>
-
+    <header className="sticky top-0 z-40 bg-[#FAF8F5]/95 backdrop-blur-md border-b border-[#EAE5DD] transition-colors">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
-          {/* Mobile Menu Button */}
-          <div className="flex items-center lg:hidden">
-            <button
-              type="button"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="p-2 text-[#20201D] hover:text-[#89714F] focus:outline-none"
-              aria-label="Toggle menu"
-            >
-              {isMobileMenuOpen ? (
-                <X className="w-6 h-6" />
-              ) : (
-                <Menu className="w-6 h-6" />
-              )}
-            </button>
-          </div>
-
-          {/* Logo & Brand Identity */}
+        <div className="flex items-center justify-between h-16 sm:h-20">
+          {/* Logo on Left */}
           <div className="flex items-center">
-            <Link href="/" className="flex flex-col items-start group">
-              <span className="font-serif text-2xl sm:text-3xl tracking-tight text-[#20201D] group-hover:text-[#89714F] transition-colors font-medium">
-                ARTSINLY
-              </span>
-              <span className="text-[10px] tracking-[0.2em] uppercase text-[#89714F] font-medium -mt-1">
-                Regional Artisans
+            <Link href="/" className="group flex items-center">
+              <span className="font-serif text-2xl sm:text-[26px] tracking-tight text-[#1E1E1C] font-normal lowercase">
+                artisanale
               </span>
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8 text-sm font-medium tracking-normal text-[#20201D]">
+          {/* Desktop Navigation in Center */}
+          <nav className="hidden lg:flex items-center space-x-7 text-xs sm:text-[13px] font-medium text-[#403E39]">
             <Link
               href="/products"
-              className="hover:text-[#89714F] transition-colors"
+              className="hover:text-[#1E1E1C] transition-colors"
             >
-              Explore Catalogue
+              Reference View
             </Link>
+
+            {/* Explore with active dot indicator */}
             <Link
-              href="/artisans"
-              className="hover:text-[#89714F] transition-colors flex items-center gap-1.5"
+              href="/explore"
+              className="relative text-[#1E1E1C] hover:text-[#89714F] transition-colors py-1 flex flex-col items-center font-semibold"
             >
-              <span>Artisan Directory</span>
+              <span>Explore</span>
+              {isExploreActive ? (
+                <span className="w-1.5 h-1.5 rounded-full bg-[#1E1E1C] absolute -bottom-1" />
+              ) : null}
             </Link>
+
+            <Link
+              href="/products?filter=new"
+              className="hover:text-[#1E1E1C] transition-colors"
+            >
+              New Arrivals
+            </Link>
+
+            <Link
+              href="/products?filter=bestsellers"
+              className="hover:text-[#1E1E1C] transition-colors"
+            >
+              Best Sellers
+            </Link>
+
             <Link
               href="/about"
-              className="hover:text-[#89714F] transition-colors"
+              className="hover:text-[#1E1E1C] transition-colors"
             >
-              Our Heritage & Ethics
+              About Us
             </Link>
+
             <Link
-              href="/seller/dashboard"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-semibold bg-[#F4EFE6] text-[#89714F] hover:bg-[#89714F] hover:text-[#FFFFFF] border border-[#DCD0BD] transition-all"
+              href="/about#journal"
+              className="hover:text-[#1E1E1C] transition-colors"
             >
-              <Store className="w-3.5 h-3.5" />
-              <span>Seller Studio</span>
+              Blog
             </Link>
           </nav>
 
-          {/* Search, Wishlist, Cart & Profile */}
-          <div className="flex items-center space-x-4 sm:space-x-5">
-            {/* Search Bar (Desktop) */}
-            <form
-              onSubmit={handleSearch}
-              className="hidden md:flex items-center relative w-48 lg:w-64"
-            >
-              <input
-                type="text"
-                placeholder="Search crafts, regions..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-3 py-1.5 text-xs bg-[#FFFFFF] border border-[#DCD0BD] rounded-full text-[#20201D] placeholder-[#6B685F] focus:outline-none focus:border-[#89714F] focus:ring-1 focus:ring-[#89714F] transition-all"
-              />
-              <Search className="w-4 h-4 text-[#89714F] absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
-            </form>
-
-            {/* Mobile Search Toggle */}
-            <button
-              onClick={() => setIsSearchOpen(!isSearchOpen)}
-              className="p-1.5 text-[#20201D] hover:text-[#89714F] md:hidden"
-              aria-label="Search"
-            >
-              <Search className="w-5 h-5" />
-            </button>
-
-            {/* Wishlist */}
-            <Link
-              href="/buyer/dashboard?tab=wishlist"
-              className="relative p-1.5 text-[#20201D] hover:text-[#89714F] transition-colors"
-              aria-label="Wishlist"
-            >
-              <Heart className="w-5 h-5" />
-              {wishlist.length > 0 && (
-                <span className="absolute -top-1 -right-1 bg-[#89714F] text-[#FFFFFF] text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
-                  {wishlist.length}
-                </span>
-              )}
-            </Link>
-
-            {/* Cart */}
+          {/* Right items: Cart & Login */}
+          <div className="flex items-center space-x-5 text-xs sm:text-[13px] font-medium text-[#20201D]">
             <Link
               href="/cart"
-              className="relative p-1.5 text-[#20201D] hover:text-[#89714F] transition-colors flex items-center"
-              aria-label="Cart"
+              className="hover:text-[#89714F] transition-colors"
             >
-              <ShoppingBag className="w-5 h-5" />
-              {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-[#20201D] text-[#FFFFFF] text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
-                  {cartCount}
-                </span>
-              )}
+              Cart ({cartCount})
             </Link>
 
-            {/* Account Portal Dropdown / Link */}
             <Link
               href="/buyer/dashboard"
-              className="p-1.5 text-[#20201D] hover:text-[#89714F] transition-colors"
-              title="Buyer Account"
+              className="hover:text-[#89714F] transition-colors"
             >
-              <User className="w-5 h-5" />
+              Login
             </Link>
+
+            {/* Mobile Menu Toggle Button */}
+            <div className="flex items-center lg:hidden ml-2">
+              <button
+                type="button"
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="p-1.5 text-[#20201D] hover:text-[#89714F] focus:outline-none"
+                aria-label="Toggle menu"
+              >
+                {isMobileMenuOpen ? (
+                  <X className="w-5 h-5" />
+                ) : (
+                  <Menu className="w-5 h-5" />
+                )}
+              </button>
+            </div>
           </div>
         </div>
-
-        {/* Mobile Search Box */}
-        {isSearchOpen && (
-          <div className="py-3 px-2 md:hidden border-t border-[#E8E0D2]">
-            <form onSubmit={handleSearch} className="relative">
-              <input
-                type="text"
-                placeholder="Search blue pottery, Madhubani, Dokra..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                autoFocus
-                className="w-full pl-9 pr-4 py-2 text-sm bg-white border border-[#DCD0BD] rounded-lg text-[#20201D] focus:outline-none focus:border-[#89714F]"
-              />
-              <Search className="w-4 h-4 text-[#89714F] absolute left-3 top-1/2 -translate-y-1/2" />
-            </form>
-          </div>
-        )}
       </div>
 
       {/* Mobile Drawer */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden border-t border-[#E8E0D2] bg-[#F8F5EF] px-4 pt-3 pb-6 space-y-3">
+        <div className="lg:hidden border-t border-[#EAE5DD] bg-[#FAF8F5] px-4 pt-3 pb-6 space-y-3 text-sm">
+          <Link
+            href="/explore"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="block py-2 font-medium text-[#1E1E1C] hover:text-[#89714F]"
+          >
+            Explore
+          </Link>
           <Link
             href="/products"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="block py-2 text-base font-medium text-[#20201D] hover:text-[#89714F]"
+            className="block py-2 font-medium text-[#1E1E1C] hover:text-[#89714F]"
           >
-            Explore Catalogue
+            Reference View
           </Link>
           <Link
-            href="/artisans"
+            href="/products?filter=new"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="block py-2 text-base font-medium text-[#20201D] hover:text-[#89714F]"
+            className="block py-2 font-medium text-[#1E1E1C] hover:text-[#89714F]"
           >
-            Artisan Directory & Stories
+            New Arrivals
+          </Link>
+          <Link
+            href="/products?filter=bestsellers"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="block py-2 font-medium text-[#1E1E1C] hover:text-[#89714F]"
+          >
+            Best Sellers
           </Link>
           <Link
             href="/about"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="block py-2 text-base font-medium text-[#20201D] hover:text-[#89714F]"
+            className="block py-2 font-medium text-[#1E1E1C] hover:text-[#89714F]"
           >
-            Heritage & Fair-Trade Ethics
+            About Us
           </Link>
-          <div className="pt-2 border-t border-[#E8E0D2] flex flex-col gap-2">
+          <div className="pt-2 border-t border-[#EAE5DD] flex items-center justify-between">
+            <Link
+              href="/cart"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="py-1 text-sm font-semibold text-[#1E1E1C]"
+            >
+              Cart ({cartCount})
+            </Link>
             <Link
               href="/seller/dashboard"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="flex items-center justify-center gap-2 py-2.5 px-4 bg-[#20201D] text-[#FFFFFF] rounded text-sm font-medium hover:bg-[#89714F] transition-colors"
+              className="py-1 text-sm font-semibold text-[#89714F]"
             >
-              <Store className="w-4 h-4" />
-              <span>Seller Studio & Inventory</span>
-            </Link>
-            <Link
-              href="/buyer/dashboard"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="flex items-center justify-center gap-2 py-2 px-4 border border-[#DCD0BD] text-[#20201D] rounded text-sm font-medium hover:bg-[#F3ECE1] transition-colors"
-            >
-              <User className="w-4 h-4" />
-              <span>My Orders & Addresses</span>
+              Seller Studio
             </Link>
           </div>
         </div>
