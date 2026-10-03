@@ -205,6 +205,19 @@ export const PRODUCTS: Product[] = [
     careInstructions: "Wipe with a soft dry or slightly damp cloth. Avoid submerging in water.",
     priceDollars: 126.99,
     priceDisplay: "$126.99",
+    originalPriceDisplay: "$155.00",
+    badgeText: "Direct Artisan Pricing",
+    subtitle: "Minimalist Abstract Matte Decor for Living Room, Shelf & Tabletop Styling",
+    colorSwatches: [
+      { name: "Raw Terracotta", hex: "#8A4B38" },
+      { name: "Sand Matte", hex: "#C8BEAF" },
+    ],
+    bullets: [
+      "Authentic raw smoked terracotta with burnished finish",
+      "Hand-painted indigenous geometric motifs using iron-oxide minerals",
+      "Wheel-thrown and low-fired in traditional wood-burning village kilns",
+      "Treated with organic beeswax sealant on the interior",
+    ],
     pricePaise: 1045000,
     originalPricePaise: 1250000,
     stock: 6,
@@ -215,9 +228,19 @@ export const PRODUCTS: Product[] = [
     images: [
       {
         id: "img-vase-1",
-        url: "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=1000&q=85",
-        altText: "Modern Ethnic Ceramic Vase – Terracotta Vase with Indigenous Pattern on stone stand",
+        url: "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=1200&q=85",
+        altText: "Modern Ethnic Ceramic Vase – Terracotta Vase with Indigenous Pattern on marble pedestal",
         isPrimary: true,
+      },
+      {
+        id: "img-vase-2",
+        url: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=1000&q=85",
+        altText: "Artisanal handcrafted ceramic plates and dishes on wooden workshop table",
+      },
+      {
+        id: "img-vase-3",
+        url: "https://images.unsplash.com/photo-1581783342308-f792dbdd27c5?auto=format&fit=crop&w=1000&q=85",
+        altText: "Minimal white ceramic single flower vase on clean white reflective surface",
       },
     ],
     rating: 4.9,

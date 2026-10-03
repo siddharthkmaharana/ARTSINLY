@@ -73,6 +73,11 @@ export interface Product {
   pricePaise: number; // e.g. 240000 = ₹2,400
   priceDollars?: number; // e.g. 126.99
   priceDisplay?: string; // e.g. "$126.99"
+  originalPriceDisplay?: string; // e.g. "$155.00"
+  badgeText?: string; // e.g. "Direct Artisan Pricing"
+  subtitle?: string; // e.g. "Minimalist Abstract Matte Decor for Living Room, Shelf & Tabletop Styling"
+  colorSwatches?: { name: string; hex: string }[];
+  bullets?: string[];
   excerpt?: string;
   byline?: string;
   provenanceTag?: string;
