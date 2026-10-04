@@ -13,7 +13,15 @@ export function Header() {
   const [activeRole, setActiveRole] = useState<"collector" | "artisan" | "admin">("collector");
 
   const isCatalogActive = pathname.startsWith("/catalog") || pathname.startsWith("/products");
-  const isExploreActive = pathname.startsWith("/explore") && !isCatalogActive;
+  const isArtisansActive = pathname.startsWith("/artisans");
+  const isNewArrivalsActive = pathname.startsWith("/new-arrivals");
+  const isBestSellersActive = pathname.startsWith("/best-sellers");
+  const isAboutActive = pathname.startsWith("/about");
+  const isExploreActive =
+    pathname.startsWith("/explore") &&
+    !isCatalogActive &&
+    !isNewArrivalsActive &&
+    !isBestSellersActive;
 
   return (
     <header className="sticky top-0 z-40 bg-[#FAF8F5]/95 backdrop-blur-md border-b border-[#EAE5DD] transition-colors">
@@ -101,39 +109,63 @@ export function Header() {
               ) : null}
             </Link>
 
+            {/* Our Artisans with black dot underneath when active */}
             <Link
               href="/artisans"
-              className="hover:text-[#1E1E1C] transition-colors"
+              className={`relative hover:text-[#1E1E1C] transition-colors py-1 flex flex-col items-center ${
+                isArtisansActive ? "text-[#1E1E1C] font-semibold" : "text-[#403E39]"
+              }`}
             >
-              Our Artisans
+              <span>Our Artisans</span>
+              {isArtisansActive ? (
+                <span className="w-1.5 h-1.5 rounded-full bg-[#1E1E1C] absolute -bottom-1" />
+              ) : null}
             </Link>
 
+            {/* New Arrivals with black dot underneath when active */}
             <Link
-              href="/explore?filter=new"
-              className="hover:text-[#1E1E1C] transition-colors"
+              href="/new-arrivals"
+              className={`relative hover:text-[#1E1E1C] transition-colors py-1 flex flex-col items-center ${
+                isNewArrivalsActive ? "text-[#1E1E1C] font-semibold" : "text-[#403E39]"
+              }`}
             >
-              New Arrivals
+              <span>New Arrivals</span>
+              {isNewArrivalsActive ? (
+                <span className="w-1.5 h-1.5 rounded-full bg-[#1E1E1C] absolute -bottom-1" />
+              ) : null}
             </Link>
 
+            {/* Best Sellers with black dot underneath when active */}
             <Link
-              href="/explore?filter=bestsellers"
-              className="hover:text-[#1E1E1C] transition-colors"
+              href="/best-sellers"
+              className={`relative hover:text-[#1E1E1C] transition-colors py-1 flex flex-col items-center ${
+                isBestSellersActive ? "text-[#1E1E1C] font-semibold" : "text-[#403E39]"
+              }`}
             >
-              Best Sellers
+              <span>Best Sellers</span>
+              {isBestSellersActive ? (
+                <span className="w-1.5 h-1.5 rounded-full bg-[#1E1E1C] absolute -bottom-1" />
+              ) : null}
             </Link>
 
+            {/* About Us with black dot underneath when active */}
             <Link
               href="/about"
-              className="hover:text-[#1E1E1C] transition-colors"
+              className={`relative hover:text-[#1E1E1C] transition-colors py-1 flex flex-col items-center ${
+                isAboutActive ? "text-[#1E1E1C] font-semibold" : "text-[#403E39]"
+              }`}
             >
-              About Us
+              <span>About Us</span>
+              {isAboutActive ? (
+                <span className="w-1.5 h-1.5 rounded-full bg-[#1E1E1C] absolute -bottom-1" />
+              ) : null}
             </Link>
 
             <Link
               href="/about#journal"
-              className="hover:text-[#1E1E1C] transition-colors"
+              className="hover:text-[#1E1E1C] transition-colors py-1 flex flex-col items-center"
             >
-              Blog
+              <span>Blog</span>
             </Link>
           </nav>
 
@@ -198,14 +230,14 @@ export function Header() {
             Our Artisans
           </Link>
           <Link
-            href="/explore?filter=new"
+            href="/new-arrivals"
             onClick={() => setIsMobileMenuOpen(false)}
             className="block py-2 font-medium text-[#1E1E1C] hover:text-[#89714F]"
           >
             New Arrivals
           </Link>
           <Link
-            href="/explore?filter=bestsellers"
+            href="/best-sellers"
             onClick={() => setIsMobileMenuOpen(false)}
             className="block py-2 font-medium text-[#1E1E1C] hover:text-[#89714F]"
           >
