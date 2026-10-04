@@ -17,11 +17,15 @@ export function Header() {
   const isNewArrivalsActive = pathname.startsWith("/new-arrivals");
   const isBestSellersActive = pathname.startsWith("/best-sellers");
   const isAboutActive = pathname.startsWith("/about");
+  const isBlogActive = pathname.startsWith("/blog");
   const isExploreActive =
     pathname.startsWith("/explore") &&
     !isCatalogActive &&
     !isNewArrivalsActive &&
-    !isBestSellersActive;
+    !isBestSellersActive &&
+    !isArtisansActive &&
+    !isAboutActive &&
+    !isBlogActive;
 
   return (
     <header className="sticky top-0 z-40 bg-[#FAF8F5]/95 backdrop-blur-md border-b border-[#EAE5DD] transition-colors">
@@ -161,11 +165,17 @@ export function Header() {
               ) : null}
             </Link>
 
+            {/* Blog with black dot underneath when active */}
             <Link
-              href="/about#journal"
-              className="hover:text-[#1E1E1C] transition-colors py-1 flex flex-col items-center"
+              href="/blog"
+              className={`relative hover:text-[#1E1E1C] transition-colors py-1 flex flex-col items-center ${
+                isBlogActive ? "text-[#1E1E1C] font-semibold" : "text-[#403E39]"
+              }`}
             >
               <span>Blog</span>
+              {isBlogActive ? (
+                <span className="w-1.5 h-1.5 rounded-full bg-[#1E1E1C] absolute -bottom-1" />
+              ) : null}
             </Link>
           </nav>
 
@@ -249,6 +259,13 @@ export function Header() {
             className="block py-2 font-medium text-[#1E1E1C] hover:text-[#89714F]"
           >
             About Us
+          </Link>
+          <Link
+            href="/blog"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="block py-2 font-medium text-[#1E1E1C] hover:text-[#89714F]"
+          >
+            Blog
           </Link>
           <div className="pt-2 border-t border-[#EAE5DD] flex items-center justify-between">
             <Link
