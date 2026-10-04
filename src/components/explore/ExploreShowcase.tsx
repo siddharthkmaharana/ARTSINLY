@@ -69,9 +69,9 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
 
   const displayPrice =
     currentProduct.priceDisplay ||
-    `$${(currentProduct.priceDollars || 126.99).toFixed(2)}`;
+    `₹${(currentProduct.priceDollars || 127).toFixed(0)}`;
   const displayOriginalPrice =
-    currentProduct.originalPriceDisplay || "$155.00";
+    currentProduct.originalPriceDisplay || "₹155";
   const badgeText = "Direct Artisan Remuneration";
   const subtitle =
     currentProduct.subtitle ||

@@ -37,7 +37,7 @@ export function ProductCard({ product, variant = "default" }: ProductCardProps) 
     product.images[0]?.url ||
     "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=800&q=80";
 
-  const displayPrice = product.priceDisplay || `$${(product.priceDollars || (product.pricePaise / 100 / 83)).toFixed(0)}`;
+  const displayPrice = product.priceDisplay || `₹${(product.priceDollars || (product.pricePaise / 100)).toFixed(0)}`;
 
   // Catalog Variant matching uploaded screenshot
   if (variant === "catalog") {

@@ -109,7 +109,7 @@ export function CatalogView() {
       }
 
       // 4. Price Cap Filter
-      const price = product.priceDollars || (product.pricePaise / 100 / 83);
+      const price = product.priceDollars || (product.pricePaise / 100);
       if (price > priceCap) {
         return false;
       }
@@ -268,7 +268,7 @@ export function CatalogView() {
                   PRICE CAP
                 </span>
                 <span className="text-xs font-bold text-[#1E1E1C]">
-                  ${priceCap}
+                  ₹{priceCap}
                 </span>
               </div>
               <input
@@ -281,8 +281,8 @@ export function CatalogView() {
                 className="w-full h-1.5 bg-[#1E1E1C] rounded-lg appearance-none cursor-pointer accent-[#1E1E1C]"
               />
               <div className="flex items-center justify-between text-[10px] text-[#8C877E] mt-1.5 font-medium">
-                <span>$100</span>
-                <span>$1,500+</span>
+                <span>₹100</span>
+                <span>₹1,500+</span>
               </div>
             </div>
 
