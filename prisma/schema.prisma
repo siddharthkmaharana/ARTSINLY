@@ -43,6 +43,7 @@ enum PayoutStatus {
   FAILED
 }
 
+// 1. Users
 model User {
   id            String          @id @default(cuid())
   email         String          @unique
@@ -57,6 +58,7 @@ model User {
   sellerProfile SellerProfile?
   addresses     Address[]
   orders        Order[]
+  cart          Cart?
   cartItems     CartItem[]
   wishlist      WishlistItem[]
   reviews       Review[]
@@ -65,30 +67,35 @@ model User {
   @@map("users")
 }
 
+// 2. Seller Profiles
 model SellerProfile {
-  id              String      @id @default(cuid())
-  userId          String      @unique
-  shopName        String
-  slug            String      @unique
-  bio             String?     @db.Text
-  story           String?     @db.Text
-  craftTradition  String
-  state           String
-  locality        String?
-  isVerified      Boolean     @default(false)
-  bannerUrl       String?
-  avatarUrl       String?
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
+  id                String      @id @default(cuid())
+  userId            String      @unique
+  shopName          String
+  slug              String      @unique
+  artisanName       String?
+  bio               String?     @db.Text
+  story             String?     @db.Text
+  craftTradition    String
+  state             String
+  locality          String?
+  giCode            String?
+  isVerified        Boolean     @default(false)
+  yearsOfExperience Int         @default(0)
+  bannerUrl         String?
+  avatarUrl         String?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
 
-  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  products        Product[]
-  orderItems      OrderItem[]
-  payouts         Payout[]
+  user              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  products          Product[]
+  orderItems        OrderItem[]
+  payouts           Payout[]
 
   @@map("seller_profiles")
 }
 
+// Regional & Provenance Taxonomy
 model Region {
   id          String    @id @default(cuid())
   name        String
@@ -103,6 +110,7 @@ model Region {
   @@map("regions")
 }
 
+// Category Taxonomy
 model Category {
   id          String      @id @default(cuid())
   name        String
@@ -119,30 +127,35 @@ model Category {
   @@map("categories")
 }
 
+// 3. Products
 model Product {
-  id                String        @id @default(cuid())
+  id                String          @id @default(cuid())
   sellerId          String
   categoryId        String
   regionId          String?
   title             String
-  slug              String        @unique
-  description       String        @db.Text
-  story             String?       @db.Text
+  slug              String          @unique
+  description       String          @db.Text
+  story             String?         @db.Text
+  craftType         String?
+  provenanceTag     String?
+  giCode            String?
   dimensions        String?
   materials         String?
-  careInstructions  String?       @db.Text
-  pricePaise        Int           // integer minor units (paise)
-  stock             Int           @default(0)
-  isMadeToOrder     Boolean       @default(false)
-  leadTimeDays      Int           @default(0)
-  status            ProductStatus @default(DRAFT)
-  createdAt         DateTime      @default(now())
-  updatedAt         DateTime      @updatedAt
+  careInstructions  String?         @db.Text
+  basePricePaise    Int             // integer minor units (paise: e.g. 12699 = ₹126.99)
+  isMadeToOrder     Boolean         @default(false)
+  leadTimeDays      Int             @default(0)
+  status            ProductStatus   @default(PUBLISHED)
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
 
-  seller            SellerProfile @relation(fields: [sellerId], references: [id], onDelete: Cascade)
-  category          Category      @relation(fields: [categoryId], references: [id])
-  region            Region?       @relation(fields: [regionId], references: [id])
+  seller            SellerProfile   @relation(fields: [sellerId], references: [id], onDelete: Cascade)
+  category          Category        @relation(fields: [categoryId], references: [id])
+  region            Region?         @relation(fields: [regionId], references: [id])
   images            ProductImage[]
+  variants          ProductVariant[]
+  inventory         Inventory?
   cartItems         CartItem[]
   orderItems        OrderItem[]
   wishlistItems     WishlistItem[]
@@ -152,16 +165,145 @@ model Product {
 }
 
 model ProductImage {
-  id          String    @id @default(cuid())
-  productId   String
-  url         String
-  altText     String?
-  displayOrder Int      @default(0)
-  isPrimary   Boolean   @default(false)
+  id            String    @id @default(cuid())
+  productId     String
+  url           String
+  altText       String?
+  displayOrder  Int       @default(0)
+  isPrimary     Boolean   @default(false)
 
-  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  product       Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
 
   @@map("product_images")
+}
+
+// 4. Product Variants
+model ProductVariant {
+  id                  String      @id @default(cuid())
+  productId           String
+  sku                 String      @unique
+  name                String      // e.g. "Raw Terracotta - 14\" H", "Sand Matte Finish"
+  colorName           String?     // e.g. "Raw Terracotta"
+  colorHex            String?     // e.g. "#8A4B38"
+  sizeOption          String?     // e.g. "14\" H × 8\" D"
+  materialOption      String?     // e.g. "Natural Terracotta"
+  pricePaise          Int         // integer minor units (paise)
+  compareAtPricePaise Int?        // original price for strike-through
+  isDefault           Boolean     @default(false)
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+
+  product             Product     @relation(fields: [productId], references: [id], onDelete: Cascade)
+  inventory           Inventory?
+  cartItems           CartItem[]
+  orderItems          OrderItem[]
+
+  @@map("product_variants")
+}
+
+// 5. Inventory Tracking
+model Inventory {
+  id                  String          @id @default(cuid())
+  productId           String          @unique
+  variantId           String?         @unique
+  quantity            Int             @default(0) // Available on-hand quantity
+  reservedQuantity    Int             @default(0) // Reserved in pending orders/checkouts
+  lowStockThreshold   Int             @default(2) // Alert trigger
+  sku                 String?
+  updatedAt           DateTime        @updatedAt
+
+  product             Product         @relation(fields: [productId], references: [id], onDelete: Cascade)
+  variant             ProductVariant? @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  @@map("inventories")
+}
+
+// 6. Carts & Cart Items
+model Cart {
+  id            String      @id @default(cuid())
+  userId        String?     @unique
+  sessionToken  String?     @unique // supports guest checkout & persistent browser sessions
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  user          User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items         CartItem[]
+
+  @@map("carts")
+}
+
+model CartItem {
+  id          String          @id @default(cuid())
+  cartId      String
+  userId      String?
+  productId   String
+  variantId   String?
+  quantity    Int             @default(1)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  cart        Cart            @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  user        User?           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product     Product         @relation(fields: [productId], references: [id], onDelete: Cascade)
+  variant     ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+
+  @@unique([cartId, productId, variantId])
+  @@map("cart_items")
+}
+
+model WishlistItem {
+  id          String    @id @default(cuid())
+  userId      String
+  productId   String
+  createdAt   DateTime  @default(now())
+
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, productId])
+  @@map("wishlist_items")
+}
+
+// 7. Orders & Order Items
+model Order {
+  id                String       @id @default(cuid())
+  orderNumber       String       @unique
+  buyerId           String
+  status            OrderStatus  @default(PENDING)
+  currency          String       @default("INR")
+  totalPaise        Int
+  subtotalPaise     Int
+  shippingFeePaise  Int          @default(0)
+  taxPaise          Int          @default(0)
+  addressSnapshot   Json
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  buyer             User         @relation(fields: [buyerId], references: [id])
+  items             OrderItem[]
+  payments          Payment[]
+  shipments         Shipment[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id          String          @id @default(cuid())
+  orderId     String
+  productId   String
+  variantId   String?
+  sellerId    String
+  title       String
+  pricePaise  Int
+  quantity    Int
+  createdAt   DateTime        @default(now())
+
+  order       Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product     Product         @relation(fields: [productId], references: [id])
+  variant     ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+  seller      SellerProfile   @relation(fields: [sellerId], references: [id])
+
+  @@map("order_items")
 }
 
 model Address {
@@ -181,70 +323,6 @@ model Address {
   user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("addresses")
-}
-
-model CartItem {
-  id          String    @id @default(cuid())
-  userId      String
-  productId   String
-  quantity    Int       @default(1)
-  createdAt   DateTime  @default(now())
-
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, productId])
-  @@map("cart_items")
-}
-
-model WishlistItem {
-  id          String    @id @default(cuid())
-  userId      String
-  productId   String
-  createdAt   DateTime  @default(now())
-
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, productId])
-  @@map("wishlist_items")
-}
-
-model Order {
-  id                String       @id @default(cuid())
-  orderNumber       String       @unique
-  buyerId           String
-  status            OrderStatus  @default(PENDING)
-  totalPaise        Int
-  shippingFeePaise  Int          @default(0)
-  taxPaise          Int          @default(0)
-  addressSnapshot   Json
-  createdAt         DateTime     @default(now())
-  updatedAt         DateTime     @updatedAt
-
-  buyer             User         @relation(fields: [buyerId], references: [id])
-  items             OrderItem[]
-  payments          Payment[]
-  shipments         Shipment[]
-
-  @@map("orders")
-}
-
-model OrderItem {
-  id          String        @id @default(cuid())
-  orderId     String
-  productId   String
-  sellerId    String
-  title       String
-  pricePaise  Int
-  quantity    Int
-  createdAt   DateTime      @default(now())
-
-  order       Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  product     Product       @relation(fields: [productId], references: [id])
-  seller      SellerProfile @relation(fields: [sellerId], references: [id])
-
-  @@map("order_items")
 }
 
 model Payment {
@@ -277,17 +355,20 @@ model Shipment {
   @@map("shipments")
 }
 
+// 8. Reviews
 model Review {
-  id          String    @id @default(cuid())
-  productId   String
-  buyerId     String
-  rating      Int       // 1 to 5
-  title       String?
-  comment     String?   @db.Text
-  createdAt   DateTime  @default(now())
+  id                  String    @id @default(cuid())
+  productId           String
+  buyerId             String
+  rating              Int       // 1 to 5
+  title               String?
+  comment             String?   @db.Text
+  isVerifiedPurchase  Boolean   @default(true)
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
 
-  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
-  buyer       User      @relation(fields: [buyerId], references: [id], onDelete: Cascade)
+  product             Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  buyer               User      @relation(fields: [buyerId], references: [id], onDelete: Cascade)
 
   @@map("reviews")
 }
