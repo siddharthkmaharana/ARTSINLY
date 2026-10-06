@@ -89,42 +89,6 @@ export default function HomePage() {
     },
   ];
 
-  // 3 Dispatches & Essays matching the Blog page
-  const featuredStories = [
-    {
-      id: "blog-1",
-      slug: "the-sacred-smoke-kilns-of-molela",
-      category: "CRAFT HERITAGE",
-      readTime: "6 MIN READ",
-      title: "The Sacred Smoke Kilns of Molela",
-      excerpt:
-        "On the banks of river Banas, clay is venerated as divine mother earth. Explore how terracotta votive plaques preserve 900 years of tribal lore.",
-      imageUrl:
-        "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?auto=format&fit=crop&w=1000&q=85",
-    },
-    {
-      id: "blog-2",
-      slug: "ajrakh-printing-in-synchrony-with-the-stars",
-      category: "TEXTILE ALCHEMY",
-      readTime: "8 MIN READ",
-      title: "Ajrakh: Printing In Synchrony with the Stars",
-      excerpt:
-        "Derived from 'Azrak', meaning blue in Arabic, Ajrakh is not merely textile printing—it is astronomy, river biochemistry, and devotional discipline.",
-      imageUrl:
-        "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1000&q=85",
-    },
-    {
-      id: "blog-3",
-      slug: "why-imperfection-is-the-true-mark-of-heritage",
-      category: "DESIGN PHILOSOPHY",
-      readTime: "5 MIN READ",
-      title: "Why Imperfection is the True Mark of Heritage",
-      excerpt:
-        "In an era of synthetic 3D printing, the uneven kiss of firewood kiln smoke and the tremor of an artisan's hand is the ultimate luxury.",
-      imageUrl:
-        "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=1000&q=85",
-    },
-  ];
 
   return (
     <div className="bg-[#FAF7F2] min-h-screen text-[#1E1E1C]">
@@ -433,78 +397,8 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 5. Stories Behind The Kilns: Dispatches & Essays */}
-      <section className="py-16 sm:py-20 border-b border-[#EAE5DD]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
-            <div>
-              <span className="text-[10px] sm:text-[11px] font-semibold text-[#C2410C] uppercase tracking-[0.2em] block mb-1">
-                DISPATCHES & ESSAYS
-              </span>
-              <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-normal text-[#1E1E1C] tracking-tight">
-                Stories Behind The Kilns
-              </h2>
-              <p className="text-xs text-[#6E6A62] mt-1 max-w-lg leading-relaxed">
-                Curatorial field notes documenting the sacred geometry, earth pigments, and oral poetry of rural guild masters.
-              </p>
-            </div>
-            <Link
-              href="/blog"
-              className="text-xs font-semibold text-[#1E1E1C] hover:text-[#C2410C] transition-colors inline-flex items-center gap-1 shrink-0"
-            >
-              <span>Read The Gazette</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
-            {featuredStories.map((post) => (
-              <Link
-                key={post.id}
-                href={`/blog/${post.slug}`}
-                className="bg-[#F4EFE6]/60 border border-[#E3DDD1] rounded-2xl p-3.5 sm:p-4 hover:shadow-md hover:border-[#D5CFC5] transition-all flex flex-col justify-between group"
-              >
-                <div>
-                  <div className="relative aspect-[4/3] w-full rounded-xl overflow-hidden bg-[#ECE6DC] mb-4">
-                    <img
-                      src={post.imageUrl}
-                      alt={post.title}
-                      className="w-full h-full object-cover object-center group-hover:scale-103 transition-transform duration-500 ease-out"
-                      loading="lazy"
-                    />
-                  </div>
-
-                  <div className="flex items-center justify-between text-[10px] sm:text-[11px] tracking-wider mb-2">
-                    <span className="text-[#8C877E] font-semibold uppercase tracking-wider">
-                      {post.category}
-                    </span>
-                    <span className="text-[#A8A29E] tracking-wider uppercase">
-                      {post.readTime}
-                    </span>
-                  </div>
-
-                  <h3 className="font-serif text-lg sm:text-[19px] font-medium text-[#1E1E1C] leading-snug mb-2 group-hover:text-[#C2410C] transition-colors">
-                    {post.title}
-                  </h3>
-
-                  <p className="text-xs sm:text-[12.5px] text-[#6E6A62] leading-relaxed mb-6 font-normal">
-                    {post.excerpt}
-                  </p>
-                </div>
-
-                <div className="pt-3.5 border-t border-[#E5DFD4] mt-auto">
-                  <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1E1E1C] group-hover:text-[#C2410C] transition-colors">
-                    <span>Read Essay</span>
-                    <ArrowUpRight className="w-3.5 h-3.5 stroke-[2.2]" />
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 6. The Maison Manifesto: High Luxury Dark Editorial Pavilion */}
+      {/* 5. The Maison Manifesto: High Luxury Dark Editorial Pavilion */}
       <section className="py-20 sm:py-28 bg-[#1A1A18] text-[#FAF7F2] relative overflow-hidden">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
           <span className="text-[10px] sm:text-[11px] font-semibold text-[#C2410C] tracking-[0.25em] uppercase">
