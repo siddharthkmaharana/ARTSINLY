@@ -4,13 +4,19 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCart } from "@/context/CartContext";
-import { ShoppingBag, Menu, X } from "lucide-react";
+import { ShoppingBag, Menu, X, ShieldCheck, Store } from "lucide-react";
 
 export function Header() {
   const pathname = usePathname();
   const { cartCount } = useCart();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeRole, setActiveRole] = useState<"collector" | "artisan" | "admin">("collector");
+
+  const currentRole: "collector" | "artisan" | "admin" = pathname.startsWith("/admin")
+    ? "admin"
+    : pathname.startsWith("/seller") || pathname.startsWith("/artisan-studio")
+    ? "artisan"
+    : activeRole;
 
   const isCatalogActive = pathname.startsWith("/catalog") || pathname.startsWith("/products");
   const isArtisansActive = pathname.startsWith("/artisans");
@@ -38,33 +44,34 @@ export function Header() {
 
         <div className="hidden md:flex items-center gap-4">
           <span className="text-[#9E988E]">Role Mode:</span>
-          <button
+          <Link
+            href="/"
             onClick={() => setActiveRole("collector")}
             className={`px-2.5 py-0.5 rounded-full text-[10px] font-semibold transition-all ${
-              activeRole === "collector"
+              currentRole === "collector"
                 ? "bg-[#1E1E1C] text-white shadow-2xs"
                 : "text-[#6E6A62] hover:text-[#1E1E1C]"
             }`}
           >
             Collector (Buyer)
-          </button>
+          </Link>
           <Link
             href="/seller/dashboard"
             onClick={() => setActiveRole("artisan")}
-            className={`text-[10px] font-medium transition-colors ${
-              activeRole === "artisan"
-                ? "font-semibold text-[#1E1E1C]"
+            className={`px-2.5 py-0.5 rounded-full text-[10px] font-semibold transition-all ${
+              currentRole === "artisan"
+                ? "bg-[#1E1E1C] text-white shadow-2xs"
                 : "text-[#6E6A62] hover:text-[#1E1E1C]"
             }`}
           >
             Artisan Studio
           </Link>
           <Link
-            href="/about#gi-ledger"
+            href="/admin"
             onClick={() => setActiveRole("admin")}
-            className={`text-[10px] font-medium transition-colors ${
-              activeRole === "admin"
-                ? "font-semibold text-[#1E1E1C]"
+            className={`px-2.5 py-0.5 rounded-full text-[10px] font-semibold transition-all ${
+              currentRole === "admin"
+                ? "bg-[#1E1E1C] text-white shadow-2xs"
                 : "text-[#6E6A62] hover:text-[#1E1E1C]"
             }`}
           >
@@ -179,8 +186,8 @@ export function Header() {
             </Link>
           </nav>
 
-          {/* Right items: Cart Box & Login */}
-          <div className="flex items-center space-x-4 sm:space-x-5 text-xs sm:text-[13px] font-medium text-[#20201D]">
+          {/* Right items: Cart Box & Role Badges matching screenshots */}
+          <div className="flex items-center space-x-3 sm:space-x-4 text-xs sm:text-[13px] font-medium text-[#20201D]">
             <Link
               href="/cart"
               className="border border-[#D5CFC5] hover:border-[#1E1E1C] rounded-md px-2.5 py-1.5 flex items-center gap-1.5 text-xs transition-colors bg-white/50"
@@ -189,12 +196,24 @@ export function Header() {
               <span>Cart ({cartCount})</span>
             </Link>
 
-            <Link
-              href="/buyer/dashboard"
-              className="hover:text-[#89714F] transition-colors"
-            >
-              Login
-            </Link>
+            {currentRole === "admin" ? (
+              <div className="bg-[#1E1E1C] text-white text-[11px] font-medium px-3.5 py-1.5 rounded-full flex items-center gap-1.5 shadow-xs cursor-default">
+                <ShieldCheck className="w-3.5 h-3.5 text-white stroke-[2.2]" />
+                <span>GI Verification</span>
+              </div>
+            ) : currentRole === "artisan" ? (
+              <div className="bg-[#B34728] text-white text-[11px] font-medium px-3.5 py-1.5 rounded-full flex items-center gap-1.5 shadow-xs cursor-default">
+                <Store className="w-3.5 h-3.5 text-white" />
+                <span>Artisan Studio</span>
+              </div>
+            ) : (
+              <Link
+                href="/buyer/dashboard"
+                className="hover:text-[#89714F] transition-colors"
+              >
+                Login
+              </Link>
+            )}
 
             {/* Mobile Menu Toggle Button */}
             <div className="flex items-center lg:hidden ml-1">
