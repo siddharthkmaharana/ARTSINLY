@@ -49,6 +49,44 @@ export default function HomePage() {
     },
   ];
 
+
+  // Top 3 New Arrivals matching the Fresh Drops collection
+  const freshDrops = [
+    {
+      id: "drop-1",
+      badgeText: "JUST UNFIRED",
+      slug: "dhokra-primitive-tribal-bell-metal-vessel",
+      originAndCraft: "WEST BENGAL • BELL-METAL CASTING",
+      title: "Dhokra Primitive Tribal Bell-Metal Lost-Wax Vessel",
+      editionNote: "Single Batch • 1 of 4 Casts",
+      priceDisplay: "₹190.00",
+      imageUrl:
+        "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=1000&q=85",
+    },
+    {
+      id: "drop-2",
+      badgeText: "FRESH FROM LOOM",
+      slug: "heritage-ajrakh-16-stage-indigo-botanical-throw",
+      originAndCraft: "GUJARAT • NATURAL DYE BLOCK PRINT",
+      title: "Heritage Ajrakh 16-Stage Indigo Botanical Throw",
+      editionNote: "Natural Indigo • River Washed",
+      priceDisplay: "₹184.00",
+      imageUrl:
+        "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=1000&q=85",
+    },
+    {
+      id: "drop-3",
+      badgeText: "LIMITED EDITION",
+      slug: "zardozi-hand-embroidered-velvet-adornment",
+      originAndCraft: "UTTAR PRADESH • ZARDOZI NEEDLEWORK",
+      title: "Zardozi Hand-Embroidered Velvet Wall Tapestry",
+      editionNote: "140 Artisan-Hours • Semi-Precious Agate",
+      priceDisplay: "₹540.00",
+      imageUrl:
+        "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1000&q=85",
+    },
+  ];
+
   // 4 Featured Artisans matching the Our Artisans page
   const featuredArtisans = [
     {
@@ -261,7 +299,86 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 3. Recognized Excellence: Top Bestsellers Showcase */}
+      {/* 3. Fresh From The Atelier: Recent Studio Releases */}
+      <section className="py-16 sm:py-20 border-b border-[#EAE5DD]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+            <div>
+              <span className="text-[10px] sm:text-[11px] font-semibold text-[#C2410C] uppercase tracking-[0.2em] block mb-1">
+                FRESH FROM THE ATELIER
+              </span>
+              <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-normal text-[#1E1E1C] tracking-tight">
+                Recent Studio Releases
+              </h2>
+              <p className="text-xs text-[#6E6A62] mt-1 max-w-lg leading-relaxed">
+                Limited single-batch creations just completed by master rural guilds, ready for immediate acquisition.
+              </p>
+            </div>
+            <Link
+              href="/new-arrivals"
+              className="text-xs font-semibold text-[#1E1E1C] hover:text-[#C2410C] transition-colors inline-flex items-center gap-1 shrink-0"
+            >
+              <span>Explore All Fresh Drops</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
+            {freshDrops.map((item) => (
+              <div
+                key={item.id}
+                className="bg-[#FAF7F2] border border-[#E5E0D7] rounded-xl p-3.5 sm:p-4 hover:shadow-md hover:border-[#D5CFC5] transition-all flex flex-col justify-between group"
+              >
+                <div>
+                  <div className="relative aspect-[4/3] w-full rounded-lg overflow-hidden bg-[#ECE6DC] mb-3.5">
+                    <Link href={`/products/${item.slug}`}>
+                      <img
+                        src={item.imageUrl}
+                        alt={item.title}
+                        className="w-full h-full object-cover object-center group-hover:scale-103 transition-transform duration-500 ease-out"
+                        loading="lazy"
+                      />
+                    </Link>
+                    <div className="absolute top-2.5 right-2.5 bg-[#C2410C] text-white text-[9.5px] font-semibold px-2.5 py-0.5 rounded-full z-10 tracking-wider shadow-xs pointer-events-none uppercase">
+                      {item.badgeText}
+                    </div>
+                  </div>
+
+                  <span className="text-[10px] sm:text-[11px] font-semibold text-[#8C877E] uppercase tracking-wider block mb-1.5">
+                    {item.originAndCraft}
+                  </span>
+
+                  <Link href={`/products/${item.slug}`}>
+                    <h3 className="font-serif text-[15px] sm:text-base font-normal text-[#1E1E1C] leading-snug line-clamp-2 h-11 mb-2 group-hover:text-[#C2410C] transition-colors">
+                      {item.title}
+                    </h3>
+                  </Link>
+
+                  <div className="flex items-center gap-1.5 text-xs text-[#7A756D] mb-4">
+                    <Sparkles className="w-3.5 h-3.5 text-[#C2410C] shrink-0" />
+                    <span>{item.editionNote}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between pt-2 border-t border-[#EFEBE4]">
+                  <span className="text-base sm:text-lg font-medium text-[#1E1E1C]">
+                    {item.priceDisplay}
+                  </span>
+
+                  <Link
+                    href={`/products/${item.slug}`}
+                    className="border border-[#1E1E1C] bg-white text-[#1E1E1C] hover:bg-[#1E1E1C] hover:text-white px-4 py-1.5 rounded-md text-xs font-semibold tracking-wide transition-all shadow-xs"
+                  >
+                    Acquire
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 4. Recognized Excellence: Top Bestsellers Showcase */}
       <section className="py-16 sm:py-20 border-b border-[#EAE5DD]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
@@ -340,7 +457,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 4. The Master Custodians: Living Heritage Artisans */}
+      {/* 5. The Master Custodians: Living Heritage Artisans */}
       <section className="py-16 sm:py-20 border-b border-[#EAE5DD]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-12 space-y-2">
@@ -398,7 +515,7 @@ export default function HomePage() {
       </section>
 
 
-      {/* 5. The Maison Manifesto: High Luxury Dark Editorial Pavilion */}
+      {/* 6. The Maison Manifesto: High Luxury Dark Editorial Pavilion */}
       <section className="py-20 sm:py-28 bg-[#1A1A18] text-[#FAF7F2] relative overflow-hidden">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
           <span className="text-[10px] sm:text-[11px] font-semibold text-[#C2410C] tracking-[0.25em] uppercase">
