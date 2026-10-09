@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Plus, X, Upload, Check } from "lucide-react";
+import ImageUploader from "@/components/ui/ImageUploader";
 
 interface StudioProduct {
   id: string;
@@ -113,6 +114,7 @@ export default function SellerDashboardPage() {
   const [newCraft, setNewCraft] = useState("");
   const [newCategory, setNewCategory] = useState("Vases");
   const [newPrice, setNewPrice] = useState("");
+  const [newImageUrl, setNewImageUrl] = useState("");
 
   const handleCreateProduct = (e: React.FormEvent) => {
     e.preventDefault();
@@ -135,6 +137,7 @@ export default function SellerDashboardPage() {
     setNewTitle("");
     setNewCraft("");
     setNewPrice("");
+    setNewImageUrl("");
   };
 
   return (

@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import ImageUploader from "@/components/ui/ImageUploader";
 import { CATEGORIES, REGIONS } from "@/lib/mock-data";
 import {
   ArrowLeft,
@@ -298,15 +299,12 @@ export default function NewProductListingPage() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold text-[#20201D] mb-1">
-                  Product Image URL (High Resolution)
-                </label>
-                <input
-                  type="url"
-                  name="imageUrl"
+                <ImageUploader
                   value={form.imageUrl}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 bg-[#F8F5EF] border border-[#DCD0BD] rounded text-xs text-[#20201D] focus:outline-none focus:border-[#89714F]"
+                  onChange={(url) => setForm((prev) => ({ ...prev, imageUrl: url }))}
+                  folder="artsinly/products"
+                  label="Artwork & Craft Photography"
+                  helperText="Upload your authentic craft photo to Cloudinary or S3-compatible storage. High resolution recommended."
                 />
               </div>
             </div>
