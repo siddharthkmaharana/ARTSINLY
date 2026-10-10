@@ -1,4 +1,4 @@
-﻿import { v2 as cloudinary } from "cloudinary";
+import { v2 as cloudinary } from "cloudinary";
 import { StorageUploadOptions, UploadedImageResult, ImageTransformationOptions } from "./types";
 
 const isConfigured = Boolean(

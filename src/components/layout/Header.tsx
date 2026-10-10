@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { ShoppingBag, Menu, X, ShieldCheck, Store } from "lucide-react";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 
 export function Header() {
   const pathname = usePathname();
@@ -77,6 +78,8 @@ export function Header() {
           >
             Admin / GI Ledger
           </Link>
+          <span className="h-3 w-px bg-[#E2DDD5] dark:bg-[#38342E]" />
+          <ThemeToggle variant="pill" />
         </div>
       </div>
 
@@ -187,7 +190,8 @@ export function Header() {
           </nav>
 
           {/* Right items: Cart Box & Role Badges matching screenshots */}
-          <div className="flex items-center space-x-3 sm:space-x-4 text-xs sm:text-[13px] font-medium text-[#20201D]">
+          <div className="flex items-center space-x-2.5 sm:space-x-3 text-xs sm:text-[13px] font-medium text-[#20201D]">
+            <ThemeToggle variant="icon" />
             <Link
               href="/cart"
               className="border border-[#D5CFC5] hover:border-[#1E1E1C] rounded-md px-2.5 py-1.5 flex items-center gap-1.5 text-xs transition-colors bg-white/50"
@@ -286,6 +290,10 @@ export function Header() {
           >
             Blog
           </Link>
+          <div className="pt-3 border-t border-[#EAE5DD] dark:border-[#33302A] flex items-center justify-between">
+            <span className="text-xs text-[#7A756D] dark:text-[#A8A297]">Ambient Theme</span>
+            <ThemeToggle variant="pill" />
+          </div>
           <div className="pt-2 border-t border-[#EAE5DD] flex items-center justify-between">
             <Link
               href="/cart"

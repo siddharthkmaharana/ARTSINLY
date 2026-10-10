@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import ThemeToggle from "@/components/ui/ThemeToggle";
 
 export function Footer() {
   return (
@@ -102,6 +103,16 @@ export function Footer() {
                 Join
               </button>
             </form>
+          </div>
+        </div>
+        {/* Bottom Bar: Copyright & Theme Toggle */}
+        <div className="mt-12 pt-6 border-t border-[#DDD8CE] dark:border-[#2D2A25] flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[#858076] dark:text-[#A39D91]">
+          <div>
+            © 2026 ARTISANLY • Registered Fair Trade Platform & Sovereign Craft Ledger
+          </div>
+          <div className="flex items-center gap-2">
+            <span>Ambient Lighting:</span>
+            <ThemeToggle variant="pill" />
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-﻿import fs from "fs";
+import fs from "fs";
 import path from "path";
 import { StorageUploadOptions, UploadedImageResult, StorageProviderType } from "./types";
 import { isCloudinaryConfigured, uploadToCloudinary, getCloudinaryOptimizedUrl } from "./cloudinary";

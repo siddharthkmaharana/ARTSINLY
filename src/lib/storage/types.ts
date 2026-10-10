@@ -1,4 +1,4 @@
-﻿export type StorageProviderType = "cloudinary" | "s3" | "local";
+export type StorageProviderType = "cloudinary" | "s3" | "local";
 
 export interface StorageUploadOptions {
   folder?: string;
