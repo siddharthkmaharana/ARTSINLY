@@ -6,8 +6,8 @@ type Theme = "light" | "dark";
 
 interface ThemeContextType {
   theme: Theme;
-  toggleTheme: () => void;
-  setTheme: (theme: Theme) => void;
+  toggleTheme: (event?: React.MouseEvent | MouseEvent) => void;
+  setTheme: (theme: Theme, event?: React.MouseEvent | MouseEvent) => void;
   isDark: boolean;
 }
 
@@ -45,15 +45,69 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
-  const setTheme = (newTheme: Theme) => {
-    setThemeState(newTheme);
-    localStorage.setItem(THEME_STORAGE_KEY, newTheme);
-    applyTheme(newTheme);
+  const setTheme = (newTheme: Theme, event?: React.MouseEvent | MouseEvent) => {
+    if (newTheme === theme) return;
+
+    // Check if View Transition API is supported and motion is not reduced
+    const doc = typeof document !== "undefined" ? (document as any) : null;
+    const isAppearanceTransition =
+      doc &&
+      typeof doc.startViewTransition === "function" &&
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    if (!isAppearanceTransition) {
+      setThemeState(newTheme);
+      localStorage.setItem(THEME_STORAGE_KEY, newTheme);
+      applyTheme(newTheme);
+      return;
+    }
+
+    // Determine circular ripple center coordinates
+    let x = window.innerWidth / 2;
+    let y = window.innerHeight / 2;
+
+    if (event && (event.clientX > 0 || event.clientY > 0)) {
+      x = event.clientX;
+      y = event.clientY;
+    } else if (event && event.currentTarget) {
+      const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+      x = rect.left + rect.width / 2;
+      y = rect.top + rect.height / 2;
+    }
+
+    const endRadius = Math.hypot(
+      Math.max(x, window.innerWidth - x),
+      Math.max(y, window.innerHeight - y)
+    );
+
+    const transition = doc.startViewTransition(() => {
+      setThemeState(newTheme);
+      localStorage.setItem(THEME_STORAGE_KEY, newTheme);
+      applyTheme(newTheme);
+    });
+
+    transition.ready.then(() => {
+      const clipPath = [
+        `circle(0px at ${x}px ${y}px)`,
+        `circle(${endRadius}px at ${x}px ${y}px)`,
+      ];
+
+      document.documentElement.animate(
+        {
+          clipPath: clipPath,
+        },
+        {
+          duration: 500,
+          easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+          pseudoElement: "::view-transition-new(root)",
+        }
+      );
+    });
   };
 
-  const toggleTheme = () => {
+  const toggleTheme = (event?: React.MouseEvent | MouseEvent) => {
     const next = theme === "dark" ? "light" : "dark";
-    setTheme(next);
+    setTheme(next, event);
   };
 
   return (

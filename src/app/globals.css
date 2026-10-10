@@ -1,5 +1,7 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #F8F5EF;       /* Warm ivory */
   --surface: #FFFFFF;          /* Pure White for cards/panels */
@@ -97,6 +99,24 @@ h1, h2, h3, .font-serif {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--bronze);
+}
+
+/* ========================================================================= */
+/* CIRCULAR VIEW TRANSITION (THEME SPREADING RIPPLE ANIMATION)               */
+/* ========================================================================= */
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 9999;
 }
 
 /* ========================================================================= */
