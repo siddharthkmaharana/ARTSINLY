@@ -2,9 +2,12 @@
 
 import React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 
 export function Footer() {
+  const pathname = usePathname();
+  if (pathname === "/login" || pathname.startsWith("/login")) return null;
   return (
     <footer className="bg-[#EDE9E2] text-[#3A3834] pt-14 pb-12 border-t border-[#DDD8CE] text-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -9,6 +9,7 @@ import ThemeToggle from "@/components/ui/ThemeToggle";
 
 export function Header() {
   const pathname = usePathname();
+  if (pathname === "/login" || pathname.startsWith("/login")) return null;
   const { cartCount } = useCart();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeRole, setActiveRole] = useState<"collector" | "artisan" | "admin">("collector");
@@ -212,7 +213,7 @@ export function Header() {
               </div>
             ) : (
               <Link
-                href="/buyer/dashboard"
+                href="/login"
                 className="hover:text-[#89714F] transition-colors"
               >
                 Login
