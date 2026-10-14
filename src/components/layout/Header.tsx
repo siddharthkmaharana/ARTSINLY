@@ -26,14 +26,6 @@ export function Header() {
   const isBestSellersActive = pathname.startsWith("/best-sellers");
   const isAboutActive = pathname.startsWith("/about");
   const isBlogActive = pathname.startsWith("/blog");
-  const isExploreActive =
-    pathname.startsWith("/explore") &&
-    !isCatalogActive &&
-    !isNewArrivalsActive &&
-    !isBestSellersActive &&
-    !isArtisansActive &&
-    !isAboutActive &&
-    !isBlogActive;
 
   return (
     <header className="sticky top-0 z-40 bg-[#FAF8F5]/95 backdrop-blur-md border-b border-[#EAE5DD] transition-colors">
@@ -98,19 +90,6 @@ export function Header() {
 
           {/* Desktop Navigation in Center */}
           <nav className="hidden lg:flex items-center space-x-7 text-xs sm:text-[13px] font-medium text-[#403E39]">
-            {/* Explore with black dot underneath when active */}
-            <Link
-              href="/explore"
-              className={`relative hover:text-[#1E1E1C] transition-colors py-1 flex flex-col items-center ${
-                isExploreActive ? "text-[#1E1E1C] font-semibold" : "text-[#403E39]"
-              }`}
-            >
-              <span>Explore</span>
-              {isExploreActive ? (
-                <span className="w-1.5 h-1.5 rounded-full bg-[#1E1E1C] absolute -bottom-1" />
-              ) : null}
-            </Link>
-
             {/* Catalog with black dot underneath when active */}
             <Link
               href="/catalog"
@@ -242,13 +221,6 @@ export function Header() {
       {/* Mobile Drawer */}
       {isMobileMenuOpen && (
         <div className="lg:hidden border-t border-[#EAE5DD] bg-[#FAF8F5] px-4 pt-3 pb-6 space-y-3 text-sm">
-          <Link
-            href="/explore"
-            onClick={() => setIsMobileMenuOpen(false)}
-            className="block py-2 font-medium text-[#1E1E1C] hover:text-[#89714F]"
-          >
-            Explore
-          </Link>
           <Link
             href="/catalog"
             onClick={() => setIsMobileMenuOpen(false)}
