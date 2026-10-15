@@ -11,7 +11,7 @@ export async function getInventory(productId: string, variantId?: string) {
     });
   }
 
-  return prisma.inventory.findUnique({
+  return prisma.inventory.findFirst({
     where: { productId },
   });
 }
@@ -45,10 +45,13 @@ export async function adjustStock(
   quantityChange: number,
   variantId?: string
 ): Promise<Inventory> {
-  const where = variantId ? { variantId } : { productId };
+  const inventory = await getInventory(productId, variantId);
+  if (!inventory) {
+    throw new Error(`Inventory not found for product ${productId}`);
+  }
 
   return prisma.inventory.update({
-    where,
+    where: { id: inventory.id },
     data: {
       quantity: {
         increment: quantityChange,
@@ -65,13 +68,14 @@ export async function reserveStock(
   quantity: number,
   variantId?: string
 ): Promise<boolean> {
-  const where = variantId ? { variantId } : { productId };
+  const inventory = await getInventory(productId, variantId);
+  if (!inventory) return false;
 
   const result = await prisma.inventory.updateMany({
     where: {
-      ...where,
+      id: inventory.id,
       quantity: {
-        gte: prisma.inventory.fields.reservedQuantity, // ensure stock >= reserved
+        gte: inventory.reservedQuantity + quantity,
       },
     },
     data: {
@@ -92,10 +96,13 @@ export async function releaseReservedStock(
   quantity: number,
   variantId?: string
 ): Promise<Inventory> {
-  const where = variantId ? { variantId } : { productId };
+  const inventory = await getInventory(productId, variantId);
+  if (!inventory) {
+    throw new Error(`Inventory not found for product ${productId}`);
+  }
 
   return prisma.inventory.update({
-    where,
+    where: { id: inventory.id },
     data: {
       reservedQuantity: {
         decrement: quantity,
@@ -112,10 +119,13 @@ export async function commitStockDeduction(
   quantity: number,
   variantId?: string
 ): Promise<Inventory> {
-  const where = variantId ? { variantId } : { productId };
+  const inventory = await getInventory(productId, variantId);
+  if (!inventory) {
+    throw new Error(`Inventory not found for product ${productId}`);
+  }
 
   return prisma.inventory.update({
-    where,
+    where: { id: inventory.id },
     data: {
       quantity: {
         decrement: quantity,

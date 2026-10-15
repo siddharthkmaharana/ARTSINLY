@@ -22,6 +22,7 @@ import {
   Globe2,
 } from "lucide-react";
 import ThemeToggle from "@/components/ui/ThemeToggle";
+import { useAuth } from "@/context/AuthContext";
 
 function getPasswordStrength(password: string) {
   if (!password) return { score: 0, label: "", color: "bg-white/20", text: "text-white/40" };
@@ -135,6 +136,9 @@ function LoginPageContent() {
   const [rememberMe, setRememberMe] = useState(true);
   const [agreeTerms, setAgreeTerms] = useState(false);
 
+  const { login, register } = useAuth();
+  const [signupRole, setSignupRole] = useState<"BUYER" | "SELLER">("BUYER");
+
   // Form fields
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
@@ -219,11 +223,29 @@ function LoginPageContent() {
     setErrors({});
     setIsSubmitting(true);
 
-    // Simulate authentication
-    await new Promise((r) => setTimeout(r, 1600));
+    const result = await login(loginEmail, loginPassword);
     setIsSubmitting(false);
+
+    if (!result.success) {
+      setErrors({ loginEmail: result.error || "Invalid email or password" });
+      setShakeKey((prev) => prev + 1);
+      return;
+    }
+
     setIsSuccess(true);
-    setSuccessMessage(`Welcome back, ${loginEmail.split("@")[0]}! Connecting to Pavilion...`);
+    setSuccessMessage(`Welcome back, ${result.user?.name || loginEmail.split("@")[0]}! Connecting to Pavilion...`);
+
+    setTimeout(() => {
+      if (result.user?.role === "SELLER") {
+        if (!result.user.sellerProfile) {
+          router.push("/seller/onboarding");
+        } else {
+          router.push("/seller/dashboard");
+        }
+      } else {
+        router.push("/buyer/dashboard");
+      }
+    }, 1200);
   };
 
   const handleSignupSubmit = async (e: React.FormEvent) => {
@@ -237,11 +259,30 @@ function LoginPageContent() {
     setErrors({});
     setIsSubmitting(true);
 
-    // Simulate account creation
-    await new Promise((r) => setTimeout(r, 1800));
+    const result = await register({
+      email: signupEmail,
+      password: signupPassword,
+      name: signupName,
+      role: signupRole,
+    });
     setIsSubmitting(false);
+
+    if (!result.success) {
+      setErrors({ signupEmail: result.error || "Failed to create account" });
+      setShakeKey((prev) => prev + 1);
+      return;
+    }
+
     setIsSuccess(true);
-    setSuccessMessage(`Atelier Account created for ${signupName}! Redirecting to Dashboard...`);
+    setSuccessMessage(`Atelier Account created for ${signupName}! Redirecting...`);
+
+    setTimeout(() => {
+      if (signupRole === "SELLER") {
+        router.push("/seller/onboarding");
+      } else {
+        router.push("/buyer/dashboard");
+      }
+    }, 1200);
   };
 
   const handleForgotSubmit = (e: React.FormEvent) => {
@@ -627,6 +668,34 @@ function LoginPageContent() {
                           <p className="text-xs text-white/60">
                             Join the sovereign network of patrons and generational craft guardians.
                           </p>
+                        </div>
+
+                        {/* Role Selector: Collector vs Master Artisan */}
+                        <div className="grid grid-cols-2 gap-2 p-1 rounded-xl bg-white/5 border border-white/10">
+                          <button
+                            type="button"
+                            onClick={() => setSignupRole("BUYER")}
+                            className={`py-2 px-3 rounded-lg text-xs font-medium transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                              signupRole === "BUYER"
+                                ? "bg-amber-500 text-slate-950 font-semibold shadow-xs"
+                                : "text-white/70 hover:text-white"
+                            }`}
+                          >
+                            <User className="w-3.5 h-3.5" />
+                            <span>Collector (Buyer)</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setSignupRole("SELLER")}
+                            className={`py-2 px-3 rounded-lg text-xs font-medium transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                              signupRole === "SELLER"
+                                ? "bg-amber-500 text-slate-950 font-semibold shadow-xs"
+                                : "text-white/70 hover:text-white"
+                            }`}
+                          >
+                            <Award className="w-3.5 h-3.5" />
+                            <span>Master Artisan</span>
+                          </button>
                         </div>
 
                         {/* Full Name */}

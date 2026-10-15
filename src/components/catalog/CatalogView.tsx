@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { PRODUCTS } from "@/lib/mock-data";
@@ -64,6 +64,40 @@ export function CatalogView() {
   const [priceCap, setPriceCap] = useState(1500);
   const [selectedArtisan, setSelectedArtisan] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState(initialQuery);
+  const [dbProducts, setDbProducts] = useState<any[] | null>(null);
+  const [isLoadingDb, setIsLoadingDb] = useState(false);
+
+  // Fetch live products from PostgreSQL via API
+  useEffect(() => {
+    let isCancelled = false;
+    const fetchCatalog = async () => {
+      try {
+        setIsLoadingDb(true);
+        const params = new URLSearchParams();
+        if (searchQuery.trim()) params.set("search", searchQuery.trim());
+        if (selectedCraft !== "all") params.set("craft", selectedCraft);
+        if (selectedRegion !== "all") params.set("region", selectedRegion);
+        if (priceCap < 1500) params.set("maxPrice", priceCap.toString());
+
+        const res = await fetch(`/api/products?${params.toString()}`);
+        if (res.ok) {
+          const data = await res.json();
+          if (!isCancelled && data.products) {
+            setDbProducts(data.products);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch live database products:", err);
+      } finally {
+        if (!isCancelled) setIsLoadingDb(false);
+      }
+    };
+
+    fetchCatalog();
+    return () => {
+      isCancelled = true;
+    };
+  }, [searchQuery, selectedCraft, selectedRegion, priceCap]);
 
   const handleReset = () => {
     setSelectedCraft("all");
@@ -74,22 +108,24 @@ export function CatalogView() {
   };
 
   const filteredProducts = useMemo(() => {
-    return PRODUCTS.filter((product) => {
-      // 1. Search Query Filter
-      if (searchQuery.trim()) {
+    // If database returned live products, use them (with optional artisan filter applied locally)
+    const baseList = dbProducts || PRODUCTS;
+    return baseList.filter((product) => {
+      // 1. Search Query Filter (if local fallback)
+      if (!dbProducts && searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
         const matchesTitle = product.title.toLowerCase().includes(q);
-        const matchesArtisan = product.artisan.artisanName.toLowerCase().includes(q) ||
+        const matchesArtisan = product.artisan?.artisanName?.toLowerCase().includes(q) ||
           (product.byline || "").toLowerCase().includes(q);
-        const matchesCraft = product.craftType.toLowerCase().includes(q);
-        const matchesRegion = (product.provenanceTag || product.regionName || product.state).toLowerCase().includes(q);
+        const matchesCraft = (product.craftType || "").toLowerCase().includes(q);
+        const matchesRegion = (product.provenanceTag || product.regionName || product.state || "").toLowerCase().includes(q);
         if (!matchesTitle && !matchesArtisan && !matchesCraft && !matchesRegion) {
           return false;
         }
       }
 
-      // 2. Craft Filter
-      if (selectedCraft !== "all") {
+      // 2. Craft Filter (if local fallback)
+      if (!dbProducts && selectedCraft !== "all") {
         const craftConfig = CRAFT_OPTIONS.find((c) => c.id === selectedCraft);
         if (craftConfig && craftConfig.matchers.length > 0) {
           const productCraftString = `${product.craftType} ${product.categorySlug} ${product.title}`.toLowerCase();
@@ -98,8 +134,8 @@ export function CatalogView() {
         }
       }
 
-      // 3. Region Filter
-      if (selectedRegion !== "all") {
+      // 3. Region Filter (if local fallback)
+      if (!dbProducts && selectedRegion !== "all") {
         const regionConfig = REGION_OPTIONS.find((r) => r.id === selectedRegion);
         if (regionConfig && regionConfig.matchers.length > 0) {
           const productRegionString = `${product.regionSlug} ${product.provenanceTag} ${product.state}`.toLowerCase();
@@ -118,7 +154,7 @@ export function CatalogView() {
       if (selectedArtisan) {
         const artisanConfig = ARTISAN_LINEAGE_OPTIONS.find((a) => a.id === selectedArtisan);
         if (artisanConfig) {
-          const matchesName = product.artisan.artisanName.toLowerCase().includes(artisanConfig.artisanName.toLowerCase()) ||
+          const matchesName = product.artisan?.artisanName?.toLowerCase().includes(artisanConfig.artisanName.toLowerCase()) ||
             (product.byline || "").toLowerCase().includes(artisanConfig.artisanName.toLowerCase());
           if (!matchesName) return false;
         }
@@ -126,7 +162,7 @@ export function CatalogView() {
 
       return true;
     });
-  }, [searchQuery, selectedCraft, selectedRegion, priceCap, selectedArtisan]);
+  }, [dbProducts, searchQuery, selectedCraft, selectedRegion, priceCap, selectedArtisan]);
 
   return (
     <div className="bg-[#FAF7F2] min-h-screen py-5 sm:py-7">
@@ -137,16 +173,10 @@ export function CatalogView() {
             Home
           </Link>
           <span>•</span>
-          <Link href="/explore" className="hover:text-[#1E1E1C] transition-colors">
-            Explore
-          </Link>
-          <span>•</span>
-          <span className="hover:text-[#1E1E1C] transition-colors cursor-pointer">
-            Vases
-          </span>
+          <span className="text-[#6B665E] font-medium">Catalog</span>
           <span>•</span>
           <span className="text-[#6B665E] truncate">
-            Modern Ethnic Ceramic Vase – Terracotta Vase with Indigenous Pattern
+            All Curated Masterpieces
           </span>
         </nav>
 
