@@ -155,7 +155,7 @@ model Product {
   region            Region?         @relation(fields: [regionId], references: [id])
   images            ProductImage[]
   variants          ProductVariant[]
-  inventory         Inventory?
+  inventory         Inventory[]
   cartItems         CartItem[]
   orderItems        OrderItem[]
   wishlistItems     WishlistItem[]
@@ -204,7 +204,7 @@ model ProductVariant {
 // 5. Inventory Tracking
 model Inventory {
   id                  String          @id @default(cuid())
-  productId           String          @unique
+  productId           String
   variantId           String?         @unique
   quantity            Int             @default(0) // Available on-hand quantity
   reservedQuantity    Int             @default(0) // Reserved in pending orders/checkouts
@@ -215,6 +215,7 @@ model Inventory {
   product             Product         @relation(fields: [productId], references: [id], onDelete: Cascade)
   variant             ProductVariant? @relation(fields: [variantId], references: [id], onDelete: Cascade)
 
+  @@unique([productId, variantId])
   @@map("inventories")
 }
 

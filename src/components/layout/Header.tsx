@@ -6,17 +6,19 @@ import { usePathname } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { ShoppingBag, Menu, X, ShieldCheck, Store } from "lucide-react";
 import ThemeToggle from "@/components/ui/ThemeToggle";
+import { useAuth } from "@/context/AuthContext";
 
 export function Header() {
   const pathname = usePathname();
   if (pathname === "/login" || pathname.startsWith("/login")) return null;
   const { cartCount } = useCart();
+  const { user, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeRole, setActiveRole] = useState<"collector" | "artisan" | "admin">("collector");
 
   const currentRole: "collector" | "artisan" | "admin" = pathname.startsWith("/admin")
     ? "admin"
-    : pathname.startsWith("/seller") || pathname.startsWith("/artisan-studio")
+    : pathname.startsWith("/seller") || pathname.startsWith("/artisan-studio") || user?.role === "SELLER"
     ? "artisan"
     : activeRole;
 
@@ -184,6 +186,22 @@ export function Header() {
               <div className="bg-[#1E1E1C] text-white text-[11px] font-medium px-3.5 py-1.5 rounded-full flex items-center gap-1.5 shadow-xs cursor-default">
                 <ShieldCheck className="w-3.5 h-3.5 text-white stroke-[2.2]" />
                 <span>GI Verification</span>
+              </div>
+            ) : user ? (
+              <div className="flex items-center gap-2">
+                <Link
+                  href={user.role === "SELLER" ? "/seller/dashboard" : "/buyer/dashboard"}
+                  className="px-2.5 py-1 rounded-md text-xs font-semibold bg-[#1E1E1C] text-white hover:bg-[#383734] transition-all flex items-center gap-1.5 shadow-2xs"
+                >
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                  <span>{user.name?.split(" ")[0] || (user.role === "SELLER" ? "Artisan" : "Patron")}</span>
+                </Link>
+                <button
+                  onClick={() => logout()}
+                  className="text-[11px] text-[#7A756D] hover:text-rose-600 transition-colors cursor-pointer"
+                >
+                  Logout
+                </button>
               </div>
             ) : currentRole === "artisan" ? (
               <div className="bg-[#B34728] text-white text-[11px] font-medium px-3.5 py-1.5 rounded-full flex items-center gap-1.5 shadow-xs cursor-default">
