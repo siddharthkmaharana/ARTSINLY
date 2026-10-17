@@ -1,67 +1,126 @@
 "use client";
 
-import React, { useState, Suspense } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { PRODUCTS } from "@/lib/mock-data";
 import { formatINR } from "@/lib/utils";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
 import { ProductCard } from "@/components/products/ProductCard";
 import {
   Package,
   Heart,
   MapPin,
-  User,
   Truck,
-  ExternalLink,
   CheckCircle2,
   Clock,
-  ChevronRight,
+  Loader2,
+  Sparkles,
 } from "lucide-react";
+
+const FALLBACK_ORDERS = [
+  {
+    id: "ART-842918",
+    date: "01 Oct 2026",
+    status: "IN_TRANSIT",
+    statusText: "Dispatched from Sanganer Kiln",
+    carrier: "BlueDart Express Insured",
+    trackingNumber: "BD-IN-98124018",
+    estimatedDelivery: "05 Oct 2026",
+    items: [
+      {
+        title: "Modern Ethnic Ceramic Vase – Terracotta Vase with Indigenous Pattern",
+        quantity: 1,
+        pricePaise: 12699,
+        imageUrl: "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=400&q=80",
+        artisanName: "Devendra Prajapati",
+        state: "Gujarat",
+        slug: "modern-ethnic-ceramic-vase-terracotta-indigenous-pattern",
+      },
+    ],
+    totalPaise: 12699,
+  },
+];
 
 function BuyerDashboardContent() {
   const searchParams = useSearchParams();
   const initialTab = (searchParams.get("tab") as "orders" | "wishlist" | "addresses") || "orders";
   const [activeTab, setActiveTab] = useState(initialTab);
-
+  const { user } = useAuth();
   const { wishlist } = useCart();
   const wishlistProducts = PRODUCTS.filter((p) => wishlist.includes(p.id));
 
-  // Mock buyer orders
-  const orders = [
-    {
-      id: "ART-842918",
-      date: "01 Oct 2026",
-      status: "IN_TRANSIT",
-      statusText: "Dispatched from Sanganer Kiln",
-      carrier: "BlueDart Express Insured",
-      trackingNumber: "BD-IN-98124018",
-      estimatedDelivery: "05 Oct 2026",
-      items: [
-        {
-          product: PRODUCTS[0],
-          quantity: 1,
-        },
-      ],
-      totalPaise: 385000,
-    },
-    {
-      id: "ART-719302",
-      date: "14 Sep 2026",
-      status: "DELIVERED",
-      statusText: "Delivered to Residence",
-      carrier: "Delhivery Air Fragile",
-      trackingNumber: "DLV-90812349",
-      deliveredOn: "18 Sep 2026",
-      items: [
-        {
-          product: PRODUCTS[4],
-          quantity: 2,
-        },
-      ],
-      totalPaise: 330000,
-    },
-  ];
+  const [orders, setOrders] = useState<any[]>(FALLBACK_ORDERS);
+  const [loadingOrders, setLoadingOrders] = useState(false);
+
+  useEffect(() => {
+    let isCancelled = false;
+    const fetchOrders = async () => {
+      try {
+        setLoadingOrders(true);
+        const res = await fetch("/api/orders");
+        if (res.ok) {
+          const data = await res.json();
+          if (!isCancelled && data.orders && data.orders.length > 0) {
+            const mapped = data.orders.map((ord: any) => {
+              const shipment = ord.shipments?.[0];
+              const dateStr = new Date(ord.createdAt).toLocaleDateString("en-IN", {
+                day: "2-digit",
+                month: "short",
+                year: "numeric",
+              });
+
+              let statusText = "Order Received & Verified";
+              if (ord.status === "CONFIRMED") statusText = "Artisan Preparing Craft";
+              if (ord.status === "PROCESSING") statusText = "In Kiln / Atelier Finishing";
+              if (ord.status === "SHIPPED") statusText = "In Insured Transit";
+              if (ord.status === "DELIVERED") statusText = "Delivered to Residence";
+
+              return {
+                id: ord.orderNumber || ord.id,
+                date: dateStr,
+                status: ord.status,
+                statusText,
+                carrier: shipment?.carrier || "Pan-India Fragile Express",
+                trackingNumber: shipment?.trackingNumber || `AWB-${ord.orderNumber}`,
+                items: ord.items.map((item: any) => ({
+                  title: item.title,
+                  quantity: item.quantity,
+                  pricePaise: item.pricePaise,
+                  imageUrl:
+                    item.product?.images?.[0]?.url ||
+                    "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=400&q=80",
+                  artisanName: item.seller?.artisanName || "Master Artisan",
+                  state: item.seller?.state || "Heritage Craft",
+                  slug: item.product?.slug || "handcrafted-piece",
+                })),
+                totalPaise: ord.totalPaise,
+              };
+            });
+            setOrders(mapped);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to fetch live buyer orders:", err);
+      } finally {
+        if (!isCancelled) setLoadingOrders(false);
+      }
+    };
+
+    fetchOrders();
+    return () => {
+      isCancelled = true;
+    };
+  }, [user]);
+
+  const displayName = user?.name || "Aarav Sharma";
+  const initials = displayName
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .substring(0, 2)
+    .toUpperCase();
 
   return (
     <div className="bg-[#F8F5EF] min-h-screen py-10 sm:py-14">
@@ -70,14 +129,14 @@ function BuyerDashboardContent() {
         <div className="bg-white border border-[#E8E0D2] rounded-xl p-6 sm:p-8 shadow-xs mb-8 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-center gap-4">
             <div className="w-14 h-14 rounded-full bg-[#F4EFE6] border border-[#DCD0BD] flex items-center justify-center text-[#89714F] font-serif text-xl font-bold">
-              AS
+              {initials}
             </div>
             <div>
               <h1 className="font-serif text-2xl sm:text-3xl font-medium text-[#20201D]">
-                Aarav Sharma
+                {displayName}
               </h1>
               <p className="text-xs text-[#6B685F]">
-                Patron Member • Supporting 4 Artisan Clusters
+                Patron Member • Supporting Indigenous Indian Heritage
               </p>
             </div>
           </div>
@@ -86,7 +145,7 @@ function BuyerDashboardContent() {
             href="/products"
             className="px-4 py-2 bg-[#20201D] hover:bg-[#89714F] text-white text-xs font-semibold rounded transition-colors"
           >
-            Explore New Curations
+            Explore Catalog
           </Link>
         </div>
 
@@ -130,6 +189,13 @@ function BuyerDashboardContent() {
         {/* Tab 1: Orders */}
         {activeTab === "orders" && (
           <div className="space-y-6">
+            {loadingOrders && (
+              <div className="flex items-center justify-center p-8 text-xs text-[#89714F] gap-2">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <span>Checking latest database orders...</span>
+              </div>
+            )}
+
             {orders.map((order) => (
               <div
                 key={order.id}
@@ -150,7 +216,7 @@ function BuyerDashboardContent() {
                     </div>
                     <div>
                       <span className="text-[#6B685F] block">Order ID</span>
-                      <span className="font-semibold text-[#20201D]">{order.id}</span>
+                      <span className="font-semibold text-[#20201D] font-mono">{order.id}</span>
                     </div>
                   </div>
 
@@ -158,6 +224,8 @@ function BuyerDashboardContent() {
                     className={`inline-flex items-center gap-1.5 px-3 py-1 rounded text-xs font-semibold ${
                       order.status === "DELIVERED"
                         ? "bg-[#EBF0E9] text-[#52644B]"
+                        : order.status === "SHIPPED"
+                        ? "bg-sky-50 text-sky-800 border border-sky-200"
                         : "bg-[#F4EFE6] text-[#89714F]"
                     }`}
                   >
@@ -172,42 +240,42 @@ function BuyerDashboardContent() {
 
                 {/* Tracking & Items */}
                 <div className="p-6 space-y-4">
-                  {order.status === "IN_TRANSIT" && (
+                  {(order.status === "SHIPPED" || order.status === "IN_TRANSIT" || order.status === "PROCESSING") && (
                     <div className="p-3 bg-[#F8F5EF] border border-[#DCD0BD] rounded-lg text-xs flex flex-wrap items-center justify-between gap-2">
                       <div className="flex items-center gap-2 text-[#20201D]">
                         <Clock className="w-4 h-4 text-[#89714F]" />
                         <span>
-                          Estimated Arrival: <strong>{order.estimatedDelivery}</strong> via {order.carrier}
+                          Carrier: <strong>{order.carrier}</strong>
                         </span>
                       </div>
-                      <span className="font-mono text-[#89714F] text-[11px]">
+                      <span className="font-mono text-[#89714F] text-[11px] bg-white px-2 py-0.5 rounded border border-[#DCD0BD]">
                         AWB: {order.trackingNumber}
                       </span>
                     </div>
                   )}
 
-                  {order.items.map((item, idx) => (
+                  {order.items.map((item: any, idx: number) => (
                     <div
                       key={idx}
                       className="flex items-center justify-between gap-4 py-2 border-b last:border-0 border-[#F3ECE1]"
                     >
                       <div className="flex items-center gap-4">
                         <img
-                          src={item.product.images[0]?.url}
-                          alt={item.product.title}
+                          src={item.imageUrl}
+                          alt={item.title}
                           className="w-16 h-20 object-cover rounded bg-[#F3ECE1] border border-[#DCD0BD]"
                         />
                         <div>
                           <h3 className="font-serif text-sm sm:text-base font-medium text-[#20201D]">
                             <Link
-                              href={`/products/${item.product.slug}`}
+                              href={`/products/${item.slug}`}
                               className="hover:text-[#89714F]"
                             >
-                              {item.product.title}
+                              {item.title}
                             </Link>
                           </h3>
                           <p className="text-xs text-[#6B685F]">
-                            By {item.product.artisan.artisanName} • {item.product.state}
+                            By {item.artisanName} • {item.state}
                           </p>
                           <span className="text-xs font-semibold text-[#89714F]">
                             Qty: {item.quantity}
@@ -217,10 +285,10 @@ function BuyerDashboardContent() {
 
                       <div className="text-right">
                         <span className="font-serif text-base font-semibold text-[#20201D] block">
-                          {formatINR(item.product.pricePaise * item.quantity)}
+                          {formatINR(item.pricePaise * item.quantity)}
                         </span>
                         <Link
-                          href={`/products/${item.product.slug}`}
+                          href={`/products/${item.slug}`}
                           className="text-[11px] text-[#89714F] hover:underline"
                         >
                           Write a Review
@@ -271,7 +339,7 @@ function BuyerDashboardContent() {
                 Default
               </span>
               <h3 className="font-serif text-base font-semibold text-[#20201D]">
-                Aarav Sharma (Home)
+                {displayName} (Residence)
               </h3>
               <p className="text-xs text-[#6B685F] leading-relaxed">
                 42, Shanti Niketan, Civil Lines<br />
@@ -280,7 +348,7 @@ function BuyerDashboardContent() {
                 Phone: +91 98765 43210
               </p>
               <div className="pt-2 flex gap-3 text-xs">
-                <button className="text-[#89714F] font-semibold hover:underline">
+                <button className="text-[#89714F] font-semibold hover:underline cursor-pointer">
                   Edit Address
                 </button>
               </div>
