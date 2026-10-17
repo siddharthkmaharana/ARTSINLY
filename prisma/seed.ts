@@ -1,6 +1,16 @@
 import { PrismaClient, Role, ProductStatus, OrderStatus } from "@prisma/client";
+import crypto from "crypto";
 
 const prisma = new PrismaClient();
+
+function hashPassword(password: string): string {
+  const salt = crypto.randomBytes(16).toString("hex");
+  const iterations = 10000;
+  const keyLength = 64;
+  const digest = "sha512";
+  const hash = crypto.pbkdf2Sync(password, salt, iterations, keyLength, digest).toString("hex");
+  return `${salt}:${iterations}:${hash}`;
+}
 
 async function main() {
   console.log("🏺 Starting ARTSINLY PostgreSQL Database Seeding...");
@@ -119,6 +129,7 @@ async function main() {
     data: {
       email: "devendra.prajapati@artsinly.com",
       name: "Devendra Prajapati",
+      passwordHash: hashPassword("password123"),
       role: Role.SELLER,
       phone: "+91 98250 11234",
       avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80",
@@ -148,6 +159,7 @@ async function main() {
     data: {
       email: "meenakshi.rathore@artsinly.com",
       name: "Meenakshi Rathore",
+      passwordHash: hashPassword("password123"),
       role: Role.SELLER,
       avatar: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=600&q=80",
     },
@@ -175,6 +187,7 @@ async function main() {
     data: {
       email: "shankar.jangid@artsinly.com",
       name: "Shankar Lal Jangid",
+      passwordHash: hashPassword("password123"),
       role: Role.SELLER,
       avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80",
     },
@@ -202,6 +215,7 @@ async function main() {
     data: {
       email: "collector@artsinly.com",
       name: "Aditi Sen Sharma",
+      passwordHash: hashPassword("password123"),
       role: Role.BUYER,
       phone: "+91 98300 44556",
       avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80",
