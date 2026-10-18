@@ -16,6 +16,7 @@ async function main() {
   console.log("🏺 Starting ARTSINLY PostgreSQL Database Seeding...");
 
   // 1. Clean existing records in reverse dependency order
+  await prisma.auditLog.deleteMany();
   await prisma.review.deleteMany();
   await prisma.cartItem.deleteMany();
   await prisma.cart.deleteMany();
@@ -232,6 +233,47 @@ async function main() {
       postalCode: "700019",
       phone: "+91 98300 44556",
       isDefault: true,
+    },
+  });
+
+  // 6. Create Super Administrator
+  const adminUser = await prisma.user.create({
+    data: {
+      email: "admin@artsinly.com",
+      name: "Sovereign Heritage Admin",
+      passwordHash: hashPassword("admin123"),
+      role: Role.ADMIN,
+      phone: "+91 99999 88888",
+      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80",
+    },
+  });
+
+  // 7. Create Pending / Unverified Seller for Verification Queue
+  const userKashmir = await prisma.user.create({
+    data: {
+      email: "kashmir.weavers@artsinly.com",
+      name: "Ghulam Rasool Mir",
+      passwordHash: hashPassword("password123"),
+      role: Role.SELLER,
+      phone: "+91 94190 77112",
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80",
+    },
+  });
+
+  const sellerPending = await prisma.sellerProfile.create({
+    data: {
+      userId: userKashmir.id,
+      shopName: "Pashmina Weavers Guild",
+      slug: "pashmina-weavers-guild",
+      artisanName: "Ghulam Rasool Mir",
+      craftTradition: "Pashmina Weaving",
+      state: "Jammu & Kashmir",
+      locality: "Srinagar",
+      giCode: "GI-IN-JK-003",
+      isVerified: false, // Pending verification
+      yearsOfExperience: 28,
+      bio: "Master pashmina spinner and handloom artisan seeking GI cluster certification for Changthangi cashmere.",
+      avatarUrl: userKashmir.avatar,
     },
   });
 
@@ -452,7 +494,34 @@ async function main() {
     },
   });
 
-  console.log("✓ Created Users, Sellers, Categories, Products, Variants, Inventory, Cart, Order, and Review");
+  // 10. Seed Initial Audit Logs
+  await prisma.auditLog.create({
+    data: {
+      userId: adminUser.id,
+      action: "PLATFORM_INITIALIZED",
+      details: {
+        event: "Genesis platform deployment & GI tag master cluster enrollment",
+        clustersEnrolled: ["Kutch Terracotta", "Jaipur Enamel", "Churu Sheesham"],
+      },
+      ipAddress: "127.0.0.1",
+    },
+  });
+
+  await prisma.auditLog.create({
+    data: {
+      userId: adminUser.id,
+      action: "SELLER_VERIFIED",
+      details: {
+        sellerId: sellerDevendra.id,
+        shopName: sellerDevendra.shopName,
+        giCode: sellerDevendra.giCode,
+        verifiedBy: adminUser.name,
+      },
+      ipAddress: "127.0.0.1",
+    },
+  });
+
+  console.log("✓ Created Users, Sellers, Categories, Products, Variants, Inventory, Cart, Order, Review, and Audit Logs");
   console.log("✨ Seeding completed successfully!");
 }
 

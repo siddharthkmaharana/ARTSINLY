@@ -6,4 +6,5 @@ export * from "./inventory";
 export * from "./carts";
 export * from "./orders";
 export * from "./reviews";
+export * from "./audit";
 export { prisma } from "@/lib/prisma";
