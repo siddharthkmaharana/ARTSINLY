@@ -125,3 +125,34 @@ export async function sendShipmentDispatchedEmail(params: SendShipmentDispatched
 
   return { success: true, messageId: `msg_ship_${orderNumber}_${Date.now()}` };
 }
+
+export interface SendOrderRefundedParams {
+  orderNumber: string;
+  buyerEmail: string;
+  buyerName: string;
+  amountPaise: number;
+  reason?: string;
+}
+
+/**
+ * 4. Send Order Refund Notification to Buyer
+ */
+export async function sendOrderRefundedEmail(params: SendOrderRefundedParams) {
+  const { orderNumber, buyerEmail, buyerName, amountPaise, reason = "Requested by Buyer / Administrative Resolution" } = params;
+
+  const subject = `Refund Processed for Order ${orderNumber} | ARTSINLY Escrow Protection`;
+
+  console.log(`\n============================================================`);
+  console.log(`✉️  [TRANSACTIONAL EMAIL] Order Refund Dispatched`);
+  console.log(`To Buyer: ${buyerEmail} (${buyerName})`);
+  console.log(`Subject: ${subject}`);
+  console.log(`Order Number: ${orderNumber}`);
+  console.log(`Refunded Amount: ${formatINR(amountPaise)}`);
+  console.log(`Resolution Reason: ${reason}`);
+  console.log(`Credit Destination: Original Source Account / Payment Method`);
+  console.log(`Status: Delivered to Sandbox Notification Log`);
+  console.log(`============================================================\n`);
+
+  return { success: true, messageId: `msg_refund_${orderNumber}_${Date.now()}` };
+}
+
