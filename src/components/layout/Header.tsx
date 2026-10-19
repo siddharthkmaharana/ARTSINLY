@@ -30,7 +30,7 @@ export function Header() {
   const isBlogActive = pathname.startsWith("/blog");
 
   return (
-    <header className="sticky top-0 z-40 bg-[#FAF8F5]/95 backdrop-blur-md border-b border-[#EAE5DD] transition-colors">
+    <header role="banner" className="sticky top-0 z-40 bg-[#FAF8F5]/95 backdrop-blur-md border-b border-[#EAE5DD] transition-colors">
       {/* 1. Topmost Utility Bar */}
       <div className="bg-[#FAF8F5] border-b border-[#EFEBE4] text-[11px] text-[#7A756D] py-1 px-4 sm:px-8 flex items-center justify-between">
         <div className="flex items-center gap-1.5 font-normal tracking-wide">
@@ -38,7 +38,7 @@ export function Header() {
           <span>ARTSINLY • Modern Editorial Pavilion for Indian Generational Masters</span>
         </div>
 
-        <div className="hidden md:flex items-center gap-4">
+        <nav aria-label="Role Mode Navigation" className="hidden md:flex items-center gap-4">
           <span className="text-[#9E988E]">Role Mode:</span>
           <Link
             href="/"
@@ -75,7 +75,7 @@ export function Header() {
           </Link>
           <span className="h-3 w-px bg-[#E2DDD5] dark:bg-[#38342E]" />
           <ThemeToggle variant="pill" />
-        </div>
+        </nav>
       </div>
 
       {/* 2. Main Navigation Bar */}
@@ -91,7 +91,7 @@ export function Header() {
           </div>
 
           {/* Desktop Navigation in Center */}
-          <nav className="hidden lg:flex items-center space-x-7 text-xs sm:text-[13px] font-medium text-[#403E39]">
+          <nav aria-label="Main Navigation" className="hidden lg:flex items-center space-x-7 text-xs sm:text-[13px] font-medium text-[#403E39]">
             {/* Catalog with black dot underneath when active */}
             <Link
               href="/catalog"
@@ -176,6 +176,7 @@ export function Header() {
             <ThemeToggle variant="icon" />
             <Link
               href="/cart"
+              aria-label={`Shopping cart with ${cartCount} ${cartCount === 1 ? 'item' : 'items'}`}
               className="border border-[#D5CFC5] hover:border-[#1E1E1C] rounded-md px-2.5 py-1.5 flex items-center gap-1.5 text-xs transition-colors bg-white/50"
             >
               <ShoppingBag className="w-3.5 h-3.5 text-[#1E1E1C]" />
@@ -223,7 +224,9 @@ export function Header() {
                 type="button"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 className="p-1.5 text-[#20201D] hover:text-[#89714F] focus:outline-none"
-                aria-label="Toggle menu"
+                aria-expanded={isMobileMenuOpen}
+                aria-controls="mobile-navigation"
+                aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
               >
                 {isMobileMenuOpen ? (
                   <X className="w-5 h-5" />
@@ -238,7 +241,11 @@ export function Header() {
 
       {/* Mobile Drawer */}
       {isMobileMenuOpen && (
-        <div className="lg:hidden border-t border-[#EAE5DD] bg-[#FAF8F5] px-4 pt-3 pb-6 space-y-3 text-sm">
+        <nav
+          id="mobile-navigation"
+          aria-label="Mobile Navigation"
+          className="lg:hidden border-t border-[#EAE5DD] bg-[#FAF8F5] px-4 pt-3 pb-6 space-y-3 text-sm"
+        >
           <Link
             href="/catalog"
             onClick={() => setIsMobileMenuOpen(false)}
@@ -301,7 +308,7 @@ export function Header() {
               Artisan Studio
             </Link>
           </div>
-        </div>
+        </nav>
       )}
     </header>
   );

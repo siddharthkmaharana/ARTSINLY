@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { Prisma } from "@prisma/client";
+import { logger } from "@/lib/monitoring/logger";
 
 export async function GET(req: NextRequest) {
+  const startTime = performance.now();
   try {
     const { searchParams } = new URL(req.url);
     const search = searchParams.get("search") || searchParams.get("q") || "";
@@ -134,15 +136,31 @@ export async function GET(req: NextRequest) {
       };
     });
 
-    return NextResponse.json({
-      success: true,
-      products: formattedProducts,
-      totalCount,
+    const durationMs = performance.now() - startTime;
+    logger.metric("fetch_products_catalog", durationMs, {
+      count: formattedProducts.length,
+      category,
+      region,
       page,
-      limit,
     });
+
+    return NextResponse.json(
+      {
+        success: true,
+        products: formattedProducts,
+        totalCount,
+        page,
+        limit,
+      },
+      {
+        headers: {
+          "Cache-Control": "public, s-maxage=60, stale-while-revalidate=300",
+        },
+      }
+    );
   } catch (error: any) {
-    console.error("Products catalog API error:", error);
+    const durationMs = performance.now() - startTime;
+    logger.error("Products catalog API error", { error: error.message, durationMs });
     return NextResponse.json(
       { error: error.message || "Failed to fetch products" },
       { status: 500 }

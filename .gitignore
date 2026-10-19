@@ -44,3 +44,7 @@ next-env.d.ts
 # Local uploaded media in development
 public/uploads/*
 !public/uploads/.gitkeep
+
+# Database backups snapshots
+backups/*
+!backups/.gitkeep
