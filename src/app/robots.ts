@@ -18,6 +18,12 @@ export default function robots(): MetadataRoute.Robots {
           "/blog",
           "/new-arrivals",
           "/best-sellers",
+          "/terms",
+          "/privacy",
+          "/shipping",
+          "/refunds",
+          "/seller-policy",
+          "/grievance",
         ],
         disallow: [
           "/admin",

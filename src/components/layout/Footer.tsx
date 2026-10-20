@@ -115,10 +115,38 @@ export function Footer() {
           </div>
         </div>
 
+        {/* Statutory Legal & Compliance Bar */}
+        <nav aria-label="Legal & Statutory Compliance" className="mt-10 pt-6 border-t border-[#DDD8CE] dark:border-[#2D2A25] flex flex-wrap items-center justify-between gap-y-3 text-[11px] text-[#6E6A62] dark:text-[#A8A297]">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
+            <Link href="/terms" className="hover:text-[#1E1E1C] dark:hover:text-white transition-colors">
+              Terms of Service
+            </Link>
+            <Link href="/privacy" className="hover:text-[#1E1E1C] dark:hover:text-white transition-colors">
+              Privacy Policy (DPDP)
+            </Link>
+            <Link href="/shipping" className="hover:text-[#1E1E1C] dark:hover:text-white transition-colors">
+              Shipping &amp; Logistics
+            </Link>
+            <Link href="/refunds" className="hover:text-[#1E1E1C] dark:hover:text-white transition-colors">
+              Returns &amp; Refunds
+            </Link>
+            <Link href="/seller-policy" className="hover:text-[#1E1E1C] dark:hover:text-white transition-colors">
+              Artisan Agreement (84% Remittance)
+            </Link>
+            <Link href="/grievance" className="hover:text-[#C2410C] font-semibold transition-colors flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#C2410C]" />
+              Grievance Redressal Officer
+            </Link>
+          </div>
+          <div className="text-[10px] text-[#858076] dark:text-[#7A756D]">
+            CPA 2019 • DPDP 2023 • Section 194-O TDS Compliant
+          </div>
+        </nav>
+
         {/* Bottom Bar: Copyright & Theme Toggle */}
-        <div className="mt-12 pt-6 border-t border-[#DDD8CE] dark:border-[#2D2A25] flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[#858076] dark:text-[#A39D91]">
+        <div className="mt-6 pt-4 border-t border-[#E5E0D6] dark:border-[#24211D] flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[#858076] dark:text-[#A39D91]">
           <div>
-            © 2026 ARTSINLY • Registered Fair Trade Platform &amp; Sovereign Craft Ledger
+            © 2026 ARTSINLY CRAFT PAVILION PVT. LTD. • Registered Fair Trade Platform &amp; Sovereign Craft Ledger
           </div>
           <div className="flex items-center gap-2">
             <span>Ambient Lighting:</span>

@@ -82,3 +82,32 @@ export function verifySessionToken(token: string): TokenPayload | null {
     return null;
   }
 }
+
+export type AuthUser = TokenPayload & { id: string };
+
+/**
+ * Extract authenticated user session from NextRequest (cookies or Authorization header)
+ */
+export async function getCurrentUser(req: any): Promise<AuthUser | null> {
+  let token =
+    req?.cookies?.get?.("artsinly_token")?.value ||
+    req?.headers?.get?.("authorization")?.replace("Bearer ", "");
+
+  if (!token && typeof req?.headers?.get === "function") {
+    const cookieHeader = req.headers.get("cookie");
+    if (cookieHeader) {
+      const match = cookieHeader.match(/artsinly_token=([^;]+)/);
+      if (match) token = match[1];
+    }
+  }
+
+  if (!token) return null;
+  const payload = verifySessionToken(token);
+  if (!payload) return null;
+
+  return {
+    ...payload,
+    id: payload.userId,
+  };
+}
+
