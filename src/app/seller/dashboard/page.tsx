@@ -21,6 +21,10 @@ import {
   Archive,
   AlertCircle,
   ExternalLink,
+  Landmark,
+  Building2,
+  CreditCard,
+  Receipt,
 } from "lucide-react";
 import ImageUploader from "@/components/ui/ImageUploader";
 import { useAuth } from "@/context/AuthContext";
@@ -121,11 +125,27 @@ const FALLBACK_PRODUCTS: StudioProduct[] = [
 export default function SellerDashboardPage() {
   const { user, refreshUser } = useAuth();
 
-  const [activeTab, setActiveTab] = useState<"catalogue" | "orders">("catalogue");
+  const [activeTab, setActiveTab] = useState<"catalogue" | "orders" | "payouts">("catalogue");
   const [sellerProfile, setSellerProfile] = useState<any>(null);
   const [products, setProducts] = useState<StudioProduct[]>(FALLBACK_PRODUCTS);
   const [orders, setOrders] = useState<SellerOrder[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Bank Account & Payout Onboarding State
+  const [payoutAccount, setPayoutAccount] = useState<any>(null);
+  const [payoutSummary, setPayoutSummary] = useState<any>(null);
+  const [isEditingBank, setIsEditingBank] = useState(false);
+  const [bankHolderName, setBankHolderName] = useState("");
+  const [bankAccountNumber, setBankAccountNumber] = useState("");
+  const [bankConfirmAccount, setBankConfirmAccount] = useState("");
+  const [bankIfsc, setBankIfsc] = useState("");
+  const [bankName, setBankName] = useState("");
+  const [panNumber, setPanNumber] = useState("");
+  const [gstin, setGstin] = useState("");
+  const [taxExemption, setTaxExemption] = useState(true);
+  const [isSavingBank, setIsSavingBank] = useState(false);
+  const [bankSaveError, setBankSaveError] = useState("");
+  const [bankSaveSuccess, setBankSaveSuccess] = useState("");
 
   // New Product Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -169,11 +189,28 @@ export default function SellerDashboardPage() {
   const loadData = async () => {
     try {
       setLoading(true);
-      const [profileRes, productsRes, ordersRes] = await Promise.all([
+      const [profileRes, productsRes, ordersRes, accountRes, payoutsRes] = await Promise.all([
         fetch("/api/seller/profile"),
         fetch("/api/seller/products"),
         fetch("/api/seller/orders"),
+        fetch("/api/seller/payout-account"),
+        fetch("/api/seller/payouts"),
       ]);
+
+      if (accountRes.ok) {
+        const accData = await accountRes.json();
+        setPayoutAccount(accData.account || null);
+        if (accData.account?.isOnboarded) {
+          setBankHolderName(accData.account.accountHolderName || "");
+          setBankIfsc(accData.account.ifscCode || "");
+          setBankName(accData.account.bankName || "");
+        }
+      }
+
+      if (payoutsRes.ok) {
+        const payData = await payoutsRes.json();
+        setPayoutSummary(payData.summary || null);
+      }
 
       if (profileRes.ok) {
         const profData = await profileRes.json();
@@ -445,6 +482,49 @@ export default function SellerDashboardPage() {
     }
   };
 
+  // Handle Save Bank Account & Tax Onboarding
+  const handleSaveBankAccount = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setBankSaveError("");
+    setBankSaveSuccess("");
+
+    if (bankAccountNumber !== bankConfirmAccount) {
+      setBankSaveError("Account numbers do not match.");
+      return;
+    }
+
+    try {
+      setIsSavingBank(true);
+      const res = await fetch("/api/seller/payout-account", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          accountHolderName: bankHolderName,
+          accountNumber: bankAccountNumber,
+          confirmAccountNumber: bankConfirmAccount,
+          ifscCode: bankIfsc,
+          bankName,
+          panNumber,
+          gstin: taxExemption ? "EXEMPT" : gstin,
+          taxExemptionDeclared: taxExemption,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to update bank account");
+      }
+
+      setBankSaveSuccess("Bank account and PAN credentials verified successfully!");
+      setIsEditingBank(false);
+      await loadData();
+    } catch (err: any) {
+      setBankSaveError(err.message || "Failed to update bank account");
+    } finally {
+      setIsSavingBank(false);
+    }
+  };
+
   const displayShopName = sellerProfile?.shopName || "Devendra Prajapati Pottery Studio";
   const displayLocation = `${sellerProfile?.locality ? sellerProfile.locality + ", " : ""}${
     sellerProfile?.state || "Gujarat"
@@ -605,6 +685,25 @@ export default function SellerDashboardPage() {
             {pendingOrdersCount > 0 && (
               <span className="px-1.5 py-0.5 rounded-full bg-[#C2410C] text-white text-[10px] font-bold">
                 {pendingOrdersCount}
+              </span>
+            )}
+          </button>
+
+          <button
+            onClick={() => setActiveTab("payouts")}
+            className={`pb-3 font-medium transition-colors border-b-2 flex items-center gap-2 cursor-pointer ${
+              activeTab === "payouts"
+                ? "border-[#C2410C] text-[#1E1E1C]"
+                : "border-transparent text-[#7A756D] hover:text-[#1E1E1C]"
+            }`}
+          >
+            <Landmark className="w-4 h-4" />
+            <span>Bank Onboarding & Settlements</span>
+            {payoutAccount?.isOnboarded ? (
+              <span className="w-2 h-2 rounded-full bg-emerald-500" title="Bank Verified" />
+            ) : (
+              <span className="px-1.5 py-0.5 rounded-full bg-amber-500 text-white text-[10px] font-bold">
+                Action Required
               </span>
             )}
           </button>
@@ -868,6 +967,352 @@ export default function SellerDashboardPage() {
                 })}
               </div>
             )}
+          </div>
+        )}
+
+        {/* TAB 3: BANK ONBOARDING & SETTLEMENTS */}
+        {activeTab === "payouts" && (
+          <div className="space-y-6">
+            {/* Header */}
+            <div className="border border-[#E5E0D7] rounded-2xl bg-white p-5 sm:p-7 shadow-xs">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+                <div>
+                  <div className="flex items-center gap-2 text-xs font-semibold text-[#52644B] uppercase tracking-wider mb-1">
+                    <span>RBI PAPG &amp; Section 194-O Compliant</span>
+                    <span>•</span>
+                    <span>Escrow Settlement</span>
+                  </div>
+                  <h2 className="font-serif text-xl sm:text-2xl text-[#1E1E1C] font-normal">
+                    Bank Onboarding &amp; Artisan Settlements
+                  </h2>
+                  <p className="text-xs text-[#7A756D] mt-0.5">
+                    Link your direct bank account for scheduled T+2 settlements, PAN for 1% TDS, and view fair-trade earnings.
+                  </p>
+                </div>
+              </div>
+
+              {/* Fair Trade Split Metric Card */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 rounded-xl bg-[#FAF7F2] border border-[#E5E0D7] mb-8">
+                <div className="p-3">
+                  <span className="text-[10px] uppercase font-semibold text-[#8C877E] block mb-1">
+                    YOUR NET SHARE
+                  </span>
+                  <div className="font-serif text-2xl font-bold text-[#52644B]">84%</div>
+                  <span className="text-[11px] text-[#7A756D]">Direct artisan livelihood payout</span>
+                </div>
+                <div className="p-3">
+                  <span className="text-[10px] uppercase font-semibold text-[#8C877E] block mb-1">
+                    PLATFORM COMMISSION
+                  </span>
+                  <div className="font-serif text-2xl font-bold text-[#1E1E1C]">15%</div>
+                  <span className="text-[11px] text-[#7A756D]">Gateway fees, curation &amp; hosting</span>
+                </div>
+                <div className="p-3">
+                  <span className="text-[10px] uppercase font-semibold text-[#8C877E] block mb-1">
+                    SECTION 194-O TDS
+                  </span>
+                  <div className="font-serif text-2xl font-bold text-[#C2410C]">1%</div>
+                  <span className="text-[11px] text-[#7A756D]">Deposited to Government under your PAN</span>
+                </div>
+              </div>
+
+              {/* 2-Column Grid: Bank Details + Settlement Ledger */}
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                {/* Left: Bank Account Onboarding */}
+                <div className="lg:col-span-6 p-5 sm:p-6 rounded-xl border border-[#E5E0D7] bg-[#FAF8F5]">
+                  <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#EAE5DD]">
+                    <div className="flex items-center gap-2">
+                      <Landmark className="w-5 h-5 text-[#89714F]" />
+                      <h3 className="font-semibold text-sm text-[#1E1E1C]">
+                        Settlement Bank Account
+                      </h3>
+                    </div>
+                    {payoutAccount?.isOnboarded && !isEditingBank && (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-100 text-emerald-800">
+                        <CheckCircle2 className="w-3 h-3" />
+                        Verified
+                      </span>
+                    )}
+                  </div>
+
+                  {bankSaveSuccess && (
+                    <div className="p-3 rounded-md bg-emerald-50 text-emerald-800 text-xs mb-4 border border-emerald-200">
+                      {bankSaveSuccess}
+                    </div>
+                  )}
+
+                  {bankSaveError && (
+                    <div className="p-3 rounded-md bg-rose-50 text-rose-800 text-xs mb-4 border border-rose-200">
+                      {bankSaveError}
+                    </div>
+                  )}
+
+                  {payoutAccount?.isOnboarded && !isEditingBank ? (
+                    <div className="space-y-4 text-xs">
+                      <div className="grid grid-cols-2 gap-3 p-4 rounded-lg bg-white border border-[#E5E0D7]">
+                        <div>
+                          <span className="text-[10px] uppercase text-[#8C877E] block">Beneficiary</span>
+                          <span className="font-medium text-[#1E1E1C]">{payoutAccount.accountHolderName}</span>
+                        </div>
+                        <div>
+                          <span className="text-[10px] uppercase text-[#8C877E] block">Bank Name</span>
+                          <span className="font-medium text-[#1E1E1C]">{payoutAccount.bankName}</span>
+                        </div>
+                        <div>
+                          <span className="text-[10px] uppercase text-[#8C877E] block">Account Number</span>
+                          <span className="font-mono font-medium text-[#1E1E1C]">{payoutAccount.maskedAccountNumber}</span>
+                        </div>
+                        <div>
+                          <span className="text-[10px] uppercase text-[#8C877E] block">IFSC Code</span>
+                          <span className="font-mono font-medium text-[#1E1E1C]">{payoutAccount.ifscCode}</span>
+                        </div>
+                        <div>
+                          <span className="text-[10px] uppercase text-[#8C877E] block">PAN (194-O)</span>
+                          <span className="font-mono font-medium text-[#1E1E1C]">{payoutAccount.panNumber || "Submitted"}</span>
+                        </div>
+                        <div>
+                          <span className="text-[10px] uppercase text-[#8C877E] block">GST Status</span>
+                          <span className="font-medium text-[#52644B]">{payoutAccount.gstinStatus}</span>
+                        </div>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => setIsEditingBank(true)}
+                        className="px-4 py-2 rounded-md bg-[#1E1E1C] hover:bg-[#383734] text-white text-xs font-semibold transition-colors cursor-pointer"
+                      >
+                        Update Bank Account / Tax Info
+                      </button>
+                    </div>
+                  ) : (
+                    <form onSubmit={handleSaveBankAccount} className="space-y-3 text-xs">
+                      <div>
+                        <label className="block font-semibold text-[#1E1E1C] mb-1">
+                          Account Holder Full Name *
+                        </label>
+                        <input
+                          type="text"
+                          required
+                          value={bankHolderName}
+                          onChange={(e) => setBankHolderName(e.target.value)}
+                          placeholder="As per bank passbook / cheque"
+                          className="w-full px-3 py-1.5 bg-white border border-[#DDD7CE] rounded text-xs focus:ring-1 focus:ring-[#C2410C] focus:outline-none"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="block font-semibold text-[#1E1E1C] mb-1">
+                            Bank Account Number *
+                          </label>
+                          <input
+                            type="password"
+                            required
+                            value={bankAccountNumber}
+                            onChange={(e) => setBankAccountNumber(e.target.value)}
+                            placeholder="Enter account number"
+                            className="w-full px-3 py-1.5 bg-white border border-[#DDD7CE] rounded text-xs focus:ring-1 focus:ring-[#C2410C] focus:outline-none"
+                          />
+                        </div>
+                        <div>
+                          <label className="block font-semibold text-[#1E1E1C] mb-1">
+                            Confirm Account Number *
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            value={bankConfirmAccount}
+                            onChange={(e) => setBankConfirmAccount(e.target.value)}
+                            placeholder="Re-enter account number"
+                            className="w-full px-3 py-1.5 bg-white border border-[#DDD7CE] rounded text-xs focus:ring-1 focus:ring-[#C2410C] focus:outline-none"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="block font-semibold text-[#1E1E1C] mb-1">
+                            Bank IFSC Code *
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            value={bankIfsc}
+                            onChange={(e) => setBankIfsc(e.target.value.toUpperCase())}
+                            placeholder="e.g. SBIN0001234"
+                            maxLength={11}
+                            className="w-full px-3 py-1.5 bg-white border border-[#DDD7CE] rounded text-xs font-mono uppercase focus:ring-1 focus:ring-[#C2410C] focus:outline-none"
+                          />
+                        </div>
+                        <div>
+                          <label className="block font-semibold text-[#1E1E1C] mb-1">
+                            Bank Name &amp; Branch *
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            value={bankName}
+                            onChange={(e) => setBankName(e.target.value)}
+                            placeholder="e.g. State Bank of India, Bhuj"
+                            className="w-full px-3 py-1.5 bg-white border border-[#DDD7CE] rounded text-xs focus:ring-1 focus:ring-[#C2410C] focus:outline-none"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                          <label className="block font-semibold text-[#1E1E1C] mb-1">
+                            Artisan PAN (for 1% TDS) *
+                          </label>
+                          <input
+                            type="text"
+                            required
+                            value={panNumber}
+                            onChange={(e) => setPanNumber(e.target.value.toUpperCase())}
+                            placeholder="e.g. ABCDE1234F"
+                            maxLength={10}
+                            className="w-full px-3 py-1.5 bg-white border border-[#DDD7CE] rounded text-xs font-mono uppercase focus:ring-1 focus:ring-[#C2410C] focus:outline-none"
+                          />
+                        </div>
+                        <div>
+                          <label className="block font-semibold text-[#1E1E1C] mb-1">
+                            GSTIN (Optional)
+                          </label>
+                          <input
+                            type="text"
+                            disabled={taxExemption}
+                            value={gstin}
+                            onChange={(e) => setGstin(e.target.value.toUpperCase())}
+                            placeholder={taxExemption ? "EXEMPT" : "15-digit GSTIN"}
+                            className="w-full px-3 py-1.5 bg-white border border-[#DDD7CE] rounded text-xs font-mono uppercase focus:ring-1 focus:ring-[#C2410C] focus:outline-none disabled:bg-gray-100 disabled:text-gray-500"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 pt-1">
+                        <input
+                          id="taxExemption"
+                          type="checkbox"
+                          checked={taxExemption}
+                          onChange={(e) => setTaxExemption(e.target.checked)}
+                          className="rounded text-[#C2410C] focus:ring-[#C2410C]"
+                        />
+                        <label htmlFor="taxExemption" className="text-[11px] text-[#6E6A62]">
+                          I declare annual turnover under ₹20L/₹40L and claim composite exemption under GST Rules.
+                        </label>
+                      </div>
+
+                      <div className="flex items-center gap-3 pt-3">
+                        <button
+                          type="submit"
+                          disabled={isSavingBank}
+                          className="px-4 py-2 rounded-md bg-[#1E1E1C] hover:bg-[#383734] text-white text-xs font-semibold transition-colors cursor-pointer disabled:opacity-50"
+                        >
+                          {isSavingBank ? "Verifying..." : "Verify & Onboard Bank Account"}
+                        </button>
+                        {payoutAccount?.isOnboarded && (
+                          <button
+                            type="button"
+                            onClick={() => setIsEditingBank(false)}
+                            className="px-4 py-2 rounded-md border border-[#DDD7CE] text-[#403E39] text-xs font-medium hover:bg-white"
+                          >
+                            Cancel
+                          </button>
+                        )}
+                      </div>
+                    </form>
+                  )}
+                </div>
+
+                {/* Right: Balance & Settlement Statistics */}
+                <div className="lg:col-span-6 space-y-4">
+                  <div className="p-5 sm:p-6 rounded-xl border border-[#E5E0D7] bg-[#FAF8F5]">
+                    <div className="flex items-center gap-2 mb-4 pb-3 border-b border-[#EAE5DD]">
+                      <Receipt className="w-5 h-5 text-[#89714F]" />
+                      <h3 className="font-semibold text-sm text-[#1E1E1C]">
+                        Settlement Balance &amp; Escrow
+                      </h3>
+                    </div>
+
+                    <div className="space-y-3 text-xs">
+                      <div className="flex justify-between items-center py-1.5 border-b border-[#EAE5DD]">
+                        <span className="text-[#6E6A62]">Delivered Sales (Eligible for Settlement):</span>
+                        <span className="font-semibold text-[#1E1E1C]">
+                          {formatINR(payoutSummary?.deliveredSalesPaise || 0)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center py-1.5 border-b border-[#EAE5DD]">
+                        <span className="text-[#6E6A62]">Platform Fee (15%):</span>
+                        <span className="text-[#C2410C]">
+                          - {formatINR(payoutSummary?.commissionPaise || 0)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center py-1.5 border-b border-[#EAE5DD]">
+                        <span className="text-[#6E6A62]">Statutory Section 194-O TDS (1%):</span>
+                        <span className="text-[#C2410C]">
+                          - {formatINR(payoutSummary?.tdsPaise || 0)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center py-1.5 border-b border-[#EAE5DD]">
+                        <span className="text-[#6E6A62]">Total Disbursed to Date:</span>
+                        <span className="font-semibold text-[#52644B]">
+                          {formatINR(payoutSummary?.totalPaidOutPaise || 0)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center pt-2 text-sm font-semibold text-[#1E1E1C]">
+                        <span>Pending Settlement Balance:</span>
+                        <span className="text-emerald-700 font-mono text-base">
+                          {formatINR(payoutSummary?.pendingSettlementPaise || 0)}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 p-3 rounded-lg bg-[#EFECE6] text-[11px] text-[#6E6A62] leading-relaxed">
+                      💡 Escrow settlements are automatically scheduled on a T+2 business day cycle after the buyer marks the piece as delivered and the 7-day initial inspection window elapses.
+                    </div>
+                  </div>
+
+                  {/* Past Disbursements Table */}
+                  <div className="p-5 rounded-xl border border-[#E5E0D7] bg-white">
+                    <h4 className="font-semibold text-xs text-[#1E1E1C] mb-3 uppercase tracking-wider">
+                      Recent Bank Disbursements
+                    </h4>
+                    {!payoutSummary?.payouts || payoutSummary.payouts.length === 0 ? (
+                      <p className="text-xs text-[#8C877E] italic py-2">
+                        No previous bank payouts recorded yet. Disbursements appear here once delivered orders are settled.
+                      </p>
+                    ) : (
+                      <div className="divide-y divide-[#EAE5DD] text-xs">
+                        {payoutSummary.payouts.map((p: any) => (
+                          <div key={p.id} className="py-2.5 flex justify-between items-center">
+                            <div>
+                              <span className="font-mono text-[11px] font-medium text-[#1E1E1C] block">
+                                {p.referenceId || "DISB-BANK"}
+                              </span>
+                              <span className="text-[10px] text-[#8C877E]">
+                                {new Date(p.createdAt).toLocaleDateString("en-IN", {
+                                  day: "numeric",
+                                  month: "short",
+                                  year: "numeric",
+                                })}
+                              </span>
+                            </div>
+                            <div className="text-right">
+                              <span className="font-semibold text-emerald-700 block">
+                                {formatINR(p.amountPaise)}
+                              </span>
+                              <span className="text-[10px] font-semibold text-emerald-800 bg-emerald-100 px-1.5 py-0.5 rounded">
+                                {p.status}
+                              </span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>

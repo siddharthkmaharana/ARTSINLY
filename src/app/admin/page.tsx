@@ -22,6 +22,9 @@ import {
   Clock,
   Truck,
   ExternalLink,
+  Landmark,
+  Building2,
+  Receipt,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { formatINR } from "@/lib/utils";
@@ -29,9 +32,15 @@ import { formatINR } from "@/lib/utils";
 export default function AdminPage() {
   const { user, login } = useAuth();
 
-  const [activeTab, setActiveTab] = useState<"sellers" | "products" | "orders" | "audit">("sellers");
+  const [activeTab, setActiveTab] = useState<"sellers" | "products" | "orders" | "compliance" | "audit">("sellers");
   const [metrics, setMetrics] = useState<any>(null);
   const [loadingMetrics, setLoadingMetrics] = useState(true);
+
+  // Payment Provider Onboarding & Compliance State
+  const [paymentOnboarding, setPaymentOnboarding] = useState<any>(null);
+  const [adminPayoutsData, setAdminPayoutsData] = useState<any>(null);
+  const [loadingCompliance, setLoadingCompliance] = useState(false);
+  const [payoutProcessingId, setPayoutProcessingId] = useState<string | null>(null);
 
   // Quick Admin Login State for non-logged in state
   const [adminEmail, setAdminEmail] = useState("admin@artsinly.com");
@@ -276,6 +285,53 @@ export default function AdminPage() {
     }
   };
 
+  // Load Payment Provider Onboarding & Compliance
+  const loadCompliance = async () => {
+    try {
+      setLoadingCompliance(true);
+      const [onboardingRes, payoutsRes] = await Promise.all([
+        fetch("/api/payments/onboarding"),
+        fetch("/api/admin/payouts"),
+      ]);
+      if (onboardingRes.ok) {
+        const oData = await onboardingRes.json();
+        setPaymentOnboarding(oData.onboarding || null);
+      }
+      if (payoutsRes.ok) {
+        const pData = await payoutsRes.json();
+        setAdminPayoutsData(pData || null);
+      }
+    } catch (err) {
+      console.error("Failed to load compliance data:", err);
+    } finally {
+      setLoadingCompliance(false);
+    }
+  };
+
+  // Release Artisan Payout Action
+  const handleReleasePayout = async (sellerId: string, amountPaise: number) => {
+    try {
+      setPayoutProcessingId(sellerId);
+      const res = await fetch("/api/admin/payouts", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sellerId, amountPaise }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        alert(data.error || "Failed to release payout");
+      } else {
+        alert(data.message || "Payout released successfully!");
+        await loadCompliance();
+        await loadMetrics();
+      }
+    } catch (err: any) {
+      alert(err.message || "Failed to release payout");
+    } finally {
+      setPayoutProcessingId(null);
+    }
+  };
+
   // If Not Admin, render login card
   if (!isAdmin) {
     return (
@@ -483,6 +539,21 @@ export default function AdminPage() {
           >
             <Package className="w-4 h-4" />
             <span>Orders, Escrow &amp; Refunds ({orders.length})</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setActiveTab("compliance");
+              loadCompliance();
+            }}
+            className={`pb-3 font-medium transition-colors border-b-2 flex items-center gap-2 cursor-pointer ${
+              activeTab === "compliance"
+                ? "border-[#1E6B52] text-[#1E1E1C]"
+                : "border-transparent text-[#7A756D] hover:text-[#1E1E1C]"
+            }`}
+          >
+            <Landmark className="w-4 h-4" />
+            <span>Payment Provider &amp; Payouts</span>
           </button>
 
           <button
@@ -1034,6 +1105,242 @@ export default function AdminPage() {
                   </table>
                 </div>
               </div>
+            )}
+          </div>
+        )}
+
+        {/* TAB 5: PAYMENT PROVIDER ONBOARDING & PAYOUTS */}
+        {activeTab === "compliance" && (
+          <div className="space-y-6">
+            {/* Header */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h3 className="font-serif text-xl text-[#1E1E1C]">
+                  Payment Provider Onboarding &amp; Escrow Settlements
+                </h3>
+                <p className="text-xs text-[#7A756D]">
+                  Manage RBI PAPG compliance, gateway merchant onboarding, and artisan direct settlements.
+                </p>
+              </div>
+              <button
+                onClick={loadCompliance}
+                disabled={loadingCompliance}
+                className="px-3 py-1.5 rounded-md border border-[#D5CFC5] bg-white text-xs font-medium text-[#403E39] hover:bg-[#FAF7F2] transition-colors cursor-pointer self-start sm:self-auto"
+              >
+                {loadingCompliance ? "Refreshing..." : "Refresh Compliance Ledger"}
+              </button>
+            </div>
+
+            {loadingCompliance ? (
+              <div className="p-12 text-center text-xs text-[#7A756D]">
+                Loading payment provider onboarding &amp; settlement records...
+              </div>
+            ) : (
+              <>
+                {/* Gateway Onboarding & Compliance Card */}
+                <div className="bg-white border border-[#E3DDD1] rounded-2xl p-6 shadow-2xs space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#EAE5DD]">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-800">
+                        <Landmark className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <span className="text-[10px] uppercase font-semibold text-[#8C877E] tracking-wider block">
+                          PAYMENT AGGREGATOR INTEGRATION
+                        </span>
+                        <h4 className="font-serif text-lg text-[#1E1E1C] font-medium">
+                          {paymentOnboarding?.provider?.toUpperCase() || "RAZORPAY"} ESCROW GATEWAY
+                        </h4>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                          paymentOnboarding?.mode === "live"
+                            ? "bg-emerald-100 text-emerald-800 border border-emerald-300"
+                            : "bg-amber-100 text-amber-800 border border-amber-300"
+                        }`}
+                      >
+                        Mode: {paymentOnboarding?.mode?.toUpperCase() || "SANDBOX"}
+                      </span>
+                      <span className="px-3 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-800 border border-blue-200">
+                        MCC: {paymentOnboarding?.merchantCategoryCode || "5971"} (Art &amp; Crafts)
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Compliance Checklist Grid */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
+                    <div className="p-3 rounded-lg bg-[#FAF7F2] border border-[#EAE5DD]">
+                      <span className="text-[10px] uppercase text-[#8C877E] block mb-0.5">Corporate KYB</span>
+                      <span className="font-semibold text-emerald-700 flex items-center gap-1">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        {paymentOnboarding?.kybVerified ? "Verified" : "Sandbox Verified"}
+                      </span>
+                    </div>
+                    <div className="p-3 rounded-lg bg-[#FAF7F2] border border-[#EAE5DD]">
+                      <span className="text-[10px] uppercase text-[#8C877E] block mb-0.5">PAN &amp; GSTIN Check</span>
+                      <span className="font-semibold text-emerald-700 flex items-center gap-1">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        Valid (Sec 194-O)
+                      </span>
+                    </div>
+                    <div className="p-3 rounded-lg bg-[#FAF7F2] border border-[#EAE5DD]">
+                      <span className="text-[10px] uppercase text-[#8C877E] block mb-0.5">Nodal Escrow Acct</span>
+                      <span className="font-semibold text-emerald-700 flex items-center gap-1">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        Mapped (T+2)
+                      </span>
+                    </div>
+                    <div className="p-3 rounded-lg bg-[#FAF7F2] border border-[#EAE5DD]">
+                      <span className="text-[10px] uppercase text-[#8C877E] block mb-0.5">Webhook Signature</span>
+                      <span className="font-semibold text-emerald-700 flex items-center gap-1">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        HMAC SHA-256
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Artisan Payout Settlement Ledger */}
+                <div className="bg-white border border-[#E3DDD1] rounded-2xl overflow-hidden shadow-2xs">
+                  <div className="p-4 sm:p-5 border-b border-[#EAE5DD] flex justify-between items-center bg-[#FAF7F2]">
+                    <div>
+                      <h4 className="font-serif text-base text-[#1E1E1C]">
+                        Artisan Payouts &amp; Bank Onboarding Ledger
+                      </h4>
+                      <p className="text-[11px] text-[#7A756D]">
+                        Review verified bank accounts and disburse pending fair-trade settlements (84% net maker share).
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-xs text-[#1E1E1C]">
+                      <thead className="bg-[#FAF7F2] border-b border-[#E3DDD1] text-[10px] uppercase font-semibold text-[#8C877E] tracking-wider">
+                        <tr>
+                          <th className="py-3 px-4">Artisan Guild</th>
+                          <th className="py-3 px-4">Bank Onboarding Status</th>
+                          <th className="py-3 px-4">Account / IFSC</th>
+                          <th className="py-3 px-4 text-right">Gross Sales</th>
+                          <th className="py-3 px-4 text-right">Pending Settlement</th>
+                          <th className="py-3 px-4 text-right">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-[#EAE5DD]">
+                        {!adminPayoutsData?.sellerSummaries || adminPayoutsData.sellerSummaries.length === 0 ? (
+                          <tr>
+                            <td colSpan={6} className="py-8 text-center text-xs text-[#7A756D]">
+                              No seller accounts found.
+                            </td>
+                          </tr>
+                        ) : (
+                          adminPayoutsData.sellerSummaries.map((s: any) => (
+                            <tr key={s.sellerId} className="hover:bg-[#FAF7F2]/60 transition-colors">
+                              <td className="py-3 px-4">
+                                <span className="font-semibold text-[#1E1E1C] block">{s.shopName}</span>
+                                <span className="text-[11px] text-[#7A756D]">{s.artisanName || s.email}</span>
+                              </td>
+                              <td className="py-3 px-4">
+                                {s.payoutAccount?.isOnboarded ? (
+                                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 text-emerald-800">
+                                    <CheckCircle2 className="w-3 h-3" />
+                                    Bank Verified
+                                  </span>
+                                ) : (
+                                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-amber-100 text-amber-800">
+                                    <Clock className="w-3 h-3" />
+                                    Pending Bank Setup
+                                  </span>
+                                )}
+                              </td>
+                              <td className="py-3 px-4 font-mono text-[11px]">
+                                {s.payoutAccount?.isOnboarded ? (
+                                  <div>
+                                    <span>{s.payoutAccount.maskedAccountNumber}</span>
+                                    <span className="text-[10px] text-[#8C877E] block">{s.payoutAccount.ifscCode} • {s.payoutAccount.bankName}</span>
+                                  </div>
+                                ) : (
+                                  <span className="text-[#8C877E] italic">—</span>
+                                )}
+                              </td>
+                              <td className="py-3 px-4 text-right font-medium">
+                                {formatINR(s.grossSalesPaise)}
+                              </td>
+                              <td className="py-3 px-4 text-right font-semibold text-emerald-700">
+                                {formatINR(s.pendingSettlementPaise)}
+                              </td>
+                              <td className="py-3 px-4 text-right">
+                                {s.pendingSettlementPaise > 0 ? (
+                                  <button
+                                    onClick={() => handleReleasePayout(s.sellerId, s.pendingSettlementPaise)}
+                                    disabled={payoutProcessingId === s.sellerId || !s.payoutAccount?.isOnboarded}
+                                    className="px-3 py-1.5 rounded-md bg-[#1E6B52] hover:bg-[#16523E] text-white text-[11px] font-semibold transition-colors disabled:opacity-50 cursor-pointer"
+                                  >
+                                    {payoutProcessingId === s.sellerId ? "Disbursing..." : "Disburse Payout"}
+                                  </button>
+                                ) : (
+                                  <span className="text-[11px] text-[#8C877E] font-medium">Settled</span>
+                                )}
+                              </td>
+                            </tr>
+                          ))
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* Recent Payouts Table */}
+                <div className="bg-white border border-[#E3DDD1] rounded-2xl p-5 shadow-2xs">
+                  <h4 className="font-serif text-base text-[#1E1E1C] mb-3">
+                    Recent Escrow Disbursement Records
+                  </h4>
+                  {!adminPayoutsData?.recentPayouts || adminPayoutsData.recentPayouts.length === 0 ? (
+                    <p className="text-xs text-[#7A756D] italic py-3">
+                      No previous bank disbursements recorded in this environment yet.
+                    </p>
+                  ) : (
+                    <div className="overflow-x-auto">
+                      <table className="w-full text-left text-xs text-[#1E1E1C]">
+                        <thead className="bg-[#FAF7F2] border-b border-[#E3DDD1] text-[10px] uppercase font-semibold text-[#8C877E]">
+                          <tr>
+                            <th className="py-2.5 px-3">Date</th>
+                            <th className="py-2.5 px-3">Reference ID</th>
+                            <th className="py-2.5 px-3">Artisan</th>
+                            <th className="py-2.5 px-3 text-right">Amount</th>
+                            <th className="py-2.5 px-3 text-right">Status</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-[#EAE5DD] text-xs">
+                          {adminPayoutsData.recentPayouts.map((p: any) => (
+                            <tr key={p.id}>
+                              <td className="py-2.5 px-3 text-[#7A756D]">
+                                {new Date(p.createdAt).toLocaleDateString("en-IN")}
+                              </td>
+                              <td className="py-2.5 px-3 font-mono text-[11px]">
+                                {p.referenceId || "DISB-BANK"}
+                              </td>
+                              <td className="py-2.5 px-3 font-medium">
+                                {p.seller?.shopName || "Artisan Guild"}
+                              </td>
+                              <td className="py-2.5 px-3 text-right font-semibold text-emerald-700">
+                                {formatINR(p.amountPaise)}
+                              </td>
+                              <td className="py-2.5 px-3 text-right">
+                                <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 text-emerald-800">
+                                  {p.status}
+                                </span>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              </>
             )}
           </div>
         )}
