@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { verifySessionToken } from "@/lib/auth";
 import { sendShipmentDispatchedEmail } from "@/lib/email";
 import { OrderStatus } from "@prisma/client";
+import { generateTrackingNumber } from "@/lib/id";
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -118,7 +119,7 @@ export async function PATCH(req: NextRequest, { params }: RouteParams) {
           data: {
             orderId,
             carrier: carrier || "Insured Express Courier",
-            trackingNumber: trackingNumber || `AWB-${Math.floor(10000000 + Math.random() * 90000000)}`,
+            trackingNumber: trackingNumber || generateTrackingNumber("AWB"),
             status: shipmentStatus,
             shippedAt: status === "SHIPPED" ? new Date() : undefined,
             deliveredAt: status === "DELIVERED" ? new Date() : undefined,

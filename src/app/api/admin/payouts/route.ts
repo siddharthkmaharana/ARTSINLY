@@ -3,6 +3,7 @@ import { requireAdmin } from "@/lib/adminAuth";
 import { prisma } from "@/lib/prisma";
 import { logAuditEvent } from "@/lib/db/audit";
 import { getSellerPayoutSummary, getSellerPayoutAccount } from "@/lib/payments/onboarding";
+import { generateReferenceId } from "@/lib/id";
 
 /**
  * GET /api/admin/payouts
@@ -100,7 +101,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const ref = referenceId || `PAYOUT_${Date.now()}_${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+    const ref = referenceId || generateReferenceId("PAYOUT");
 
     const payout = await prisma.payout.create({
       data: {

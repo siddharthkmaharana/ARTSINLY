@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifySessionToken } from "@/lib/auth";
+import { rupeesToPaise } from "@/lib/money";
 
 interface RouteParams {
   params: Promise<{ id: string }>;
@@ -100,8 +101,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
 
     let pricePaise: number | undefined;
     if (price !== undefined) {
-      const numericPrice = typeof price === "string" ? parseFloat(price.replace(/[^0-9.]/g, "")) : price;
-      pricePaise = Math.round(numericPrice * 100);
+      pricePaise = rupeesToPaise(price);
     }
 
     const updated = await prisma.$transaction(async (tx) => {

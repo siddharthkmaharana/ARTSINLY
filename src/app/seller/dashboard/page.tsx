@@ -407,8 +407,11 @@ export default function SellerDashboardPage() {
     setFulfilmentStatus(order.status === "PENDING" ? "PROCESSING" : order.status);
     const existingShipment = order.shipments?.[0];
     setCarrierName(existingShipment?.carrier || "BlueDart Express Insured");
+    const randomToken = typeof window !== "undefined" && window.crypto?.getRandomValues
+      ? Array.from(window.crypto.getRandomValues(new Uint8Array(4)), (b) => b.toString(16).padStart(2, "0")).join("").toUpperCase()
+      : Date.now().toString(36).toUpperCase();
     setTrackingNumber(
-      existingShipment?.trackingNumber || `BD-IN-${Math.floor(10000000 + Math.random() * 90000000)}`
+      existingShipment?.trackingNumber || `BD-IN-${randomToken}`
     );
   };
 

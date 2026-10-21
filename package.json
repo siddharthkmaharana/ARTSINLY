@@ -9,6 +9,7 @@
     "lint": "eslint",
     "test:system": "node scripts/test_system_suite.js",
     "test:payments-legal": "node scripts/test_payments_and_legal.js",
+    "test:db-rules": "node scripts/test_database_rules.js",
     "prisma:generate": "prisma generate",
     "prisma:push": "prisma db push",
     "prisma:seed": "tsx prisma/seed.ts"

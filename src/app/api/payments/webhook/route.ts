@@ -3,6 +3,7 @@ import crypto from "crypto";
 import { prisma } from "@/lib/prisma";
 import { logAuditEvent } from "@/lib/db/audit";
 import { logger } from "@/lib/monitoring/logger";
+import { generateReferenceId } from "@/lib/id";
 
 /**
  * Verifies webhook HMAC SHA-256 signature
@@ -46,7 +47,7 @@ export async function POST(req: NextRequest) {
     }
 
     const event = payload.event || "payment.captured";
-    const eventId = payload.id || `evt_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+    const eventId = payload.id || generateReferenceId("evt");
 
     // 1. Idempotency Check: Avoid processing duplicate webhook deliveries
     const existingLog = await prisma.auditLog.findFirst({

@@ -2,12 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifySessionToken } from "@/lib/auth";
 import { sendSellerOrderAlertEmail } from "@/lib/email";
-
-function generateOrderNumber(): string {
-  const year = new Date().getFullYear();
-  const randomStr = Math.random().toString(36).substring(2, 7).toUpperCase();
-  return `ART-${year}-${randomStr}`;
-}
+import { generateOrderNumber } from "@/lib/id";
 
 /**
  * GET /api/orders - Get orders for the logged-in buyer

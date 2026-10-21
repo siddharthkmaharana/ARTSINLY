@@ -54,7 +54,7 @@ export default function CheckoutPage() {
   const [placedOrder, setPlacedOrder] = useState<any>(null);
 
   const shippingFeePaise = subtotalPaise > 200000 ? 0 : 15000;
-  const taxPaise = Math.round(subtotalPaise * 0.05);
+  const taxPaise = Math.floor((subtotalPaise * 5) / 100);
   const totalPaise = subtotalPaise + shippingFeePaise + taxPaise;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
