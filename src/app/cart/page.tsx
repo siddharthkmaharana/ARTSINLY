@@ -19,7 +19,7 @@ export default function CartPage() {
   const { cart, removeFromCart, updateQuantity, subtotalPaise } = useCart();
 
   const shippingFeePaise = subtotalPaise > 200000 ? 0 : 15000; // Free over ₹2,000
-  const taxPaise = Math.round(subtotalPaise * 0.05); // 5% GST on handicrafts
+  const taxPaise = Math.floor((subtotalPaise * 5) / 100); // 5% GST on handicrafts (integer minor units)
   const totalPaise = subtotalPaise + shippingFeePaise + taxPaise;
 
   if (cart.length === 0) {

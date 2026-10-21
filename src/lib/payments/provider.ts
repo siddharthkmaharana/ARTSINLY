@@ -5,6 +5,8 @@
  * provider credentials management, and pre-flight live-payment activation checks.
  */
 
+import { calculateFairTradeSettlement, ArtisanSettlementBreakdown } from "@/lib/money";
+
 export type PaymentProviderType = "razorpay" | "cashfree" | "stripe" | "sandbox";
 
 export type GatewayMode = "sandbox" | "live";
@@ -124,25 +126,12 @@ export function validateGSTIN(gstin: string): boolean {
 
 /**
  * Calculates fair-trade payout economics for artisan orders under Section 194-O (1% TDS):
- * - Marketplace Commission: 15% (₹15 per ₹100)
- * - TDS under Section 194-O: 1% (₹1 per ₹100 of gross amount)
- * - Net to Artisan: 84% (₹84 per ₹100)
+ * - Marketplace Commission: 15% (1500 basis points)
+ * - TDS under Section 194-O: 1% (100 basis points)
+ * - Net to Artisan: 84% (Remainder allocation)
+ * 
+ * Enforces integer minor units (paise) with zero floating-point arithmetic.
  */
-export function calculateArtisanSettlement(grossPaise: number) {
-  const commissionRate = 0.15; // 15%
-  const tdsRate = 0.01;        // 1% Section 194-O TDS on e-commerce operators
-
-  const commissionPaise = Math.round(grossPaise * commissionRate);
-  const tdsPaise = Math.round(grossPaise * tdsRate);
-  const netPaise = grossPaise - commissionPaise - tdsPaise;
-
-  return {
-    grossPaise,
-    commissionPaise,
-    tdsPaise,
-    netPaise,
-    commissionRatePercent: 15,
-    tdsRatePercent: 1,
-    artisanSharePercent: 84,
-  };
+export function calculateArtisanSettlement(grossPaise: number): ArtisanSettlementBreakdown {
+  return calculateFairTradeSettlement(grossPaise);
 }

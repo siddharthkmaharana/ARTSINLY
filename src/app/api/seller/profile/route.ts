@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifySessionToken } from "@/lib/auth";
+import { generateSecureId } from "@/lib/id";
 
 export async function GET(req: NextRequest) {
   try {
@@ -90,7 +91,7 @@ export async function POST(req: NextRequest) {
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/(^-|-$)/g, "") +
       "-" +
-      Math.floor(1000 + Math.random() * 9000);
+      generateSecureId(undefined, 3);
 
     const profile = await prisma.$transaction(async (tx) => {
       // 1. Create or update profile

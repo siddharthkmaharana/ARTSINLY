@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { sendOrderConfirmationEmail } from "@/lib/email";
+import { generateReferenceId } from "@/lib/id";
 
 /**
  * POST /api/payments/sandbox
@@ -60,7 +61,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const referenceId = `SBX_${paymentMethod.toUpperCase()}_${Math.random().toString(36).substring(2, 9).toUpperCase()}`;
+    const referenceId = generateReferenceId(`SBX_${paymentMethod.toUpperCase()}`);
 
     // Record payment and confirm order in transaction
     const [payment, updatedOrder] = await prisma.$transaction([

@@ -7,6 +7,7 @@ import {
   removeCartItem,
   clearCart,
 } from "@/lib/db/carts";
+import { generateGuestSessionToken } from "@/lib/id";
 
 /**
  * GET /api/cart
@@ -46,7 +47,7 @@ export async function POST(req: NextRequest) {
 
     const response = NextResponse.next();
     if (!payload && !sessionToken) {
-      sessionToken = `guest_${Math.random().toString(36).substring(2)}_${Date.now()}`;
+      sessionToken = generateGuestSessionToken();
       response.cookies.set("artsinly_guest_cart", sessionToken, {
         httpOnly: true,
         path: "/",

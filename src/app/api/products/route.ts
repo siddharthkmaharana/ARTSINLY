@@ -108,7 +108,7 @@ export async function GET(req: NextRequest) {
         priceDollars: p.basePricePaise / 100,
         pricePaise: p.basePricePaise,
         priceDisplay: `₹${(p.basePricePaise / 100).toFixed(2)}`,
-        originalPriceDisplay: `₹${((p.basePricePaise * 1.2) / 100).toFixed(0)}`,
+        originalPriceDisplay: `₹${Math.floor((p.basePricePaise * 120) / 10000)}`,
         imageUrl: primaryImage,
         images: p.images.map((img) => ({
           id: img.id,

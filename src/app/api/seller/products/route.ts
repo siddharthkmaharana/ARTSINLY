@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifySessionToken } from "@/lib/auth";
+import { rupeesToPaise } from "@/lib/money";
+import { generateSecureId } from "@/lib/id";
 
 export async function GET(req: NextRequest) {
   try {
@@ -92,9 +94,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Convert price to paise (e.g. ₹120.50 -> 12050 paise)
-    const numericPrice = typeof price === "string" ? parseFloat(price.replace(/[^0-9.]/g, "")) : price;
-    const pricePaise = Math.round(numericPrice * 100);
+    // Convert price to integer minor units (paise) with zero floating-point arithmetic
+    const pricePaise = rupeesToPaise(price);
 
     // Find category
     let category = await prisma.category.findUnique({
@@ -116,7 +117,7 @@ export async function POST(req: NextRequest) {
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/(^-|-$)/g, "") +
       "-" +
-      Math.floor(1000 + Math.random() * 9000);
+      generateSecureId(undefined, 3);
 
     const product = await prisma.$transaction(async (tx) => {
       // 1. Create product

@@ -1,3 +1,18 @@
+// ============================================================================
+// ARTSINLY DATABASE ARCHITECTURE & STRICT INVARIANTS:
+// 
+// 1. NON-GUESSABLE IDENTIFIERS:
+//    - Use UUIDs or equivalent collision-resistant, non-guessable identifiers
+//      for all records (CUID / UUID v4). Auto-incrementing integers (@default(autoincrement()))
+//      are strictly forbidden to prevent ID enumeration and resource traversal attacks.
+// 
+// 2. INTEGER MINOR MONETARY UNITS:
+//    - Store money as integer minor units, such as paise for INR (1 INR = 100 paise),
+//      or an appropriate exact decimal type.
+//    - Floating-point arithmetic and Float types are strictly prohibited for payments,
+//      ledger balances, taxes, and settlements to eliminate IEEE 754 precision loss.
+// ============================================================================
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")

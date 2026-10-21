@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { logAuditEvent } from "@/lib/db/audit";
 import { logger } from "@/lib/monitoring/logger";
+import { generateGrievanceTicketId } from "@/lib/id";
 
 /**
  * POST /api/grievance
@@ -25,10 +26,8 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Generate statutory grievance ticket reference ID
-    const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-    const randomSuffix = Math.random().toString(36).substring(2, 6).toUpperCase();
-    const ticketId = `GRV-${dateStr}-${randomSuffix}`;
+    // Generate statutory grievance ticket reference ID using cryptographically secure entropy
+    const ticketId = generateGrievanceTicketId("GRV");
 
     await logAuditEvent({
       action: "CONSUMER_GRIEVANCE_REGISTERED",

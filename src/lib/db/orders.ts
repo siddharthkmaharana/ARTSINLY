@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { Order, OrderStatus } from "@prisma/client";
+import { generateOrderNumber } from "@/lib/id";
 
 export interface CreateOrderItemInput {
   productId: string;
@@ -25,15 +26,6 @@ export interface CreateOrderInput {
   };
   shippingFeePaise?: number;
   taxPaise?: number;
-}
-
-/**
- * Generate unique editorial order number (e.g. ARTSINLY-2026-X8F2Q)
- */
-function generateOrderNumber(): string {
-  const year = new Date().getFullYear();
-  const randomStr = Math.random().toString(36).substring(2, 7).toUpperCase();
-  return `ART-${year}-${randomStr}`;
 }
 
 /**
