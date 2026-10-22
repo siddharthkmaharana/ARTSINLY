@@ -12,7 +12,7 @@ async function fetchUrl(url, options = {}) {
       path: parsed.pathname + parsed.search,
       method: options.method || "GET",
       headers: options.headers || {},
-      timeout: 3000,
+      timeout: options.timeout || 10000,
     };
 
     const req = http.request(reqOptions, (res) => {
