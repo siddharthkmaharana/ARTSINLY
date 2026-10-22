@@ -443,6 +443,8 @@ async function main() {
       orderNumber: "ART-2026-H82K9",
       buyerId: buyerUser.id,
       status: OrderStatus.CONFIRMED,
+      paymentStatus: "COMPLETED",
+      shipmentStatus: "SHIPPED",
       currency: "INR",
       subtotalPaise: 12699,
       shippingFeePaise: 0,
@@ -465,6 +467,13 @@ async function main() {
             title: "Modern Ethnic Ceramic Vase – Terracotta Vase with Indigenous Pattern",
             pricePaise: 12699,
             quantity: 1,
+            sellerShopName: sellerDevendra.shopName,
+            sellerArtisanName: sellerDevendra.artisanName,
+            productSnapshot: {
+              title: prodVase.title,
+              craftType: prodVase.craftType,
+              basePricePaise: prodVase.basePricePaise,
+            },
           },
         ],
       },
@@ -478,6 +487,16 @@ async function main() {
       referenceId: "pay_N829xZ93kd0",
       amountPaise: 12699,
       status: "COMPLETED",
+    },
+  });
+
+  await prisma.shipment.create({
+    data: {
+      orderId: sampleOrder.id,
+      carrier: "BlueDart Fragile Express",
+      trackingNumber: "AWB-2026-TERRA-829",
+      status: "SHIPPED",
+      shippedAt: new Date(),
     },
   });
 

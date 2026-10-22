@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifySessionToken } from "@/lib/auth";
 import { sendShipmentDispatchedEmail } from "@/lib/email";
-import { OrderStatus } from "@prisma/client";
+import { OrderStatus, ShipmentStatus } from "@prisma/client";
 import { generateTrackingNumber } from "@/lib/id";
 
 interface RouteParams {
@@ -85,24 +85,28 @@ export async function PATCH(req: NextRequest, { params }: RouteParams) {
 
     const existingShipment = orderItem.order.shipments[0];
 
+    // Determine logistical ShipmentStatus
+    const shipmentStatus: ShipmentStatus =
+      status === "SHIPPED"
+        ? ShipmentStatus.SHIPPED
+        : status === "DELIVERED"
+        ? ShipmentStatus.DELIVERED
+        : status === "PROCESSING"
+        ? ShipmentStatus.PROCESSING
+        : ShipmentStatus.LABEL_CREATED;
+
     const updated = await prisma.$transaction(async (tx) => {
-      // 1. Update order status if provided
+      // 1. Update order status and shipmentStatus independently (leaving paymentStatus intact)
       const ord = await tx.order.update({
         where: { id: orderId },
         data: {
           status: status ? (status as OrderStatus) : undefined,
+          shipmentStatus,
         },
       });
 
       // 2. Update or create Shipment
       let ship;
-      const shipmentStatus =
-        status === "SHIPPED"
-          ? "IN_TRANSIT"
-          : status === "DELIVERED"
-          ? "DELIVERED"
-          : "PROCESSING";
-
       if (existingShipment) {
         ship = await tx.shipment.update({
           where: { id: existingShipment.id },

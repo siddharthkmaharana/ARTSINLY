@@ -11,6 +11,24 @@ export type OrderStatus =
   | "CANCELLED"
   | "REFUNDED";
 
+export type PaymentStatus =
+  | "PENDING"
+  | "AUTHORIZED"
+  | "COMPLETED"
+  | "FAILED"
+  | "REFUNDED";
+
+export type ShipmentStatus =
+  | "PENDING"
+  | "LABEL_CREATED"
+  | "PROCESSING"
+  | "SHIPPED"
+  | "IN_TRANSIT"
+  | "OUT_FOR_DELIVERY"
+  | "DELIVERED"
+  | "CANCELLED"
+  | "RETURNED";
+
 export interface Artisan {
   id: string;
   shopName: string;
@@ -104,9 +122,15 @@ export interface CartItem {
 
 export interface OrderItem {
   id: string;
-  product: Product;
-  quantity: number;
+  productId?: string;
+  variantId?: string;
+  sellerId?: string;
+  title: string;
   pricePaise: number;
+  quantity: number;
+  sellerShopName?: string;
+  sellerArtisanName?: string;
+  product?: Product;
 }
 
 export interface Order {
@@ -114,6 +138,8 @@ export interface Order {
   orderNumber: string;
   date: string;
   status: OrderStatus;
+  paymentStatus: PaymentStatus;
+  shipmentStatus: ShipmentStatus;
   items: OrderItem[];
   subtotalPaise: number;
   shippingFeePaise: number;

@@ -81,6 +81,8 @@ function BuyerDashboardContent() {
                 id: ord.orderNumber || ord.id,
                 date: dateStr,
                 status: ord.status,
+                paymentStatus: ord.paymentStatus || ord.payments?.[0]?.status || "PENDING",
+                shipmentStatus: ord.shipmentStatus || shipment?.status || "PENDING",
                 statusText,
                 carrier: shipment?.carrier || "Pan-India Fragile Express",
                 trackingNumber: shipment?.trackingNumber || `AWB-${ord.orderNumber}`,
@@ -91,7 +93,7 @@ function BuyerDashboardContent() {
                   imageUrl:
                     item.product?.images?.[0]?.url ||
                     "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=400&q=80",
-                  artisanName: item.seller?.artisanName || "Master Artisan",
+                  artisanName: item.sellerArtisanName || item.seller?.artisanName || "Master Artisan",
                   state: item.seller?.state || "Heritage Craft",
                   slug: item.product?.slug || "handcrafted-piece",
                 })),
@@ -220,22 +222,52 @@ function BuyerDashboardContent() {
                     </div>
                   </div>
 
-                  <span
-                    className={`inline-flex items-center gap-1.5 px-3 py-1 rounded text-xs font-semibold ${
-                      order.status === "DELIVERED"
-                        ? "bg-[#EBF0E9] text-[#52644B]"
-                        : order.status === "SHIPPED"
-                        ? "bg-sky-50 text-sky-800 border border-sky-200"
-                        : "bg-[#F4EFE6] text-[#89714F]"
-                    }`}
-                  >
-                    {order.status === "DELIVERED" ? (
-                      <CheckCircle2 className="w-3.5 h-3.5" />
-                    ) : (
-                      <Truck className="w-3.5 h-3.5" />
-                    )}
-                    <span>{order.statusText}</span>
-                  </span>
+                  {/* Separate Status Badges: Order, Payment, and Shipment */}
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span
+                      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-[11px] font-semibold ${
+                        order.paymentStatus === "COMPLETED"
+                          ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
+                          : order.paymentStatus === "REFUNDED"
+                          ? "bg-red-50 text-red-800 border border-red-200"
+                          : "bg-amber-50 text-amber-800 border border-amber-200"
+                      }`}
+                    >
+                      Payment: {order.paymentStatus}
+                    </span>
+
+                    <span
+                      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded text-[11px] font-semibold ${
+                        order.shipmentStatus === "DELIVERED"
+                          ? "bg-[#EBF0E9] text-[#52644B]"
+                          : order.shipmentStatus === "SHIPPED" || order.shipmentStatus === "IN_TRANSIT"
+                          ? "bg-sky-50 text-sky-800 border border-sky-200"
+                          : "bg-[#F4EFE6] text-[#89714F]"
+                      }`}
+                    >
+                      <Truck className="w-3 h-3" />
+                      Shipment: {order.shipmentStatus}
+                    </span>
+
+                    <span
+                      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded text-xs font-semibold ${
+                        order.status === "DELIVERED"
+                          ? "bg-[#EBF0E9] text-[#52644B]"
+                          : order.status === "REFUNDED"
+                          ? "bg-red-100 text-red-800"
+                          : order.status === "SHIPPED"
+                          ? "bg-sky-50 text-sky-800 border border-sky-200"
+                          : "bg-[#F4EFE6] text-[#89714F]"
+                      }`}
+                    >
+                      {order.status === "DELIVERED" ? (
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                      ) : (
+                        <Clock className="w-3.5 h-3.5" />
+                      )}
+                      <span>{order.statusText}</span>
+                    </span>
+                  </div>
                 </div>
 
                 {/* Tracking & Items */}

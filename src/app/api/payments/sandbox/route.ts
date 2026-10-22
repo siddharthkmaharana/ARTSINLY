@@ -84,6 +84,7 @@ export async function POST(req: NextRequest) {
         where: { id: order.id },
         data: {
           status: "CONFIRMED",
+          paymentStatus: "COMPLETED",
         },
         include: {
           items: true,
@@ -127,6 +128,8 @@ export async function POST(req: NextRequest) {
         id: updatedOrder.id,
         orderNumber: updatedOrder.orderNumber,
         status: updatedOrder.status,
+        paymentStatus: updatedOrder.paymentStatus,
+        shipmentStatus: updatedOrder.shipmentStatus,
       },
     });
   } catch (error: any) {

@@ -66,6 +66,8 @@ export async function GET(req: NextRequest) {
           orderNumber: item.order.orderNumber,
           createdAt: item.order.createdAt,
           status: item.order.status,
+          paymentStatus: item.order.paymentStatus,
+          shipmentStatus: item.order.shipmentStatus,
           addressSnapshot: item.order.addressSnapshot,
           buyer: item.order.buyer,
           shipments: item.order.shipments,

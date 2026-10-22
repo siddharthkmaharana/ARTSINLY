@@ -115,6 +115,9 @@ export async function POST(req: NextRequest) {
       title: string;
       pricePaise: number;
       quantity: number;
+      sellerShopName?: string;
+      sellerArtisanName?: string;
+      productSnapshot?: any;
       sellerEmail?: string;
       sellerName?: string;
     }> = [];
@@ -162,15 +165,31 @@ export async function POST(req: NextRequest) {
           );
         }
 
+        // Strict Database Rule: Price and seller must be captured from product at purchase time
+        const unitPricePaise =
+          product.variants?.find((v) => v.id === item.variantId)?.pricePaise ??
+          product.basePricePaise;
+        const sellerId = product.sellerId || defaultSeller.id;
+        const sellerShopName = product.seller?.shopName || "Master Artisan Studio";
+        const sellerArtisanName = product.seller?.artisanName || "Master Artisan";
+
         enrichedItems.push({
           productId: product.id,
-          variantId: product.variants[0]?.id,
-          sellerId: product.sellerId || defaultSeller.id,
+          variantId: item.variantId || product.variants[0]?.id,
+          sellerId,
           title: product.title,
-          pricePaise: item.pricePaise || product.basePricePaise,
+          pricePaise: unitPricePaise, // Immutable unit price at purchase time
           quantity,
+          sellerShopName,
+          sellerArtisanName,
           sellerEmail: product.seller?.user?.email || "artisan@artsinly.com",
-          sellerName: product.seller?.artisanName || product.seller?.shopName || "Master Artisan",
+          sellerName: sellerArtisanName || sellerShopName,
+          productSnapshot: {
+            title: product.title,
+            craftType: product.craftType,
+            basePricePaise: product.basePricePaise,
+            giCode: product.seller?.giCode || null,
+          },
         });
       } else {
         // Fallback for demo mock product ID
@@ -178,10 +197,15 @@ export async function POST(req: NextRequest) {
           productId: item.productId,
           sellerId: defaultSeller.id,
           title: item.title || "Handcrafted Heritage Art Piece",
-          pricePaise: item.pricePaise || 12699,
+          pricePaise: Number.isInteger(item.pricePaise) ? item.pricePaise : 12699,
           quantity,
+          sellerShopName: defaultSeller.shopName,
+          sellerArtisanName: defaultSeller.artisanName || undefined,
           sellerEmail: "artisan@artsinly.com",
           sellerName: defaultSeller.artisanName || undefined,
+          productSnapshot: {
+            title: item.title || "Handcrafted Heritage Art Piece",
+          },
         });
       }
     }
@@ -195,7 +219,7 @@ export async function POST(req: NextRequest) {
 
     // 3. Atomically create Order, OrderItems, decrement Inventory, and create Shipment
     const order = await prisma.$transaction(async (tx) => {
-      // Create order
+      // Create order with separated lifecycle statuses
       const newOrder = await tx.order.create({
         data: {
           orderNumber,
@@ -205,6 +229,8 @@ export async function POST(req: NextRequest) {
           shippingFeePaise,
           taxPaise,
           status: "PENDING",
+          paymentStatus: "PENDING",
+          shipmentStatus: "LABEL_CREATED",
           addressSnapshot: shippingAddress,
           items: {
             create: enrichedItems.map((item) => ({
@@ -212,8 +238,11 @@ export async function POST(req: NextRequest) {
               variantId: item.variantId,
               sellerId: item.sellerId,
               title: item.title,
-              pricePaise: item.pricePaise,
+              pricePaise: item.pricePaise, // Frozen at purchase time
               quantity: item.quantity,
+              sellerShopName: item.sellerShopName,
+              sellerArtisanName: item.sellerArtisanName,
+              productSnapshot: item.productSnapshot,
             })),
           },
         },
@@ -232,7 +261,7 @@ export async function POST(req: NextRequest) {
         });
       }
 
-      // Create initial Shipment record
+      // Create initial Shipment record with ShipmentStatus
       await tx.shipment.create({
         data: {
           orderId: newOrder.id,

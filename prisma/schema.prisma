@@ -11,6 +11,21 @@
 //      or an appropriate exact decimal type.
 //    - Floating-point arithmetic and Float types are strictly prohibited for payments,
 //      ledger balances, taxes, and settlements to eliminate IEEE 754 precision loss.
+// 
+// 3. HISTORICAL ORDER IMMUTABILITY (PRICE & SELLER SNAPSHOTTING):
+//    - Save the unit price (in integer minor units / paise) and seller (sellerId and
+//      seller snapshot metadata) directly on each order item record at purchase time.
+//    - Historical orders and order items are immutable audit records: subsequent edits
+//      to products (price adjustments, title changes, descriptions, deletion/archival)
+//      or changes to seller profiles MUST NEVER alter historical order lines, receipts,
+//      commissions, tax computations, or financial ledgers.
+// 
+// 4. STRICT SEPARATION OF STATUSES:
+//    - Keep payment status, order status, and shipment status strictly separate.
+//    - Conflating or combining them into a single column is strictly prohibited.
+//    - OrderStatus represents the overall contract lifecycle (PENDING, CONFIRMED, PROCESSING, SHIPPED, DELIVERED, CANCELLED, REFUNDED).
+//    - PaymentStatus represents the financial transaction lifecycle (PENDING, AUTHORIZED, COMPLETED, FAILED, REFUNDED).
+//    - ShipmentStatus represents the fulfillment & delivery logistics lifecycle (PENDING, LABEL_CREATED, PROCESSING, SHIPPED, IN_TRANSIT, OUT_FOR_DELIVERY, DELIVERED, CANCELLED, RETURNED).
 // ============================================================================
 
 datasource db {
@@ -46,9 +61,22 @@ enum OrderStatus {
 
 enum PaymentStatus {
   PENDING
+  AUTHORIZED
   COMPLETED
   FAILED
   REFUNDED
+}
+
+enum ShipmentStatus {
+  PENDING
+  LABEL_CREATED
+  PROCESSING
+  SHIPPED
+  IN_TRANSIT
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+  RETURNED
 }
 
 enum PayoutStatus {
@@ -282,20 +310,22 @@ model WishlistItem {
 
 // 7. Orders & Order Items
 model Order {
-  id                String       @id @default(cuid())
-  orderNumber       String       @unique
+  id                String         @id @default(cuid())
+  orderNumber       String         @unique
   buyerId           String
-  status            OrderStatus  @default(PENDING)
-  currency          String       @default("INR")
+  status            OrderStatus    @default(PENDING)
+  paymentStatus     PaymentStatus  @default(PENDING)
+  shipmentStatus    ShipmentStatus @default(PENDING)
+  currency          String         @default("INR")
   totalPaise        Int
   subtotalPaise     Int
-  shippingFeePaise  Int          @default(0)
-  taxPaise          Int          @default(0)
+  shippingFeePaise  Int            @default(0)
+  taxPaise          Int            @default(0)
   addressSnapshot   Json
-  createdAt         DateTime     @default(now())
-  updatedAt         DateTime     @updatedAt
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
 
-  buyer             User         @relation(fields: [buyerId], references: [id])
+  buyer             User           @relation(fields: [buyerId], references: [id])
   items             OrderItem[]
   payments          Payment[]
   shipments         Shipment[]
@@ -304,20 +334,23 @@ model Order {
 }
 
 model OrderItem {
-  id          String          @id @default(cuid())
-  orderId     String
-  productId   String
-  variantId   String?
-  sellerId    String
-  title       String
-  pricePaise  Int
-  quantity    Int
-  createdAt   DateTime        @default(now())
+  id                String          @id @default(cuid())
+  orderId           String
+  productId         String
+  variantId         String?
+  sellerId          String
+  title             String
+  pricePaise        Int             // Captured unit price at purchase time (immune to later product edits)
+  quantity          Int
+  sellerShopName    String?         // Captured seller shop snapshot at purchase time
+  sellerArtisanName String?         // Captured artisan name snapshot at purchase time
+  productSnapshot   Json?           // Full immutable product snapshot at purchase time
+  createdAt         DateTime        @default(now())
 
-  order       Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  product     Product         @relation(fields: [productId], references: [id])
-  variant     ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
-  seller      SellerProfile   @relation(fields: [sellerId], references: [id])
+  order             Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product           Product         @relation(fields: [productId], references: [id])
+  variant           ProductVariant? @relation(fields: [variantId], references: [id], onDelete: SetNull)
+  seller            SellerProfile   @relation(fields: [sellerId], references: [id])
 
   @@map("order_items")
 }
@@ -357,16 +390,16 @@ model Payment {
 }
 
 model Shipment {
-  id             String    @id @default(cuid())
+  id             String         @id @default(cuid())
   orderId        String
   carrier        String
   trackingNumber String?
-  status         String    @default("LABEL_CREATED")
+  status         ShipmentStatus @default(LABEL_CREATED)
   shippedAt      DateTime?
   deliveredAt    DateTime?
-  createdAt      DateTime  @default(now())
+  createdAt      DateTime       @default(now())
 
-  order          Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  order          Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   @@map("shipments")
 }

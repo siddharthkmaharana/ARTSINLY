@@ -51,6 +51,8 @@ interface SellerOrder {
   orderNumber: string;
   createdAt: string;
   status: string;
+  paymentStatus?: string;
+  shipmentStatus?: string;
   buyer: {
     name: string;
     email: string;
@@ -73,6 +75,11 @@ interface SellerOrder {
     imageUrl: string;
   }>;
   sellerTotalPaise: number;
+  payments?: Array<{
+    id: string;
+    status: string;
+    provider?: string;
+  }>;
   shipments?: Array<{
     carrier: string;
     trackingNumber: string;
@@ -899,12 +906,39 @@ export default function SellerDashboardPage() {
                           </div>
                         </div>
 
-                        {/* Status Badge & Fulfilment Action */}
-                        <div className="flex items-center gap-3">
+                        {/* Separate Status Badges: Payment, Shipment & Order */}
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span
+                            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold ${
+                              (ord.paymentStatus || ord.payments?.[0]?.status) === "COMPLETED"
+                                ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
+                                : (ord.paymentStatus || ord.payments?.[0]?.status) === "REFUNDED"
+                                ? "bg-red-50 text-red-800 border border-red-200"
+                                : "bg-amber-50 text-amber-800 border border-amber-200"
+                            }`}
+                          >
+                            Payment: {ord.paymentStatus || ord.payments?.[0]?.status || "PENDING"}
+                          </span>
+
+                          <span
+                            className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold ${
+                              (ord.shipmentStatus || ord.shipments?.[0]?.status) === "DELIVERED"
+                                ? "bg-emerald-50 text-emerald-800 border border-emerald-200"
+                                : (ord.shipmentStatus || ord.shipments?.[0]?.status) === "SHIPPED" || (ord.shipmentStatus || ord.shipments?.[0]?.status) === "IN_TRANSIT"
+                                ? "bg-sky-50 text-sky-800 border border-sky-200"
+                                : "bg-stone-50 text-stone-700 border border-stone-200"
+                            }`}
+                          >
+                            <Truck className="w-3 h-3" />
+                            Shipment: {ord.shipmentStatus || ord.shipments?.[0]?.status || "PENDING"}
+                          </span>
+
                           <span
                             className={`inline-flex items-center gap-1 px-2.5 py-1 rounded text-xs font-semibold ${
                               ord.status === "DELIVERED"
                                 ? "bg-emerald-100 text-emerald-800"
+                                : ord.status === "REFUNDED"
+                                ? "bg-red-100 text-red-800"
                                 : ord.status === "SHIPPED"
                                 ? "bg-sky-100 text-sky-800"
                                 : ord.status === "PROCESSING"
@@ -915,7 +949,7 @@ export default function SellerDashboardPage() {
                             {ord.status === "DELIVERED" && <CheckCircle2 className="w-3.5 h-3.5" />}
                             {ord.status === "SHIPPED" && <Truck className="w-3.5 h-3.5" />}
                             {ord.status === "PROCESSING" && <Clock className="w-3.5 h-3.5" />}
-                            <span>{ord.status}</span>
+                            <span>Order: {ord.status}</span>
                           </span>
 
                           <button
