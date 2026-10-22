@@ -52,10 +52,14 @@ export async function POST(req: NextRequest, { params }: RouteParams) {
 
     // Atomically execute refund, inventory restock, and payment status update
     const result = await prisma.$transaction(async (tx) => {
-      // 1. Update Order status to REFUNDED
+      // 1. Update Order status, paymentStatus, and shipmentStatus
       const updatedOrder = await tx.order.update({
         where: { id: order.id },
-        data: { status: "REFUNDED" },
+        data: {
+          status: "REFUNDED",
+          paymentStatus: "REFUNDED",
+          shipmentStatus: "CANCELLED",
+        },
       });
 
       // 2. Update Payments to REFUNDED

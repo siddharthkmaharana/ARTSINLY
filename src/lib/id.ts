@@ -33,7 +33,7 @@ export function generateSecureId(prefix?: string, bytes = 16): string {
  */
 export function generateOrderNumber(): string {
   const year = new Date().getFullYear();
-  const token = crypto.randomBytes(4).toString("hex").toUpperCase();
+  const token = crypto.randomBytes(6).toString("hex").toUpperCase();
   return `ART-${year}-${token}`;
 }
 

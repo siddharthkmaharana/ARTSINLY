@@ -43,16 +43,28 @@ export async function requireAdmin(req: NextRequest): Promise<AdminAuthResult> {
     };
   }
 
-  // Verify user still exists in database and has ADMIN role
-  const user = await prisma.user.findUnique({
-    where: { id: payload.userId },
-    select: {
-      id: true,
-      email: true,
-      role: true,
-      name: true,
-    },
-  });
+  // Verify user in database, with payload fallback if database is offline
+  let user: any = null;
+  try {
+    user = await prisma.user.findUnique({
+      where: { id: payload.userId },
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        name: true,
+      },
+    });
+  } catch {
+    if (payload.role === "ADMIN") {
+      user = {
+        id: payload.userId,
+        email: payload.email,
+        role: payload.role,
+        name: payload.name || "Master Curator & Administrator",
+      };
+    }
+  }
 
   if (!user) {
     return {

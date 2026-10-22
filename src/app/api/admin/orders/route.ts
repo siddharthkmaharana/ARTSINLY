@@ -15,9 +15,13 @@ export async function GET(req: NextRequest) {
 
     const { searchParams } = new URL(req.url);
     const status = searchParams.get("status");
+    const paymentStatus = searchParams.get("paymentStatus");
+    const shipmentStatus = searchParams.get("shipmentStatus");
 
     const where: any = {};
     if (status) where.status = status;
+    if (paymentStatus) where.paymentStatus = paymentStatus;
+    if (shipmentStatus) where.shipmentStatus = shipmentStatus;
 
     const orders = await prisma.order.findMany({
       where,

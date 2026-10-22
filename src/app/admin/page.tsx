@@ -930,8 +930,8 @@ export default function AdminPage() {
                           </div>
                         </div>
 
-                        {/* Status Badges */}
-                        <div className="flex items-center gap-2">
+                        {/* Status Badges: Order, Payment & Shipment */}
+                        <div className="flex flex-wrap items-center gap-2">
                           <span
                             className={`px-2.5 py-1 rounded text-xs font-semibold ${
                               ord.status === "REFUNDED"
@@ -943,19 +943,33 @@ export default function AdminPage() {
                                 : "bg-[#F3ECE1] text-[#89714F]"
                             }`}
                           >
-                            {ord.status}
+                            Order: {ord.status}
                           </span>
 
                           <span
                             className={`px-2 py-0.5 rounded text-[10px] font-mono font-medium ${
-                              payment?.status === "REFUNDED"
+                              (ord.paymentStatus || payment?.status) === "REFUNDED"
                                 ? "bg-red-50 text-red-700 border border-red-200"
-                                : payment?.status === "COMPLETED"
+                                : (ord.paymentStatus || payment?.status) === "COMPLETED"
                                 ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
                                 : "bg-stone-50 text-stone-700"
                             }`}
                           >
-                            Payment: {payment?.status || "PENDING"} ({payment?.provider || "SANDBOX"})
+                            Payment: {ord.paymentStatus || payment?.status || "PENDING"} ({payment?.provider || "SANDBOX"})
+                          </span>
+
+                          <span
+                            className={`px-2 py-0.5 rounded text-[10px] font-mono font-medium ${
+                              (ord.shipmentStatus || shipment?.status) === "DELIVERED"
+                                ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                                : (ord.shipmentStatus || shipment?.status) === "SHIPPED" || (ord.shipmentStatus || shipment?.status) === "IN_TRANSIT"
+                                ? "bg-sky-50 text-sky-700 border border-sky-200"
+                                : (ord.shipmentStatus || shipment?.status) === "CANCELLED"
+                                ? "bg-red-50 text-red-700 border border-red-200"
+                                : "bg-stone-50 text-stone-700"
+                            }`}
+                          >
+                            Shipment: {ord.shipmentStatus || shipment?.status || "PENDING"}
                           </span>
                         </div>
                       </div>
@@ -975,7 +989,7 @@ export default function AdminPage() {
                               <div>
                                 <h4 className="font-medium text-[#1E1E1C]">{item.title}</h4>
                                 <span className="text-[#7A756D] text-[11px]">
-                                  Qty: <strong>{item.quantity}</strong> • Unit Price: {formatINR(item.pricePaise)} • Seller: {item.seller?.shopName}
+                                  Qty: <strong>{item.quantity}</strong> • Unit Price: {formatINR(item.pricePaise)} • Seller: {item.sellerShopName || item.seller?.shopName}
                                 </span>
                               </div>
                             </div>

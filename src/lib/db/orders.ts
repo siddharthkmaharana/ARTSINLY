@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { Order, OrderStatus } from "@prisma/client";
+import { Order, OrderStatus, PaymentStatus, ShipmentStatus } from "@prisma/client";
 import { generateOrderNumber } from "@/lib/id";
 
 export interface CreateOrderItemInput {
@@ -7,8 +7,11 @@ export interface CreateOrderItemInput {
   variantId?: string;
   sellerId: string;
   title: string;
-  pricePaise: number;
+  pricePaise: number; // Unit price snapshotted at purchase time
   quantity: number;
+  sellerShopName?: string;
+  sellerArtisanName?: string;
+  productSnapshot?: any;
 }
 
 export interface CreateOrderInput {
@@ -29,7 +32,10 @@ export interface CreateOrderInput {
 }
 
 /**
- * Create a new order, order items, deduct inventory, and optionally empty the buyer's cart
+ * Create a new order, order items, deduct inventory, and optionally empty the buyer's cart.
+ * Strict Database Invariants:
+ * 1. Saves unit price and seller snapshot on each OrderItem at purchase time.
+ * 2. Initializes paymentStatus, orderStatus, and shipmentStatus separately.
  */
 export async function createOrder(data: CreateOrderInput): Promise<Order> {
   const { buyerId, items, shippingAddress, shippingFeePaise = 0, taxPaise = 0 } = data;
@@ -41,7 +47,7 @@ export async function createOrder(data: CreateOrderInput): Promise<Order> {
   const totalPaise = subtotalPaise + shippingFeePaise + taxPaise;
 
   return prisma.$transaction(async (tx) => {
-    // 1. Create the order
+    // 1. Create the order with segregated status trackers
     const order = await tx.order.create({
       data: {
         orderNumber: generateOrderNumber(),
@@ -50,6 +56,9 @@ export async function createOrder(data: CreateOrderInput): Promise<Order> {
         subtotalPaise,
         shippingFeePaise,
         taxPaise,
+        status: OrderStatus.PENDING,
+        paymentStatus: PaymentStatus.PENDING,
+        shipmentStatus: ShipmentStatus.PENDING,
         addressSnapshot: shippingAddress,
         items: {
           create: items.map((item) => ({
@@ -57,8 +66,11 @@ export async function createOrder(data: CreateOrderInput): Promise<Order> {
             variantId: item.variantId,
             sellerId: item.sellerId,
             title: item.title,
-            pricePaise: item.pricePaise,
+            pricePaise: item.pricePaise, // Immutable unit price at purchase time
             quantity: item.quantity,
+            sellerShopName: item.sellerShopName,
+            sellerArtisanName: item.sellerArtisanName,
+            productSnapshot: item.productSnapshot,
           })),
         },
       },
@@ -166,13 +178,16 @@ export async function getOrdersByBuyer(buyerId: string) {
           },
         },
       },
+      shipments: true,
+      payments: true,
     },
     orderBy: { createdAt: "desc" },
   });
 }
 
 /**
- * Update order status (SHIPPED, DELIVERED, CANCELLED, etc.)
+ * Update order lifecycle status (CONFIRMED, PROCESSING, CANCELLED, REFUNDED, etc.)
+ * Strictly maintains payment and shipment status independently.
  */
 export async function updateOrderStatus(
   orderId: string,
@@ -181,5 +196,68 @@ export async function updateOrderStatus(
   return prisma.order.update({
     where: { id: orderId },
     data: { status },
+  });
+}
+
+/**
+ * Update financial payment status (PENDING, AUTHORIZED, COMPLETED, FAILED, REFUNDED)
+ * strictly separate from order lifecycle and logistics shipment.
+ */
+export async function updatePaymentStatus(
+  orderId: string,
+  paymentStatus: PaymentStatus
+): Promise<Order> {
+  return prisma.order.update({
+    where: { id: orderId },
+    data: { paymentStatus },
+  });
+}
+
+/**
+ * Update logistics shipment status (PENDING, LABEL_CREATED, IN_TRANSIT, DELIVERED, etc.)
+ * strictly separate from order lifecycle and payment settlement.
+ */
+export async function updateShipmentStatus(
+  orderId: string,
+  shipmentStatus: ShipmentStatus
+): Promise<Order> {
+  return prisma.order.update({
+    where: { id: orderId },
+    data: { shipmentStatus },
+  });
+}
+
+/**
+ * Retrieve immutable historical order snapshot
+ * Guarantees purchase-time unit prices and seller identity are intact even if products were subsequently edited.
+ */
+export async function getHistoricalOrderSnapshot(orderId: string) {
+  return prisma.order.findUnique({
+    where: { id: orderId },
+    select: {
+      id: true,
+      orderNumber: true,
+      status: true,
+      paymentStatus: true,
+      shipmentStatus: true,
+      totalPaise: true,
+      subtotalPaise: true,
+      shippingFeePaise: true,
+      taxPaise: true,
+      addressSnapshot: true,
+      createdAt: true,
+      items: {
+        select: {
+          id: true,
+          productId: true,
+          title: true,
+          pricePaise: true, // Immutable historical price at purchase
+          quantity: true,
+          sellerId: true, // Immutable seller at purchase
+          sellerShopName: true,
+          sellerArtisanName: true,
+        },
+      },
+    },
   });
 }
