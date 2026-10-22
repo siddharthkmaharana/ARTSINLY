@@ -114,7 +114,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-screen flex flex-col bg-[var(--background)] text-[var(--foreground)] selection:bg-[#DCD0BD] selection:text-[#20201D] dark:selection:bg-[#A44A3F] dark:selection:text-white transition-colors duration-200">
+      <body suppressHydrationWarning className="min-h-screen flex flex-col bg-[var(--background)] text-[var(--foreground)] selection:bg-[#DCD0BD] selection:text-[#20201D] dark:selection:bg-[#A44A3F] dark:selection:text-white transition-colors duration-200">
         {/* Accessible Skip Link for Screen Readers & Keyboard Navigation */}
         <a
           href="#main-content"
