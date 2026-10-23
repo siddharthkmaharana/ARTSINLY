@@ -36,11 +36,13 @@ interface StudioProduct {
   title: string;
   category: string;
   craftAndMaterial: string;
+  regionOfOrigin?: string;
   price: number; // in rupees
   priceDisplay: string;
   status: string;
   imageUrl: string;
   stock: number;
+  isMadeToOrder?: boolean;
   description?: string;
   dimensions?: string;
   materials?: string;
@@ -87,6 +89,50 @@ interface SellerOrder {
   }>;
 }
 
+export const CRAFT_CATEGORIES = [
+  "Painting",
+  "Terracotta Pottery",
+  "Wood Carving",
+  "Metal Casting (Dhokra)",
+  "Handloom Weaving",
+  "Stone Carving",
+  "Zari & Embroidery",
+  "Leather Craft (Mojari)",
+  "Jewelry & Silver Filigree (Tarakasi)",
+  "Paper Mache & Folk Toys",
+];
+
+export const REGIONS_OF_ORIGIN = [
+  "Odisha",
+  "Rajasthan",
+  "Gujarat",
+  "West Bengal",
+  "Kashmir",
+  "Tamil Nadu",
+  "Uttar Pradesh",
+  "Bihar",
+  "Kerala",
+  "Madhya Pradesh",
+  "Andhra Pradesh",
+  "Karnataka",
+  "Assam",
+  "Maharashtra",
+];
+
+export const getFormattedPreviewPrice = (val: string) => {
+  if (!val || !val.trim()) return "₹1,200";
+  try {
+    const clean = val.replace(/,/g, "").trim();
+    const num = parseFloat(clean);
+    if (isNaN(num) || num < 0) return "₹1,200";
+    return `₹${Math.floor(num).toLocaleString("en-IN")}${
+      clean.includes(".") ? "." + clean.split(".")[1].substring(0, 2) : ""
+    }`;
+  } catch {
+    return "₹1,200";
+  }
+};
+
 const FALLBACK_PRODUCTS: StudioProduct[] = [
   {
     id: "sp-1",
@@ -94,12 +140,14 @@ const FALLBACK_PRODUCTS: StudioProduct[] = [
     title: "Modern Ethnic Ceramic Vase",
     category: "Vases",
     craftAndMaterial: "Terracotta Pottery",
+    regionOfOrigin: "Gujarat",
     price: 126.99,
     priceDisplay: "₹126.99",
     status: "Live in Marketplace",
     imageUrl:
       "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=300&q=80",
     stock: 12,
+    isMadeToOrder: false,
   },
   {
     id: "sp-2",
@@ -107,25 +155,29 @@ const FALLBACK_PRODUCTS: StudioProduct[] = [
     title: "Hand-Carved Floral High-Relief Sheesham Panel",
     category: "Wall Decor",
     craftAndMaterial: "Wood Carving",
+    regionOfOrigin: "Rajasthan",
     price: 700.0,
     priceDisplay: "₹700.00",
     status: "Live in Marketplace",
     imageUrl:
       "https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?auto=format&fit=crop&w=300&q=80",
     stock: 4,
+    isMadeToOrder: true,
   },
   {
     id: "sp-3",
     slug: "sacred-srinathji-gold-leaf-pichwai-miniature",
     title: "Sacred Srinathji Gold-Leaf Pichwai Miniature Painting",
     category: "Paintings",
-    craftAndMaterial: "Miniature Painting",
-    price: 1500.0,
-    priceDisplay: "₹1,500.00",
+    craftAndMaterial: "Painting",
+    regionOfOrigin: "Odisha",
+    price: 1200.0,
+    priceDisplay: "₹1,200.00",
     status: "Live in Marketplace",
     imageUrl:
       "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=300&q=80",
-    stock: 2,
+    stock: 1,
+    isMadeToOrder: false,
   },
 ];
 
@@ -154,25 +206,28 @@ export default function SellerDashboardPage() {
   const [bankSaveError, setBankSaveError] = useState("");
   const [bankSaveSuccess, setBankSaveSuccess] = useState("");
 
-  // New Product Modal State
+  // "Add a new craft" Form & Live Preview State (Specification)
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newTitle, setNewTitle] = useState("");
-  const [newCraft, setNewCraft] = useState("");
-  const [newCategory, setNewCategory] = useState("Vases");
-  const [newPrice, setNewPrice] = useState("");
-  const [newStock, setNewStock] = useState("10");
-  const [newImageUrl, setNewImageUrl] = useState("");
+  const [newCraftCategory, setNewCraftCategory] = useState("Painting"); // specification default
+  const [newRegionOfOrigin, setNewRegionOfOrigin] = useState("Odisha"); // specification default
+  const [newPrice, setNewPrice] = useState("1200"); // specification default
+  const [newAvailableQuantity, setNewAvailableQuantity] = useState("1"); // specification default
   const [newDescription, setNewDescription] = useState("");
+  const [newIsMadeToOrder, setNewIsMadeToOrder] = useState(false); // [ ] Made to order
+  const [newImageUrl, setNewImageUrl] = useState("");
   const [isCreatingProduct, setIsCreatingProduct] = useState(false);
 
   // Edit Product Modal State
   const [editingProduct, setEditingProduct] = useState<StudioProduct | null>(null);
   const [editTitle, setEditTitle] = useState("");
-  const [editCraft, setEditCraft] = useState("");
-  const [editPrice, setEditPrice] = useState("");
-  const [editStock, setEditStock] = useState("10");
-  const [editImageUrl, setEditImageUrl] = useState("");
+  const [editCraftCategory, setEditCraftCategory] = useState("Painting");
+  const [editRegionOfOrigin, setEditRegionOfOrigin] = useState("Odisha");
+  const [editPrice, setEditPrice] = useState("1200");
+  const [editAvailableQuantity, setEditAvailableQuantity] = useState("1");
   const [editDescription, setEditDescription] = useState("");
+  const [editIsMadeToOrder, setEditIsMadeToOrder] = useState(false);
+  const [editImageUrl, setEditImageUrl] = useState("");
   const [isUpdatingProduct, setIsUpdatingProduct] = useState(false);
 
   // Fulfillment Modal State
@@ -237,21 +292,23 @@ export default function SellerDashboardPage() {
         const prodData = await productsRes.json();
         if (prodData.products && prodData.products.length > 0) {
           const mapped = prodData.products.map((p: any) => {
-            const stockQty = p.inventory?.[0]?.quantity ?? 10;
+            const stockQty = p.inventory?.[0]?.quantity ?? 1;
             const priceRs = p.basePricePaise / 100;
             return {
               id: p.id,
               slug: p.slug,
               title: p.title,
-              category: p.category?.name || "Traditional Crafts",
-              craftAndMaterial: p.craftType || "Handcrafted Heritage",
+              category: p.category?.name || "Painting",
+              craftAndMaterial: p.craftType || "Painting",
+              regionOfOrigin: p.provenanceTag || "Odisha",
               price: priceRs,
-              priceDisplay: `₹${priceRs.toFixed(2)}`,
+              priceDisplay: formatINR(p.basePricePaise),
               status: p.status === "ARCHIVED" ? "Archived" : "Live in Marketplace",
               imageUrl:
                 p.images?.[0]?.url ||
-                "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=300&q=80",
+                "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=300&q=80",
               stock: stockQty,
+              isMadeToOrder: Boolean(p.isMadeToOrder),
               description: p.description,
               dimensions: p.dimensions,
               materials: p.materials,
@@ -278,10 +335,10 @@ export default function SellerDashboardPage() {
     loadData();
   }, [user]);
 
-  // Handle Product Create
+  // Handle Product Create ("Add a new craft")
   const handleCreateProduct = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newTitle || !newPrice) return;
+    if (!newTitle.trim() || !newPrice) return;
 
     try {
       setIsCreatingProduct(true);
@@ -289,14 +346,16 @@ export default function SellerDashboardPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          title: newTitle,
-          craftType: newCraft || sellerProfile?.craftTradition || "Traditional Crafts",
+          title: newTitle.trim(),
+          craftCategory: newCraftCategory,
+          regionOfOrigin: newRegionOfOrigin,
           price: newPrice,
-          initialStock: parseInt(newStock, 10) || 10,
+          availableQuantity: newIsMadeToOrder ? 0 : (parseInt(newAvailableQuantity, 10) || 1),
           description: newDescription,
+          isMadeToOrder: newIsMadeToOrder,
           imageUrl:
             newImageUrl ||
-            "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=800&q=80",
+            "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80",
         }),
       });
 
@@ -304,11 +363,13 @@ export default function SellerDashboardPage() {
         await loadData();
         setIsModalOpen(false);
         setNewTitle("");
-        setNewCraft("");
-        setNewPrice("");
-        setNewStock("10");
-        setNewImageUrl("");
+        setNewCraftCategory("Painting");
+        setNewRegionOfOrigin("Odisha");
+        setNewPrice("1200");
+        setNewAvailableQuantity("1");
         setNewDescription("");
+        setNewIsMadeToOrder(false);
+        setNewImageUrl("");
       } else {
         const data = await res.json();
         alert(data.error || "Failed to create product listing");
@@ -324,9 +385,11 @@ export default function SellerDashboardPage() {
   const openEditProduct = (prod: StudioProduct) => {
     setEditingProduct(prod);
     setEditTitle(prod.title);
-    setEditCraft(prod.craftAndMaterial);
+    setEditCraftCategory(prod.craftAndMaterial || "Painting");
+    setEditRegionOfOrigin(prod.regionOfOrigin || "Odisha");
     setEditPrice(prod.price.toString());
-    setEditStock(prod.stock.toString());
+    setEditAvailableQuantity(prod.stock.toString());
+    setEditIsMadeToOrder(Boolean(prod.isMadeToOrder));
     setEditImageUrl(prod.imageUrl);
     setEditDescription(prod.description || "");
   };
@@ -342,10 +405,12 @@ export default function SellerDashboardPage() {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          title: editTitle,
-          craftType: editCraft,
+          title: editTitle.trim(),
+          craftCategory: editCraftCategory,
+          regionOfOrigin: editRegionOfOrigin,
           price: editPrice,
-          stock: editStock,
+          stock: editIsMadeToOrder ? 0 : (parseInt(editAvailableQuantity, 10) || 1),
+          isMadeToOrder: editIsMadeToOrder,
           imageUrl: editImageUrl,
           description: editDescription,
         }),
@@ -609,10 +674,10 @@ export default function SellerDashboardPage() {
 
             <button
               onClick={() => setIsModalOpen(true)}
-              className="bg-[#1E1E1C] hover:bg-[#383734] text-white text-xs font-medium px-5 py-2.5 rounded-full flex items-center gap-1.5 shadow-xs transition-all cursor-pointer shrink-0 active:scale-95"
+              className="bg-[#1E1E1C] hover:bg-[#383734] text-white text-xs font-semibold px-5 py-2.5 rounded-full flex items-center gap-2 shadow-xs transition-all cursor-pointer shrink-0 active:scale-95"
             >
-              <Plus className="w-3.5 h-3.5" />
-              <span>Publish New Handcrafted Listing</span>
+              <Plus className="w-4 h-4 text-[#C2410C]" />
+              <span>Add a new craft</span>
             </button>
           </div>
         </div>
@@ -731,9 +796,18 @@ export default function SellerDashboardPage() {
                   Manage product details, pricing, available stock levels, and active status in real time.
                 </p>
               </div>
-              <span className="text-xs text-[#8C877E] font-medium">
-                Showing {products.length} Products
-              </span>
+              <div className="flex items-center gap-3">
+                <span className="text-xs text-[#8C877E] font-medium hidden sm:inline">
+                  Showing {products.length} Products
+                </span>
+                <button
+                  onClick={() => setIsModalOpen(true)}
+                  className="bg-[#C2410C] hover:bg-[#9A3412] text-white text-xs font-semibold px-4 py-2 rounded-lg flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  <span>Add a new craft</span>
+                </button>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
@@ -755,12 +829,17 @@ export default function SellerDashboardPage() {
                     >
                       {item.status}
                     </span>
+                    {item.isMadeToOrder && (
+                      <span className="absolute top-2 left-2 bg-amber-900/80 text-amber-50 backdrop-blur-xs text-[9px] font-bold px-2 py-0.5 rounded">
+                        Made to order
+                      </span>
+                    )}
                   </div>
 
                   <div className="p-3.5 flex flex-col justify-between flex-grow">
                     <div>
                       <span className="text-[9px] font-semibold text-[#C2410C] uppercase tracking-wider block mb-1">
-                        {item.craftAndMaterial}
+                        {item.craftAndMaterial} · {item.regionOfOrigin || "Odisha"}
                       </span>
                       <h3 className="font-serif text-xs sm:text-sm font-medium text-[#1E1E1C] line-clamp-1 mb-1">
                         {item.title}
@@ -768,30 +847,36 @@ export default function SellerDashboardPage() {
 
                       {/* Stock Level Controls */}
                       <div className="flex items-center justify-between bg-white px-2.5 py-1.5 rounded border border-[#E5E0D7] my-2 text-xs">
-                        <span className="text-[#7A756D] text-[11px]">Stock:</span>
-                        <div className="flex items-center gap-2">
-                          <button
-                            onClick={() => handleStockAdjust(item.id, item.stock, -1)}
-                            className="w-5 h-5 rounded bg-[#FAF7F2] hover:bg-[#EAE5DD] text-[#1E1E1C] flex items-center justify-center font-bold text-xs cursor-pointer"
-                            title="Decrease stock"
-                          >
-                            -
-                          </button>
-                          <span
-                            className={`font-semibold font-mono ${
-                              item.stock <= 2 ? "text-amber-600 font-bold" : "text-[#1E1E1C]"
-                            }`}
-                          >
-                            {item.stock}
+                        <span className="text-[#7A756D] text-[11px]">Availability:</span>
+                        {item.isMadeToOrder ? (
+                          <span className="text-[10px] font-semibold text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                            Made to order
                           </span>
-                          <button
-                            onClick={() => handleStockAdjust(item.id, item.stock, 1)}
-                            className="w-5 h-5 rounded bg-[#FAF7F2] hover:bg-[#EAE5DD] text-[#1E1E1C] flex items-center justify-center font-bold text-xs cursor-pointer"
-                            title="Increase stock"
-                          >
-                            +
-                          </button>
-                        </div>
+                        ) : (
+                          <div className="flex items-center gap-2">
+                            <button
+                              onClick={() => handleStockAdjust(item.id, item.stock, -1)}
+                              className="w-5 h-5 rounded bg-[#FAF7F2] hover:bg-[#EAE5DD] text-[#1E1E1C] flex items-center justify-center font-bold text-xs cursor-pointer"
+                              title="Decrease stock"
+                            >
+                              -
+                            </button>
+                            <span
+                              className={`font-semibold font-mono ${
+                                item.stock <= 2 ? "text-amber-600 font-bold" : "text-[#1E1E1C]"
+                              }`}
+                            >
+                              {item.stock} available
+                            </span>
+                            <button
+                              onClick={() => handleStockAdjust(item.id, item.stock, 1)}
+                              className="w-5 h-5 rounded bg-[#FAF7F2] hover:bg-[#EAE5DD] text-[#1E1E1C] flex items-center justify-center font-bold text-xs cursor-pointer"
+                              title="Increase stock"
+                            >
+                              +
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
 
@@ -1354,278 +1439,542 @@ export default function SellerDashboardPage() {
         )}
       </div>
 
-      {/* MODAL 1: PUBLISH NEW HANDCRAFTED LISTING */}
+      {/* MODAL 1: ADD A NEW CRAFT (PROPOSED PRODUCT-UPLOAD FORM & PRODUCT PREVIEW) */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-          <div className="bg-[#FAF7F2] border border-[#DDD5C8] rounded-xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-3 mb-4 border-b border-[#EAE5DD]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/65 backdrop-blur-xs overflow-y-auto">
+          <div className="bg-[#FAF7F2] border border-[#DDD5C8] rounded-2xl p-5 sm:p-8 max-w-4xl w-full shadow-2xl relative max-h-[92vh] overflow-y-auto my-auto">
+            {/* Modal Header */}
+            <div className="flex items-center justify-between pb-4 mb-6 border-b border-[#EAE5DD]">
               <div>
-                <span className="text-[10px] font-semibold text-[#C2410C] uppercase tracking-wider block">
-                  NEW LISTING
+                <span className="text-[10px] font-semibold text-[#C2410C] uppercase tracking-[0.2em] block mb-0.5">
+                  ARTISAN STOREFRONT STUDIO · SELF-SERVE CRAFT MANAGEMENT
                 </span>
-                <h3 className="font-serif text-xl font-normal text-[#1E1E1C]">
-                  Publish Handcrafted Piece
+                <h3 className="font-serif text-2xl font-normal text-[#1E1E1C]">
+                  Add a new craft
                 </h3>
               </div>
               <button
                 onClick={() => setIsModalOpen(false)}
-                className="p-1 rounded-full hover:bg-[#ECE6DC] text-[#666] transition-colors cursor-pointer"
+                className="p-1.5 rounded-full hover:bg-[#ECE6DC] text-[#666] transition-colors cursor-pointer"
+                title="Close Modal"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleCreateProduct} className="space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-[#1E1E1C] mb-1">
-                  Product Title *
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Kutch Terracotta Hand-Thrown Reduction Pitcher"
-                  value={newTitle}
-                  onChange={(e) => setNewTitle(e.target.value)}
-                  className="w-full text-xs px-3 py-2 bg-white border border-[#D5CFC5] rounded-md focus:outline-none focus:border-[#C2410C]"
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-semibold text-[#1E1E1C] mb-1">
-                    Craft Discipline
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. Terracotta Pottery"
-                    value={newCraft}
-                    onChange={(e) => setNewCraft(e.target.value)}
-                    className="w-full text-xs px-3 py-2 bg-white border border-[#D5CFC5] rounded-md focus:outline-none focus:border-[#C2410C]"
-                  />
+            {/* 2-Column Responsive Specification Layout */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              {/* Left Column: Proposed product-upload form */}
+              <div className="lg:col-span-7">
+                <div className="flex items-center justify-between mb-4 pb-2 border-b border-[#EFEBE4]">
+                  <span className="text-xs font-bold text-[#1E1E1C] uppercase tracking-wider">
+                    Proposed product-upload form
+                  </span>
+                  <span className="text-[10px] font-mono bg-[#EFEBE4] text-[#7A756D] px-2 py-0.5 rounded">
+                    Implementation Spec
+                  </span>
                 </div>
-                <div>
-                  <label className="block text-xs font-semibold text-[#1E1E1C] mb-1">
-                    Category
+
+                <form onSubmit={handleCreateProduct} className="space-y-4">
+                  {/* Product name */}
+                  <div>
+                    <label className="block text-xs font-semibold text-[#1E1E1C] mb-1">
+                      Product name *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. Traditional Pattachitra Palm Leaf Painting"
+                      value={newTitle}
+                      onChange={(e) => setNewTitle(e.target.value)}
+                      className="w-full text-xs px-3.5 py-2.5 bg-white border border-[#D5CFC5] rounded-lg focus:outline-none focus:border-[#C2410C] focus:ring-1 focus:ring-[#C2410C] transition-all"
+                    />
+                  </div>
+
+                  {/* Craft category & Region of origin */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-[#1E1E1C] mb-1">
+                        Craft category
+                      </label>
+                      <select
+                        value={newCraftCategory}
+                        onChange={(e) => setNewCraftCategory(e.target.value)}
+                        className="w-full text-xs px-3 py-2.5 bg-white border border-[#D5CFC5] rounded-lg focus:outline-none focus:border-[#C2410C] cursor-pointer"
+                      >
+                        {CRAFT_CATEGORIES.map((cat) => (
+                          <option key={cat} value={cat}>
+                            {cat}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-[#1E1E1C] mb-1">
+                        Region of origin
+                      </label>
+                      <select
+                        value={newRegionOfOrigin}
+                        onChange={(e) => setNewRegionOfOrigin(e.target.value)}
+                        className="w-full text-xs px-3 py-2.5 bg-white border border-[#D5CFC5] rounded-lg focus:outline-none focus:border-[#C2410C] cursor-pointer"
+                      >
+                        {REGIONS_OF_ORIGIN.map((reg) => (
+                          <option key={reg} value={reg}>
+                            {reg}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* Price (₹) & Available quantity */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-[#1E1E1C] mb-1">
+                        Price (₹) *
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-2.5 text-xs font-medium text-[#7A756D]">
+                          ₹
+                        </span>
+                        <input
+                          type="text"
+                          required
+                          placeholder="1200"
+                          value={newPrice}
+                          onChange={(e) => setNewPrice(e.target.value)}
+                          className="w-full text-xs pl-7 pr-3 py-2.5 bg-white border border-[#D5CFC5] rounded-lg focus:outline-none focus:border-[#C2410C] font-mono"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-[#1E1E1C] mb-1">
+                        Available quantity
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        disabled={newIsMadeToOrder}
+                        value={newIsMadeToOrder ? "" : newAvailableQuantity}
+                        onChange={(e) => setNewAvailableQuantity(e.target.value)}
+                        placeholder={newIsMadeToOrder ? "Made to order" : "1"}
+                        className={`w-full text-xs px-3 py-2.5 bg-white border rounded-lg focus:outline-none font-mono ${
+                          newIsMadeToOrder
+                            ? "bg-[#EFEBE4] text-[#8C877E] border-[#DDD5C8] cursor-not-allowed"
+                            : "border-[#D5CFC5] focus:border-[#C2410C]"
+                        }`}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Description */}
+                  <div>
+                    <label className="block text-xs font-semibold text-[#1E1E1C] mb-1">
+                      Description
+                    </label>
+                    <textarea
+                      rows={3}
+                      placeholder="Describe the cultural lineage, natural pigments, seasoned wood, and artisan heritage..."
+                      value={newDescription}
+                      onChange={(e) => setNewDescription(e.target.value)}
+                      className="w-full text-xs px-3.5 py-2.5 bg-white border border-[#D5CFC5] rounded-lg focus:outline-none focus:border-[#C2410C]"
+                    />
+                  </div>
+
+                  {/* [ ] Made to order */}
+                  <label className="flex items-start gap-3 p-3 bg-white border border-[#DDD5C8] rounded-lg cursor-pointer hover:bg-[#F7F3EC] transition-colors">
+                    <input
+                      type="checkbox"
+                      checked={newIsMadeToOrder}
+                      onChange={(e) => setNewIsMadeToOrder(e.target.checked)}
+                      className="mt-0.5 w-4 h-4 rounded text-[#C2410C] focus:ring-[#C2410C] accent-[#C2410C] cursor-pointer"
+                    />
+                    <div className="select-none">
+                      <span className="text-xs font-semibold text-[#1E1E1C] block">
+                        Made to order
+                      </span>
+                      <span className="text-[11px] text-[#7A756D] leading-tight block">
+                        Each piece is custom crafted upon receiving an order. Fixed stock is not deducted.
+                      </span>
+                    </div>
                   </label>
-                  <select
-                    value={newCategory}
-                    onChange={(e) => setNewCategory(e.target.value)}
-                    className="w-full text-xs px-3 py-2 bg-white border border-[#D5CFC5] rounded-md focus:outline-none focus:border-[#C2410C]"
-                  >
-                    <option value="Vases">Vases</option>
-                    <option value="Wall Decor">Wall Decor</option>
-                    <option value="Paintings">Paintings</option>
-                    <option value="Vessels">Vessels</option>
-                    <option value="Textiles">Textiles</option>
-                  </select>
+
+                  {/* Image Upload Component */}
+                  <div>
+                    <label className="block text-xs font-semibold text-[#1E1E1C] mb-1">
+                      Piece Photograph (Optional)
+                    </label>
+                    <ImageUploader
+                      folder="artsinly/products"
+                      value={newImageUrl}
+                      onChange={(url: string) => setNewImageUrl(url)}
+                    />
+                  </div>
+
+                  {/* Form Submission Actions */}
+                  <div className="pt-3 flex items-center justify-end gap-2 border-t border-[#EAE5DD]">
+                    <button
+                      type="button"
+                      onClick={() => setIsModalOpen(false)}
+                      className="px-4 py-2 border border-[#D5CFC5] text-xs font-medium rounded-lg hover:bg-[#ECE6DC] text-[#1E1E1C] transition-colors cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isCreatingProduct}
+                      className="px-5 py-2.5 bg-[#1E1E1C] text-white text-xs font-semibold rounded-lg hover:bg-[#383734] transition-colors flex items-center gap-2 cursor-pointer disabled:opacity-60 shadow-xs"
+                    >
+                      {isCreatingProduct ? (
+                        <>
+                          <Loader2 className="w-3.5 h-3.5 animate-spin text-[#C2410C]" />
+                          <span>Publishing Craft...</span>
+                        </>
+                      ) : (
+                        <>
+                          <Plus className="w-3.5 h-3.5 text-[#C2410C]" />
+                          <span>Publish Craft Listing</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              {/* Right Column: PRODUCT PREVIEW */}
+              <div className="lg:col-span-5 lg:sticky lg:top-4 bg-[#F5EFEB] p-4 sm:p-5 rounded-xl border border-[#DDD5C8] space-y-3">
+                <div className="flex items-center justify-between pb-2 border-b border-[#E8E1D5]">
+                  <span className="text-[11px] font-bold text-[#C2410C] uppercase tracking-[0.2em] flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5" />
+                    PRODUCT PREVIEW
+                  </span>
+                  <span className="text-[9px] font-medium bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
+                    Live Reactive
+                  </span>
+                </div>
+
+                {/* THE LIVE PREVIEW CARD */}
+                <div className="bg-white border-2 border-[#DDD5C8] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all">
+                  {/* Image View */}
+                  <div className="aspect-[4/3] w-full bg-[#EFEBE4] relative overflow-hidden flex items-center justify-center">
+                    {newImageUrl ? (
+                      <img
+                        src={newImageUrl}
+                        alt={newTitle || "Craft Preview"}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="text-center p-4">
+                        <Store className="w-8 h-8 text-[#C2410C] mx-auto mb-1 opacity-70" />
+                        <span className="text-[10px] text-[#8C877E] font-medium block">
+                          Authentic Handcrafted Visual
+                        </span>
+                      </div>
+                    )}
+                    <span className="absolute top-2 left-2 text-[9px] font-semibold bg-black/70 text-white backdrop-blur-xs px-2 py-0.5 rounded flex items-center gap-1">
+                      <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                      GI Certified Origin
+                    </span>
+                    <span className="absolute top-2 right-2 text-[9px] font-semibold bg-emerald-600 text-white px-2 py-0.5 rounded uppercase tracking-wider">
+                      Live
+                    </span>
+                  </div>
+
+                  {/* Card Content Matching User Specification */}
+                  <div className="p-4 space-y-2">
+                    {/* Your product name */}
+                    <h4 className="font-serif text-base sm:text-lg font-medium text-[#1E1E1C] line-clamp-1">
+                      {newTitle.trim() || "Your product name"}
+                    </h4>
+
+                    {/* Painting · Odisha */}
+                    <p className="text-xs text-[#7A756D] font-medium">
+                      {newCraftCategory || "Painting"} · {newRegionOfOrigin || "Odisha"}
+                    </p>
+
+                    {/* ₹1,200 */}
+                    <div className="font-serif text-xl sm:text-2xl font-normal text-[#1E1E1C] pt-1">
+                      {getFormattedPreviewPrice(newPrice)}
+                    </div>
+
+                    {/* 1 available or Made to order */}
+                    <div className="flex items-center gap-1.5 text-xs text-[#5C564E] pt-1 border-t border-[#F0EBE1]">
+                      <span
+                        className={`w-2 h-2 rounded-full ${
+                          newIsMadeToOrder ? "bg-amber-500 animate-pulse" : "bg-emerald-500"
+                        }`}
+                      />
+                      <span className="font-medium">
+                        {newIsMadeToOrder
+                          ? "Made to order"
+                          : `${newAvailableQuantity || "1"} available`}
+                      </span>
+                    </div>
+
+                    {newDescription && (
+                      <p className="text-[11px] text-[#8C877E] line-clamp-2 italic pt-1 border-t border-[#F0EBE1]">
+                        "{newDescription}"
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="p-3 rounded-lg bg-[#EAE3D6] text-[10px] text-[#6E6A62] leading-relaxed">
+                  💡 <strong>Artisan Rule:</strong> All buyer orders snapshot the current price at purchase time, protecting historical transactions from later price adjustments.
                 </div>
               </div>
-
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-semibold text-[#1E1E1C] mb-1">
-                    Price (₹ INR) *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. 1450.00"
-                    value={newPrice}
-                    onChange={(e) => setNewPrice(e.target.value)}
-                    className="w-full text-xs px-3 py-2 bg-white border border-[#D5CFC5] rounded-md focus:outline-none focus:border-[#C2410C]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold text-[#1E1E1C] mb-1">
-                    Initial Stock Count
-                  </label>
-                  <input
-                    type="number"
-                    min="1"
-                    value={newStock}
-                    onChange={(e) => setNewStock(e.target.value)}
-                    className="w-full text-xs px-3 py-2 bg-white border border-[#D5CFC5] rounded-md focus:outline-none focus:border-[#C2410C]"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-[#1E1E1C] mb-1">
-                  Description & Craft Story
-                </label>
-                <textarea
-                  rows={3}
-                  placeholder="Describe the clay sourcing, kiln firing, or sacred motifs..."
-                  value={newDescription}
-                  onChange={(e) => setNewDescription(e.target.value)}
-                  className="w-full text-xs px-3 py-2 bg-white border border-[#D5CFC5] rounded-md focus:outline-none focus:border-[#C2410C]"
-                />
-              </div>
-
-              {/* Image Upload Component */}
-              <div>
-                <label className="block text-xs font-semibold text-[#1E1E1C] mb-1">
-                  Handcrafted Piece Image
-                </label>
-                <ImageUploader
-                  folder="artsinly/products"
-                  value={newImageUrl}
-                  onChange={(url: string) => setNewImageUrl(url)}
-                />
-              </div>
-
-              <div className="pt-2 flex items-center justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 border border-[#D5CFC5] text-xs font-medium rounded-md hover:bg-[#ECE6DC] text-[#1E1E1C] transition-colors cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={isCreatingProduct}
-                  className="px-5 py-2 bg-[#1E1E1C] text-white text-xs font-medium rounded-md hover:bg-[#383734] transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-60"
-                >
-                  {isCreatingProduct ? (
-                    <>
-                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                      <span>Saving to Database...</span>
-                    </>
-                  ) : (
-                    <span>Publish Piece</span>
-                  )}
-                </button>
-              </div>
-            </form>
+            </div>
           </div>
         </div>
       )}
 
-      {/* MODAL 2: EDIT HANDCRAFTED LISTING */}
+      {/* MODAL 2: EDIT HANDCRAFTED LISTING (WITH REAL-TIME PREVIEW) */}
       {editingProduct && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-          <div className="bg-[#FAF7F2] border border-[#DDD5C8] rounded-xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between pb-3 mb-4 border-b border-[#EAE5DD]">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/65 backdrop-blur-xs overflow-y-auto">
+          <div className="bg-[#FAF7F2] border border-[#DDD5C8] rounded-2xl p-5 sm:p-8 max-w-4xl w-full shadow-2xl relative max-h-[92vh] overflow-y-auto my-auto">
+            <div className="flex items-center justify-between pb-4 mb-6 border-b border-[#EAE5DD]">
               <div>
-                <span className="text-[10px] font-semibold text-[#C2410C] uppercase tracking-wider block">
+                <span className="text-[10px] font-semibold text-[#C2410C] uppercase tracking-[0.2em] block mb-0.5">
                   EDIT PIECE & INVENTORY
                 </span>
-                <h3 className="font-serif text-xl font-normal text-[#1E1E1C]">
+                <h3 className="font-serif text-2xl font-normal text-[#1E1E1C]">
                   Update Product Listing
                 </h3>
               </div>
               <button
                 onClick={() => setEditingProduct(null)}
-                className="p-1 rounded-full hover:bg-[#ECE6DC] text-[#666] transition-colors cursor-pointer"
+                className="p-1.5 rounded-full hover:bg-[#ECE6DC] text-[#666] transition-colors cursor-pointer"
+                title="Close Modal"
               >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
-            <form onSubmit={handleUpdateProduct} className="space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-[#1E1E1C] mb-1">
-                  Product Title *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={editTitle}
-                  onChange={(e) => setEditTitle(e.target.value)}
-                  className="w-full text-xs px-3 py-2 bg-white border border-[#D5CFC5] rounded-md focus:outline-none focus:border-[#C2410C]"
-                />
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              {/* Left Column: Edit Form */}
+              <div className="lg:col-span-7">
+                <form onSubmit={handleUpdateProduct} className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-semibold text-[#1E1E1C] mb-1">
+                      Product name *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      value={editTitle}
+                      onChange={(e) => setEditTitle(e.target.value)}
+                      className="w-full text-xs px-3.5 py-2.5 bg-white border border-[#D5CFC5] rounded-lg focus:outline-none focus:border-[#C2410C]"
+                    />
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-[#1E1E1C] mb-1">
+                        Craft category
+                      </label>
+                      <select
+                        value={editCraftCategory}
+                        onChange={(e) => setEditCraftCategory(e.target.value)}
+                        className="w-full text-xs px-3 py-2.5 bg-white border border-[#D5CFC5] rounded-lg focus:outline-none focus:border-[#C2410C] cursor-pointer"
+                      >
+                        {CRAFT_CATEGORIES.map((cat) => (
+                          <option key={cat} value={cat}>
+                            {cat}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-[#1E1E1C] mb-1">
+                        Region of origin
+                      </label>
+                      <select
+                        value={editRegionOfOrigin}
+                        onChange={(e) => setEditRegionOfOrigin(e.target.value)}
+                        className="w-full text-xs px-3 py-2.5 bg-white border border-[#D5CFC5] rounded-lg focus:outline-none focus:border-[#C2410C] cursor-pointer"
+                      >
+                        {REGIONS_OF_ORIGIN.map((reg) => (
+                          <option key={reg} value={reg}>
+                            {reg}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-semibold text-[#1E1E1C] mb-1">
+                        Price (₹) *
+                      </label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-2.5 text-xs font-medium text-[#7A756D]">
+                          ₹
+                        </span>
+                        <input
+                          type="text"
+                          required
+                          value={editPrice}
+                          onChange={(e) => setEditPrice(e.target.value)}
+                          className="w-full text-xs pl-7 pr-3 py-2.5 bg-white border border-[#D5CFC5] rounded-lg focus:outline-none focus:border-[#C2410C] font-mono"
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold text-[#1E1E1C] mb-1">
+                        Available quantity
+                      </label>
+                      <input
+                        type="number"
+                        min="0"
+                        disabled={editIsMadeToOrder}
+                        value={editIsMadeToOrder ? "" : editAvailableQuantity}
+                        onChange={(e) => setEditAvailableQuantity(e.target.value)}
+                        placeholder={editIsMadeToOrder ? "Made to order" : "1"}
+                        className={`w-full text-xs px-3 py-2.5 bg-white border rounded-lg focus:outline-none font-mono ${
+                          editIsMadeToOrder
+                            ? "bg-[#EFEBE4] text-[#8C877E] border-[#DDD5C8] cursor-not-allowed"
+                            : "border-[#D5CFC5] focus:border-[#C2410C]"
+                        }`}
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-[#1E1E1C] mb-1">
+                      Description
+                    </label>
+                    <textarea
+                      rows={3}
+                      value={editDescription}
+                      onChange={(e) => setEditDescription(e.target.value)}
+                      className="w-full text-xs px-3.5 py-2.5 bg-white border border-[#D5CFC5] rounded-lg focus:outline-none focus:border-[#C2410C]"
+                    />
+                  </div>
+
+                  <label className="flex items-start gap-3 p-3 bg-white border border-[#DDD5C8] rounded-lg cursor-pointer hover:bg-[#F7F3EC] transition-colors">
+                    <input
+                      type="checkbox"
+                      checked={editIsMadeToOrder}
+                      onChange={(e) => setEditIsMadeToOrder(e.target.checked)}
+                      className="mt-0.5 w-4 h-4 rounded text-[#C2410C] focus:ring-[#C2410C] accent-[#C2410C] cursor-pointer"
+                    />
+                    <div className="select-none">
+                      <span className="text-xs font-semibold text-[#1E1E1C] block">
+                        Made to order
+                      </span>
+                      <span className="text-[11px] text-[#7A756D] leading-tight block">
+                        Custom crafted upon receiving order. Shelf inventory is not decremented.
+                      </span>
+                    </div>
+                  </label>
+
+                  <div>
+                    <label className="block text-xs font-semibold text-[#1E1E1C] mb-1">
+                      Product Image
+                    </label>
+                    <ImageUploader
+                      folder="artsinly/products"
+                      value={editImageUrl}
+                      onChange={(url: string) => setEditImageUrl(url)}
+                    />
+                  </div>
+
+                  <div className="pt-3 flex items-center justify-end gap-2 border-t border-[#EAE5DD]">
+                    <button
+                      type="button"
+                      onClick={() => setEditingProduct(null)}
+                      className="px-4 py-2 border border-[#D5CFC5] text-xs font-medium rounded-lg hover:bg-[#ECE6DC] text-[#1E1E1C] transition-colors cursor-pointer"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isUpdatingProduct}
+                      className="px-5 py-2.5 bg-[#1E1E1C] text-white text-xs font-semibold rounded-lg hover:bg-[#383734] transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-60 shadow-xs"
+                    >
+                      {isUpdatingProduct ? (
+                        <>
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          <span>Saving Changes...</span>
+                        </>
+                      ) : (
+                        <span>Save Changes</span>
+                      )}
+                    </button>
+                  </div>
+                </form>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-semibold text-[#1E1E1C] mb-1">
-                    Craft Discipline
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={editCraft}
-                    onChange={(e) => setEditCraft(e.target.value)}
-                    className="w-full text-xs px-3 py-2 bg-white border border-[#D5CFC5] rounded-md focus:outline-none focus:border-[#C2410C]"
-                  />
+              {/* Right Column: Live Preview for Edited Product */}
+              <div className="lg:col-span-5 lg:sticky lg:top-4 bg-[#F5EFEB] p-4 sm:p-5 rounded-xl border border-[#DDD5C8] space-y-3">
+                <div className="flex items-center justify-between pb-2 border-b border-[#E8E1D5]">
+                  <span className="text-[11px] font-bold text-[#C2410C] uppercase tracking-[0.2em] flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5" />
+                    PRODUCT PREVIEW
+                  </span>
+                  <span className="text-[9px] font-medium bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
+                    Live Editing
+                  </span>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-semibold text-[#1E1E1C] mb-1">
-                    Inventory Stock Available
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    value={editStock}
-                    onChange={(e) => setEditStock(e.target.value)}
-                    className="w-full text-xs px-3 py-2 bg-white border border-[#D5CFC5] rounded-md focus:outline-none focus:border-[#C2410C]"
-                  />
+                <div className="bg-white border-2 border-[#DDD5C8] rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all">
+                  <div className="aspect-[4/3] w-full bg-[#EFEBE4] relative overflow-hidden flex items-center justify-center">
+                    {editImageUrl ? (
+                      <img
+                        src={editImageUrl}
+                        alt={editTitle || "Craft Preview"}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="text-center p-4">
+                        <Store className="w-8 h-8 text-[#C2410C] mx-auto mb-1 opacity-70" />
+                        <span className="text-[10px] text-[#8C877E] font-medium block">
+                          Handcrafted Studio Visual
+                        </span>
+                      </div>
+                    )}
+                    <span className="absolute top-2 left-2 text-[9px] font-semibold bg-black/70 text-white backdrop-blur-xs px-2 py-0.5 rounded flex items-center gap-1">
+                      <ShieldCheck className="w-3 h-3 text-emerald-400" />
+                      GI Certified Origin
+                    </span>
+                  </div>
+
+                  <div className="p-4 space-y-2">
+                    <h4 className="font-serif text-base sm:text-lg font-medium text-[#1E1E1C] line-clamp-1">
+                      {editTitle.trim() || "Your product name"}
+                    </h4>
+                    <p className="text-xs text-[#7A756D] font-medium">
+                      {editCraftCategory || "Painting"} · {editRegionOfOrigin || "Odisha"}
+                    </p>
+                    <div className="font-serif text-xl sm:text-2xl font-normal text-[#1E1E1C] pt-1">
+                      {getFormattedPreviewPrice(editPrice)}
+                    </div>
+                    <div className="flex items-center gap-1.5 text-xs text-[#5C564E] pt-1 border-t border-[#F0EBE1]">
+                      <span
+                        className={`w-2 h-2 rounded-full ${
+                          editIsMadeToOrder ? "bg-amber-500 animate-pulse" : "bg-emerald-500"
+                        }`}
+                      />
+                      <span className="font-medium">
+                        {editIsMadeToOrder
+                          ? "Made to order"
+                          : `${editAvailableQuantity || "1"} available`}
+                      </span>
+                    </div>
+                    {editDescription && (
+                      <p className="text-[11px] text-[#8C877E] line-clamp-2 italic pt-1 border-t border-[#F0EBE1]">
+                        "{editDescription}"
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-[#1E1E1C] mb-1">
-                  Price (₹ INR) *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={editPrice}
-                  onChange={(e) => setEditPrice(e.target.value)}
-                  className="w-full text-xs px-3 py-2 bg-white border border-[#D5CFC5] rounded-md focus:outline-none focus:border-[#C2410C]"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-[#1E1E1C] mb-1">
-                  Description
-                </label>
-                <textarea
-                  rows={3}
-                  value={editDescription}
-                  onChange={(e) => setEditDescription(e.target.value)}
-                  className="w-full text-xs px-3 py-2 bg-white border border-[#D5CFC5] rounded-md focus:outline-none focus:border-[#C2410C]"
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold text-[#1E1E1C] mb-1">
-                  Product Image
-                </label>
-                <ImageUploader
-                  folder="artsinly/products"
-                  value={editImageUrl}
-                  onChange={(url: string) => setEditImageUrl(url)}
-                />
-              </div>
-
-              <div className="pt-2 flex items-center justify-end gap-2">
-                <button
-                  type="button"
-                  onClick={() => setEditingProduct(null)}
-                  className="px-4 py-2 border border-[#D5CFC5] text-xs font-medium rounded-md hover:bg-[#ECE6DC] text-[#1E1E1C] transition-colors cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={isUpdatingProduct}
-                  className="px-5 py-2 bg-[#1E1E1C] text-white text-xs font-medium rounded-md hover:bg-[#383734] transition-colors flex items-center gap-1.5 cursor-pointer disabled:opacity-60"
-                >
-                  {isUpdatingProduct ? (
-                    <>
-                      <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                      <span>Updating Database...</span>
-                    </>
-                  ) : (
-                    <span>Save Changes</span>
-                  )}
-                </button>
-              </div>
-            </form>
+            </div>
           </div>
         </div>
       )}
