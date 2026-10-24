@@ -22,9 +22,15 @@ export async function GET(req: NextRequest) {
     }
 
     // Find seller profile
-    const seller = await prisma.sellerProfile.findUnique({
-      where: { userId: payload.userId },
-    });
+    let seller: any = null;
+    try {
+      seller = await prisma.sellerProfile.findUnique({
+        where: { userId: payload.userId },
+      });
+    } catch {
+      // Database offline fallback
+      return NextResponse.json({ orders: [] });
+    }
 
     if (!seller) {
       return NextResponse.json({ orders: [] });

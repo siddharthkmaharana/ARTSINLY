@@ -45,7 +45,9 @@ enum Role {
 
 enum ProductStatus {
   DRAFT
+  PENDING_REVIEW
   PUBLISHED
+  REJECTED
   ARCHIVED
 }
 
@@ -181,10 +183,14 @@ model Product {
   description       String          @db.Text
   story             String?         @db.Text
   craftType         String?
+  craftTechnique    String?
   provenanceTag     String?
   giCode            String?
+  authenticityDetails String?       @db.Text
   dimensions        String?
   materials         String?
+  weight            String?
+  shippingWeightGrams Int?
   careInstructions  String?         @db.Text
   basePricePaise    Int             // integer minor units (paise: e.g. 12699 = ₹126.99)
   isMadeToOrder     Boolean         @default(false)
