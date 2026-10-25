@@ -1,11 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { sendOrderConfirmationEmail } from "@/lib/email";
 import { generateReferenceId } from "@/lib/id";
+import { confirmOrderAndReserveStock, failOrderPayment } from "@/lib/payments/orders";
 
 /**
  * POST /api/payments/sandbox
- * Simulates an instantaneous, secure payment gateway transaction in sandbox environment.
+ * 
+ * Simulates a secure payment gateway transaction in the development sandbox.
+ * Strictly adheres to Flowchart:
+ * Step 5: Create payment with provider
+ * Step 6: Verified payment result:
+ *   - Failure -> Keep order unpaid (status PENDING, paymentStatus FAILED, no stock deducted, no sellers alerted)
+ *   - Success -> Confirm order and reserve stock (status CONFIRMED, paymentStatus COMPLETED, deducts inventory, notifies sellers)
  */
 export async function POST(req: NextRequest) {
   try {
@@ -24,112 +29,61 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Find the order
-    const order = await prisma.order.findFirst({
-      where: orderId ? { id: orderId } : { orderNumber },
-      include: {
-        items: true,
-        buyer: true,
-        shipments: true,
-      },
-    });
-
-    if (!order) {
-      return NextResponse.json(
-        { error: "Order not found in database" },
-        { status: 404 }
-      );
-    }
-
+    // Branch A: Failure -> Keep order unpaid
     if (simulateFailure) {
-      await prisma.payment.create({
-        data: {
-          orderId: order.id,
-          provider: `SANDBOX_${paymentMethod.toUpperCase()}`,
-          referenceId: `FAIL_${Date.now()}`,
-          amountPaise: order.totalPaise,
-          status: "FAILED",
-        },
+      const failed = await failOrderPayment({
+        orderId,
+        orderNumber,
+        failureReason: "Simulated sandbox card decline / UPI authorization rejection",
+        provider: `SANDBOX_${paymentMethod.toUpperCase()}`,
       });
 
       return NextResponse.json(
         {
           success: false,
           error: "Simulated payment authorization failed. Please try another card or UPI ID.",
+          order: {
+            id: failed.order.id,
+            orderNumber: failed.order.orderNumber,
+            status: failed.order.status,
+            paymentStatus: failed.order.paymentStatus,
+          },
         },
         { status: 400 }
       );
     }
 
+    // Branch B: Success -> Confirm order and reserve stock, notify sellers
     const referenceId = generateReferenceId(`SBX_${paymentMethod.toUpperCase()}`);
 
-    // Record payment and confirm order in transaction
-    const [payment, updatedOrder] = await prisma.$transaction([
-      prisma.payment.create({
-        data: {
-          orderId: order.id,
-          provider: `SANDBOX_${paymentMethod.toUpperCase()}`,
-          referenceId,
-          amountPaise: order.totalPaise,
-          status: "COMPLETED",
-          metadata: {
-            method: paymentMethod,
-            gateway: "ARTSINLY Escrow Payment Sandbox",
-            settlement: "HELD_IN_ESCROW",
-            timestamp: new Date().toISOString(),
-          },
-        },
-      }),
-      prisma.order.update({
-        where: { id: order.id },
-        data: {
-          status: "CONFIRMED",
-          paymentStatus: "COMPLETED",
-        },
-        include: {
-          items: true,
-          shipments: true,
-        },
-      }),
-    ]);
-
-    // Send order confirmation email to buyer
-    const address = order.addressSnapshot as any;
-    sendOrderConfirmationEmail({
-      orderNumber: updatedOrder.orderNumber,
-      buyerEmail: order.buyer.email,
-      buyerName: address?.fullName || order.buyer.name || "Esteemed Collector",
-      items: updatedOrder.items.map((i) => ({
-        title: i.title,
-        quantity: i.quantity,
-        pricePaise: i.pricePaise,
-      })),
-      totalPaise: updatedOrder.totalPaise,
-      shippingAddress: {
-        fullName: address?.fullName || "Aarav Sharma",
-        addressLine1: address?.addressLine1 || "Civil Lines",
-        city: address?.city || "Jaipur",
-        state: address?.state || "Rajasthan",
-        postalCode: address?.postalCode || "302006",
-        phone: address?.phone || "+91 98765 43210",
+    const result = await confirmOrderAndReserveStock({
+      orderId,
+      orderNumber,
+      paymentReference: referenceId,
+      provider: `SANDBOX_${paymentMethod.toUpperCase()}`,
+      metadata: {
+        method: paymentMethod,
+        gateway: "ARTSINLY Escrow Payment Sandbox",
+        settlement: "HELD_IN_ESCROW",
+        timestamp: new Date().toISOString(),
       },
-    }).catch((err) => console.error("Error sending confirmation email:", err));
+    });
 
     return NextResponse.json({
       success: true,
       payment: {
-        id: payment.id,
-        referenceId: payment.referenceId,
-        provider: payment.provider,
-        status: payment.status,
-        amountPaise: payment.amountPaise,
+        id: result.payment?.id || `pay_${Date.now()}`,
+        referenceId: result.payment?.referenceId || referenceId,
+        provider: result.payment?.provider || `SANDBOX_${paymentMethod.toUpperCase()}`,
+        status: result.payment?.status || "COMPLETED",
+        amountPaise: result.payment?.amountPaise || result.order.totalPaise,
       },
       order: {
-        id: updatedOrder.id,
-        orderNumber: updatedOrder.orderNumber,
-        status: updatedOrder.status,
-        paymentStatus: updatedOrder.paymentStatus,
-        shipmentStatus: updatedOrder.shipmentStatus,
+        id: result.order.id,
+        orderNumber: result.order.orderNumber,
+        status: result.order.status,
+        paymentStatus: result.order.paymentStatus,
+        shipmentStatus: result.order.shipmentStatus,
       },
     });
   } catch (error: any) {

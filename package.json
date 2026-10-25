@@ -11,6 +11,7 @@
     "test:payments-legal": "node scripts/test_payments_and_legal.js",
     "test:db-rules": "node scripts/test_database_rules.js",
     "test:seller-products": "node scripts/test_seller_product_management.js",
+    "test:multivendor": "node scripts/test_multivendor_checkout_and_payments.js",
     "prisma:generate": "prisma generate",
     "prisma:push": "prisma db push",
     "prisma:seed": "tsx prisma/seed.ts"
