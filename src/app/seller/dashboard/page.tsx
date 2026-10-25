@@ -306,6 +306,7 @@ export default function SellerDashboardPage() {
   const [fulfilmentStatus, setFulfilmentStatus] = useState<string>("PROCESSING");
   const [carrierName, setCarrierName] = useState<string>("BlueDart Express Insured");
   const [trackingNumber, setTrackingNumber] = useState<string>("");
+  const [cancellationReason, setCancellationReason] = useState<string>("");
   const [isUpdatingFulfilment, setIsUpdatingFulfilment] = useState(false);
 
   // Edit Profile Modal State
@@ -695,6 +696,7 @@ export default function SellerDashboardPage() {
 
     try {
       setIsUpdatingFulfilment(true);
+      const isCancellation = fulfilmentStatus === "CANCELLED";
       const res = await fetch(`/api/seller/orders/${selectedOrderForFulfilment.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -702,14 +704,19 @@ export default function SellerDashboardPage() {
           status: fulfilmentStatus,
           carrier: carrierName,
           trackingNumber,
+          cancellationReason,
+          action: isCancellation ? "CANCEL_ITEM" : undefined,
         }),
       });
 
       if (res.ok) {
         await loadData();
         setSelectedOrderForFulfilment(null);
+        setCancellationReason("");
         alert(
-          fulfilmentStatus === "SHIPPED"
+          isCancellation
+            ? "Your items have been cancelled and buyer has been issued a partial refund. Your inventory has been restored."
+            : fulfilmentStatus === "SHIPPED"
             ? "Order marked as SHIPPED! Dispatch tracking email sent to buyer."
             : "Order fulfillment status updated successfully!"
         );
@@ -3215,38 +3222,60 @@ export default function SellerDashboardPage() {
                   <option value="PROCESSING">PROCESSING — Being Crafted / Packaged in Atelier</option>
                   <option value="SHIPPED">SHIPPED — Dispatched with Insured Courier</option>
                   <option value="DELIVERED">DELIVERED — Verified Delivered to Collector</option>
+                  <option value="CANCELLED">UNABLE TO FULFILL — Cancel Item & Trigger Partial Refund (Rule 6)</option>
                 </select>
               </div>
 
-              <div>
-                <label className="block font-semibold text-[#1E1E1C] mb-1">
-                  Logistics Carrier *
-                </label>
-                <select
-                  value={carrierName}
-                  onChange={(e) => setCarrierName(e.target.value)}
-                  className="w-full px-3 py-2 bg-white border border-[#D5CFC5] rounded-md focus:outline-none focus:border-[#C2410C]"
-                >
-                  <option value="BlueDart Express Insured">BlueDart Express Insured</option>
-                  <option value="Delhivery Fragile Express">Delhivery Fragile Express</option>
-                  <option value="India Post Speed Post">India Post Speed Post</option>
-                  <option value="DTDC Premium Air">DTDC Premium Air</option>
-                </select>
-              </div>
+              {fulfilmentStatus === "CANCELLED" ? (
+                <div className="p-3.5 bg-red-50 border border-red-200 rounded-lg space-y-2 text-xs text-red-900">
+                  <label className="block font-semibold">
+                    State Reason for Cancellation *
+                  </label>
+                  <textarea
+                    rows={2}
+                    required
+                    placeholder="e.g. Ceramic cracked during final kiln firing; unable to re-fire in time."
+                    value={cancellationReason}
+                    onChange={(e) => setCancellationReason(e.target.value)}
+                    className="w-full px-3 py-2 bg-white border border-red-300 rounded-md focus:outline-none focus:border-red-600 text-xs"
+                  />
+                  <p className="text-[11px] text-red-700">
+                    Rule 6 Protocol: Submitting will cancel your item(s), unlock inventory, credit an automatic partial refund to the buyer, and preserve any other artisan's items in the order.
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <div>
+                    <label className="block font-semibold text-[#1E1E1C] mb-1">
+                      Logistics Carrier *
+                    </label>
+                    <select
+                      value={carrierName}
+                      onChange={(e) => setCarrierName(e.target.value)}
+                      className="w-full px-3 py-2 bg-white border border-[#D5CFC5] rounded-md focus:outline-none focus:border-[#C2410C]"
+                    >
+                      <option value="BlueDart Express Insured">BlueDart Express Insured</option>
+                      <option value="Delhivery Fragile Express">Delhivery Fragile Express</option>
+                      <option value="India Post Speed Post">India Post Speed Post</option>
+                      <option value="DTDC Premium Air">DTDC Premium Air</option>
+                    </select>
+                  </div>
 
-              <div>
-                <label className="block font-semibold text-[#1E1E1C] mb-1">
-                  Tracking AWB Number *
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. BD-IN-98124018"
-                  value={trackingNumber}
-                  onChange={(e) => setTrackingNumber(e.target.value)}
-                  className="w-full px-3 py-2 bg-white border border-[#D5CFC5] rounded-md font-mono focus:outline-none focus:border-[#C2410C]"
-                />
-              </div>
+                  <div>
+                    <label className="block font-semibold text-[#1E1E1C] mb-1">
+                      Tracking AWB Number *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. BD-IN-98124018"
+                      value={trackingNumber}
+                      onChange={(e) => setTrackingNumber(e.target.value)}
+                      className="w-full px-3 py-2 bg-white border border-[#D5CFC5] rounded-md font-mono focus:outline-none focus:border-[#C2410C]"
+                    />
+                  </div>
+                </>
+              )}
 
               <div className="p-3 bg-white border border-[#E5E0D7] rounded-lg space-y-1.5 text-[11px] text-[#6B685F]">
                 <div className="font-semibold text-[#1E1E1C]">Delivery Destination:</div>

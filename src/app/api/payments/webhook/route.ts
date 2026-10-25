@@ -73,60 +73,26 @@ export async function POST(req: NextRequest) {
 
     if (event === "payment.captured" || event === "order.paid") {
       if (orderNumber) {
-        const order = await prisma.order.findUnique({
-          where: { orderNumber },
+        const { confirmOrderAndReserveStock } = await import("@/lib/payments/orders");
+        await confirmOrderAndReserveStock({
+          orderNumber,
+          paymentReference: paymentReference || generateReferenceId("PAY_HOOK"),
+          provider: "RAZORPAY_WEBHOOK",
+          metadata: {
+            eventId,
+            gatewayEvent: event,
+            receivedAt: new Date().toISOString(),
+          },
         });
-
-        if (order) {
-          await prisma.$transaction([
-            prisma.payment.create({
-              data: {
-                orderId: order.id,
-                provider: "RAZORPAY_WEBHOOK",
-                referenceId: paymentReference,
-                amountPaise: amountPaise || order.totalPaise,
-                status: "COMPLETED",
-                metadata: {
-                  eventId,
-                  gatewayEvent: event,
-                  receivedAt: new Date().toISOString(),
-                },
-              },
-            }),
-            prisma.order.update({
-              where: { id: order.id },
-              data: {
-                status: "CONFIRMED",
-                paymentStatus: "COMPLETED",
-              },
-            }),
-          ]);
-        }
       }
     } else if (event === "payment.failed") {
       if (orderNumber) {
-        const order = await prisma.order.findUnique({ where: { orderNumber } });
-        if (order) {
-          await prisma.$transaction([
-            prisma.payment.create({
-              data: {
-                orderId: order.id,
-                provider: "RAZORPAY_WEBHOOK",
-                referenceId: paymentReference,
-                amountPaise: amountPaise || order.totalPaise,
-                status: "FAILED",
-                metadata: {
-                  eventId,
-                  errorReason: paymentEntity.error_description || "Card declined or UPI timeout",
-                },
-              },
-            }),
-            prisma.order.update({
-              where: { id: order.id },
-              data: { paymentStatus: "FAILED" },
-            }),
-          ]);
-        }
+        const { failOrderPayment } = await import("@/lib/payments/orders");
+        await failOrderPayment({
+          orderNumber,
+          failureReason: paymentEntity.error_description || "Card declined or UPI timeout",
+          provider: "RAZORPAY_WEBHOOK",
+        });
       }
     }
 

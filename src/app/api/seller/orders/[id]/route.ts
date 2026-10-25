@@ -62,10 +62,31 @@ export async function PATCH(req: NextRequest, { params }: RouteParams) {
 
     const body = await req.json();
     const {
-      status, // "PROCESSING" | "SHIPPED" | "DELIVERED"
+      status, // "PROCESSING" | "SHIPPED" | "DELIVERED" | "CANCELLED"
       carrier = "BlueDart Express Insured",
       trackingNumber,
+      cancellationReason,
+      action, // optional: "CANCEL_ITEM"
     } = body;
+
+    // Rule 6: Handle partial fulfillment cancellation by seller
+    if (status === "CANCELLED" || action === "CANCEL_ITEM") {
+      const { handlePartialFulfillmentCancellation } = await import("@/lib/payments/orders");
+      const cancelResult = await handlePartialFulfillmentCancellation({
+        orderId,
+        sellerId: seller.id,
+        reason: cancellationReason || "Workshop craft damage or inventory shortage",
+        cancelledByUserId: payload.userId,
+      });
+
+      return NextResponse.json({
+        success: true,
+        message: "Your items in this order have been cancelled and buyer has been issued a partial refund.",
+        partialCancellation: true,
+        refundAmountPaise: cancelResult.refundAmountPaise,
+        remainingActiveItemCount: cancelResult.remainingActiveItemCount,
+      });
+    }
 
     const validStatuses: OrderStatus[] = [
       OrderStatus.PENDING,
@@ -83,9 +104,12 @@ export async function PATCH(req: NextRequest, { params }: RouteParams) {
       );
     }
 
-    const existingShipment = orderItem.order.shipments[0];
+    // Find this seller's specific package shipment
+    const existingShipment = orderItem.order.shipments.find(
+      (s) => s.sellerId === seller.id
+    ) || orderItem.order.shipments[0];
 
-    // Determine logistical ShipmentStatus
+    // Determine logistical ShipmentStatus for this seller's parcel
     const shipmentStatus: ShipmentStatus =
       status === "SHIPPED"
         ? ShipmentStatus.SHIPPED
@@ -96,21 +120,19 @@ export async function PATCH(req: NextRequest, { params }: RouteParams) {
         : ShipmentStatus.LABEL_CREATED;
 
     const updated = await prisma.$transaction(async (tx) => {
-      // 1. Update order status and shipmentStatus independently (leaving paymentStatus intact)
-      const ord = await tx.order.update({
-        where: { id: orderId },
-        data: {
-          status: status ? (status as OrderStatus) : undefined,
-          shipmentStatus,
-        },
+      // 1. Update this seller's items to the new status
+      await tx.orderItem.updateMany({
+        where: { orderId, sellerId: seller.id },
+        data: { status: status ? (status as OrderStatus) : undefined },
       });
 
-      // 2. Update or create Shipment
+      // 2. Update or create this seller's specific Shipment package
       let ship;
       if (existingShipment) {
         ship = await tx.shipment.update({
           where: { id: existingShipment.id },
           data: {
+            sellerId: seller.id,
             carrier: carrier || existingShipment.carrier,
             trackingNumber: trackingNumber || existingShipment.trackingNumber,
             status: shipmentStatus,
@@ -122,6 +144,7 @@ export async function PATCH(req: NextRequest, { params }: RouteParams) {
         ship = await tx.shipment.create({
           data: {
             orderId,
+            sellerId: seller.id,
             carrier: carrier || "Insured Express Courier",
             trackingNumber: trackingNumber || generateTrackingNumber("AWB"),
             status: shipmentStatus,
@@ -131,10 +154,29 @@ export async function PATCH(req: NextRequest, { params }: RouteParams) {
         });
       }
 
+      // 3. Update overall order status and shipment status
+      const allShipments = await tx.shipment.findMany({ where: { orderId } });
+      const allDelivered = allShipments.length > 0 && allShipments.every((s) => s.status === ShipmentStatus.DELIVERED || s.status === ShipmentStatus.CANCELLED);
+      const anyShipped = allShipments.some((s) => s.status === ShipmentStatus.SHIPPED || s.status === ShipmentStatus.IN_TRANSIT);
+
+      const overallShipmentStatus = allDelivered
+        ? ShipmentStatus.DELIVERED
+        : anyShipped
+        ? ShipmentStatus.SHIPPED
+        : shipmentStatus;
+
+      const ord = await tx.order.update({
+        where: { id: orderId },
+        data: {
+          status: allDelivered ? OrderStatus.DELIVERED : status ? (status as OrderStatus) : undefined,
+          shipmentStatus: overallShipmentStatus,
+        },
+      });
+
       return { order: ord, shipment: ship };
     });
 
-    // 3. Trigger email to buyer if dispatched
+    // 4. Trigger dispatch tracking email to buyer if this seller shipped
     if (status === "SHIPPED" && updated.shipment.trackingNumber) {
       const address = orderItem.order.addressSnapshot as any;
       sendShipmentDispatchedEmail({

@@ -135,6 +135,7 @@ model SellerProfile {
   user              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   products          Product[]
   orderItems        OrderItem[]
+  shipments         Shipment[]
   payouts           Payout[]
 
   @@map("seller_profiles")
@@ -348,6 +349,7 @@ model OrderItem {
   title             String
   pricePaise        Int             // Captured unit price at purchase time (immune to later product edits)
   quantity          Int
+  status            OrderStatus     @default(PENDING) // Item-level fulfillment status for multi-seller partial fulfillment
   sellerShopName    String?         // Captured seller shop snapshot at purchase time
   sellerArtisanName String?         // Captured artisan name snapshot at purchase time
   productSnapshot   Json?           // Full immutable product snapshot at purchase time
@@ -398,6 +400,7 @@ model Payment {
 model Shipment {
   id             String         @id @default(cuid())
   orderId        String
+  sellerId       String?        // Multi-vendor allocation: each artisan dispatches their own package
   carrier        String
   trackingNumber String?
   status         ShipmentStatus @default(LABEL_CREATED)
@@ -406,6 +409,7 @@ model Shipment {
   createdAt      DateTime       @default(now())
 
   order          Order          @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  seller         SellerProfile? @relation(fields: [sellerId], references: [id])
 
   @@map("shipments")
 }

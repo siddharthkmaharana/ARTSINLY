@@ -107,212 +107,36 @@ export async function POST(req: NextRequest) {
       buyerId = user.id;
     }
 
-    // 2. Validate and enrich order items with database products and inventory checks
-    const enrichedItems: Array<{
-      productId: string;
-      variantId?: string;
-      sellerId: string;
-      title: string;
-      pricePaise: number;
-      quantity: number;
-      sellerShopName?: string;
-      sellerArtisanName?: string;
-      productSnapshot?: any;
-      sellerEmail?: string;
-      sellerName?: string;
-    }> = [];
-
-    // Fallback seller in case custom product without sellerId
-    const defaultSeller = await prisma.sellerProfile.findFirst() || await prisma.sellerProfile.create({
-      data: {
-        shopName: "ARTSINLY Master Guild",
-        slug: "artsinly-master-guild",
-        artisanName: "Master Artisan Collective",
-        craftTradition: "Heritage Crafts",
-        state: "Rajasthan",
-        locality: "Jaipur",
-        giCode: "GI-IN-RJ-001",
-        user: {
-          create: {
-            email: "guild@artsinly.com",
-            name: "Master Artisan Collective",
-            role: "SELLER",
-          },
-        },
-      },
+    // 2. Create Pending Order (Flowchart Step 4)
+    // Allocates items to sellers, calculates totals, creates multi-seller package shipments,
+    // leaves order in PENDING state, does NOT deduct stock yet, does NOT notify sellers yet.
+    const { createPendingOrder } = await import("@/lib/payments/orders");
+    const result = await createPendingOrder({
+      buyerId,
+      items,
+      shippingAddress,
+      shippingFeePaise,
+      taxPaise,
     });
-
-    for (const item of items) {
-      const quantity = Math.max(1, Number(item.quantity) || 1);
-      const product = await prisma.product.findUnique({
-        where: { id: item.productId },
-        include: {
-          seller: { include: { user: true } },
-          variants: true,
-          inventory: true,
-        },
-      });
-
-      if (product) {
-        // Check stock
-        const currentStock = product.inventory[0]?.quantity ?? 10;
-        if (currentStock < quantity) {
-          return NextResponse.json(
-            {
-              error: `Insufficient stock for "${product.title}". Only ${currentStock} pieces available.`,
-            },
-            { status: 400 }
-          );
-        }
-
-        // Strict Database Rule: Price and seller must be captured from product at purchase time
-        const unitPricePaise =
-          product.variants?.find((v) => v.id === item.variantId)?.pricePaise ??
-          product.basePricePaise;
-        const sellerId = product.sellerId || defaultSeller.id;
-        const sellerShopName = product.seller?.shopName || "Master Artisan Studio";
-        const sellerArtisanName = product.seller?.artisanName || "Master Artisan";
-
-        enrichedItems.push({
-          productId: product.id,
-          variantId: item.variantId || product.variants[0]?.id,
-          sellerId,
-          title: product.title,
-          pricePaise: unitPricePaise, // Immutable unit price at purchase time
-          quantity,
-          sellerShopName,
-          sellerArtisanName,
-          sellerEmail: product.seller?.user?.email || "artisan@artsinly.com",
-          sellerName: sellerArtisanName || sellerShopName,
-          productSnapshot: {
-            title: product.title,
-            craftType: product.craftType,
-            basePricePaise: product.basePricePaise,
-            giCode: product.seller?.giCode || null,
-          },
-        });
-      } else {
-        // Fallback for demo mock product ID
-        enrichedItems.push({
-          productId: item.productId,
-          sellerId: defaultSeller.id,
-          title: item.title || "Handcrafted Heritage Art Piece",
-          pricePaise: Number.isInteger(item.pricePaise) ? item.pricePaise : 12699,
-          quantity,
-          sellerShopName: defaultSeller.shopName,
-          sellerArtisanName: defaultSeller.artisanName || undefined,
-          sellerEmail: "artisan@artsinly.com",
-          sellerName: defaultSeller.artisanName || undefined,
-          productSnapshot: {
-            title: item.title || "Handcrafted Heritage Art Piece",
-          },
-        });
-      }
-    }
-
-    const subtotalPaise = enrichedItems.reduce(
-      (sum, item) => sum + item.pricePaise * item.quantity,
-      0
-    );
-    const totalPaise = subtotalPaise + shippingFeePaise + taxPaise;
-    const orderNumber = generateOrderNumber();
-
-    // 3. Atomically create Order, OrderItems, decrement Inventory, and create Shipment
-    const order = await prisma.$transaction(async (tx) => {
-      // Create order with separated lifecycle statuses
-      const newOrder = await tx.order.create({
-        data: {
-          orderNumber,
-          buyerId,
-          totalPaise,
-          subtotalPaise,
-          shippingFeePaise,
-          taxPaise,
-          status: "PENDING",
-          paymentStatus: "PENDING",
-          shipmentStatus: "LABEL_CREATED",
-          addressSnapshot: shippingAddress,
-          items: {
-            create: enrichedItems.map((item) => ({
-              productId: item.productId,
-              variantId: item.variantId,
-              sellerId: item.sellerId,
-              title: item.title,
-              pricePaise: item.pricePaise, // Frozen at purchase time
-              quantity: item.quantity,
-              sellerShopName: item.sellerShopName,
-              sellerArtisanName: item.sellerArtisanName,
-              productSnapshot: item.productSnapshot,
-            })),
-          },
-        },
-        include: {
-          items: true,
-        },
-      });
-
-      // Deduct inventory for items in DB
-      for (const item of enrichedItems) {
-        await tx.inventory.updateMany({
-          where: { productId: item.productId },
-          data: {
-            quantity: { decrement: item.quantity },
-          },
-        });
-      }
-
-      // Create initial Shipment record with ShipmentStatus
-      await tx.shipment.create({
-        data: {
-          orderId: newOrder.id,
-          carrier: "Insured Pan-India Express",
-          status: "LABEL_CREATED",
-          trackingNumber: `AWB-${orderNumber.replace(/[^A-Z0-9]/g, "")}`,
-        },
-      });
-
-      return newOrder;
-    });
-
-    // 4. Trigger Seller Order Alerts (async / non-blocking)
-    for (const item of enrichedItems) {
-      if (item.sellerEmail) {
-        sendSellerOrderAlertEmail({
-          sellerEmail: item.sellerEmail,
-          sellerName: item.sellerName || "Master Artisan",
-          orderNumber: order.orderNumber,
-          items: [
-            {
-              title: item.title,
-              quantity: item.quantity,
-              pricePaise: item.pricePaise,
-            },
-          ],
-          shippingAddress: {
-            fullName: shippingAddress.fullName,
-            addressLine1: shippingAddress.addressLine1,
-            city: shippingAddress.city,
-            state: shippingAddress.state,
-            postalCode: shippingAddress.postalCode,
-          },
-        }).catch((err) => console.error("Error sending seller alert:", err));
-      }
-    }
 
     return NextResponse.json({
       success: true,
       order: {
-        id: order.id,
-        orderNumber: order.orderNumber,
-        totalPaise: order.totalPaise,
-        status: order.status,
+        id: result.order.id,
+        orderNumber: result.order.orderNumber,
+        totalPaise: result.order.totalPaise,
+        status: result.order.status,
+        paymentStatus: result.order.paymentStatus,
+        shipmentStatus: result.order.shipmentStatus,
+        sellerCount: result.sellerCount,
       },
     });
   } catch (error: any) {
     console.error("Order creation error:", error);
     return NextResponse.json(
       { error: error.message || "Failed to place order. Please try again." },
-      { status: 500 }
+      { status: 400 }
     );
   }
 }
+
