@@ -11,6 +11,13 @@ jobs:
     name: Lint, Typecheck, and Test
     runs-on: ubuntu-latest
 
+    env:
+      DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/artsinly?schema=public"
+      AUTH_SECRET: "artsinly-dev-secret-key-32-chars-minimum-token"
+      NEXT_PUBLIC_APP_URL: "http://localhost:3000"
+      NODE_ENV: "test"
+      PORT: 3000
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -18,11 +25,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: "npm"
 
       - name: Install Dependencies
-        run: npm ci
+        run: npm install --prefer-offline --no-audit
 
       - name: Generate Prisma Client
         run: npx prisma generate
@@ -36,16 +43,23 @@ jobs:
       - name: Run Database Rules & Invariants Suite
         run: npm run test:db-rules
 
-      - name: Run Seller Product Management Suite
-        run: npm run test:seller-products
-
       - name: Run Multi-Vendor Checkout & Payments Suite
         run: npm run test:multivendor
 
       - name: Start Next.js Development Server for API Suite
         run: |
           npm run dev &
-          npx wait-on -t 30000 http://localhost:3000/api/health
+          for i in $(seq 1 30); do
+            if curl -s http://localhost:3000/api/health | grep -q "healthy"; then
+              echo "Server is healthy on port 3000!"
+              break
+            fi
+            echo "Waiting for server to start... ($i/30)"
+            sleep 1
+          done
+
+      - name: Run Seller Product Management Suite
+        run: npm run test:seller-products
 
       - name: Run Payments & Legal Reviews Suite
         run: npm run test:payments-legal

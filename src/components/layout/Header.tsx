@@ -10,11 +10,12 @@ import { useAuth } from "@/context/AuthContext";
 
 export function Header() {
   const pathname = usePathname();
-  if (pathname === "/login" || pathname.startsWith("/login")) return null;
   const { cartCount } = useCart();
   const { user, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeRole, setActiveRole] = useState<"collector" | "artisan" | "admin">("collector");
+
+  if (pathname === "/login" || pathname.startsWith("/login")) return null;
 
   const currentRole: "collector" | "artisan" | "admin" = pathname.startsWith("/admin")
     ? "admin"

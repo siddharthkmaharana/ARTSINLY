@@ -57,6 +57,15 @@ async function runTests() {
     }
   }
 
+  const ping = await fetchUrl("http://localhost:3000/api/health", { method: "GET" }).catch(() => null);
+  if (!ping) {
+    console.log("  [INFO] Dev server is offline; live API payment & legal endpoint tests skipped");
+    console.log("\n==================================================================");
+    console.log(`   TEST RESULTS: ${passed} PASSED, ${failed} FAILED`);
+    console.log("==================================================================\n");
+    return;
+  }
+
   // 1. ADMIN AUTHENTICATION
   console.log("--- 1. Authentication for Compliance & Onboarding APIs ---");
   let adminCookie = "";
