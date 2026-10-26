@@ -86,10 +86,12 @@ function BuyerDashboardContent() {
                 statusText,
                 carrier: shipment?.carrier || "Pan-India Fragile Express",
                 trackingNumber: shipment?.trackingNumber || `AWB-${ord.orderNumber}`,
+                shipments: ord.shipments || [],
                 items: ord.items.map((item: any) => ({
                   title: item.title,
                   quantity: item.quantity,
                   pricePaise: item.pricePaise,
+                  status: item.status || "PENDING",
                   imageUrl:
                     item.product?.images?.[0]?.url ||
                     "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=400&q=80",
@@ -270,20 +272,56 @@ function BuyerDashboardContent() {
                   </div>
                 </div>
 
-                {/* Tracking & Items */}
+                {/* Multi-Seller Tracking & Items */}
                 <div className="p-6 space-y-4">
-                  {(order.status === "SHIPPED" || order.status === "IN_TRANSIT" || order.status === "PROCESSING") && (
-                    <div className="p-3 bg-[#F8F5EF] border border-[#DCD0BD] rounded-lg text-xs flex flex-wrap items-center justify-between gap-2">
-                      <div className="flex items-center gap-2 text-[#20201D]">
-                        <Clock className="w-4 h-4 text-[#89714F]" />
-                        <span>
-                          Carrier: <strong>{order.carrier}</strong>
+                  {order.shipments && order.shipments.length > 1 ? (
+                    <div className="space-y-2">
+                      <p className="text-xs font-semibold text-[#89714F]">
+                        Multi-Vendor Fulfillment ({order.shipments.length} Regional Packages):
+                      </p>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {order.shipments.map((ship: any, sIdx: number) => (
+                          <div
+                            key={sIdx}
+                            className="p-3 bg-[#F8F5EF] border border-[#DCD0BD] rounded-lg text-xs flex flex-col gap-1"
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="font-semibold text-[#20201D]">
+                                Parcel {sIdx + 1}: {ship.carrier || order.carrier}
+                              </span>
+                              <span
+                                className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                                  ship.status === "DELIVERED"
+                                    ? "bg-emerald-100 text-emerald-800"
+                                    : ship.status === "CANCELLED"
+                                    ? "bg-red-100 text-red-800"
+                                    : "bg-amber-100 text-amber-800"
+                                }`}
+                              >
+                                {ship.status || "PROCESSING"}
+                              </span>
+                            </div>
+                            <span className="font-mono text-[#89714F] text-[11px]">
+                              AWB: {ship.trackingNumber || order.trackingNumber}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    (order.status === "SHIPPED" || order.status === "IN_TRANSIT" || order.status === "PROCESSING") && (
+                      <div className="p-3 bg-[#F8F5EF] border border-[#DCD0BD] rounded-lg text-xs flex flex-wrap items-center justify-between gap-2">
+                        <div className="flex items-center gap-2 text-[#20201D]">
+                          <Clock className="w-4 h-4 text-[#89714F]" />
+                          <span>
+                            Carrier: <strong>{order.carrier}</strong>
+                          </span>
+                        </div>
+                        <span className="font-mono text-[#89714F] text-[11px] bg-white px-2 py-0.5 rounded border border-[#DCD0BD]">
+                          AWB: {order.trackingNumber}
                         </span>
                       </div>
-                      <span className="font-mono text-[#89714F] text-[11px] bg-white px-2 py-0.5 rounded border border-[#DCD0BD]">
-                        AWB: {order.trackingNumber}
-                      </span>
-                    </div>
+                    )
                   )}
 
                   {order.items.map((item: any, idx: number) => (
@@ -309,9 +347,16 @@ function BuyerDashboardContent() {
                           <p className="text-xs text-[#6B685F]">
                             By {item.artisanName} • {item.state}
                           </p>
-                          <span className="text-xs font-semibold text-[#89714F]">
-                            Qty: {item.quantity}
-                          </span>
+                          <div className="flex items-center gap-2 mt-1">
+                            <span className="text-xs font-semibold text-[#89714F]">
+                              Qty: {item.quantity}
+                            </span>
+                            {item.status === "CANCELLED" && (
+                              <span className="text-[10px] font-semibold bg-red-100 text-red-800 px-2 py-0.5 rounded">
+                                Cancelled by Seller • Refund Credited
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </div>
 
@@ -319,12 +364,14 @@ function BuyerDashboardContent() {
                         <span className="font-serif text-base font-semibold text-[#20201D] block">
                           {formatINR(item.pricePaise * item.quantity)}
                         </span>
-                        <Link
-                          href={`/products/${item.slug}`}
-                          className="text-[11px] text-[#89714F] hover:underline"
-                        >
-                          Write a Review
-                        </Link>
+                        {item.status !== "CANCELLED" && (
+                          <Link
+                            href={`/products/${item.slug}`}
+                            className="text-[11px] text-[#89714F] hover:underline"
+                          >
+                            Write a Review
+                          </Link>
+                        )}
                       </div>
                     </div>
                   ))}

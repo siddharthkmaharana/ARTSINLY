@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test": "npm run test:db-rules && npm run test:seller-products && npm run test:multivendor && npm run test:payments-legal && npm run test:system",
     "test:system": "node scripts/test_system_suite.js",
     "test:payments-legal": "node scripts/test_payments_and_legal.js",
     "test:db-rules": "node scripts/test_database_rules.js",
