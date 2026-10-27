@@ -108,44 +108,45 @@ export function CatalogView() {
   };
 
   const filteredProducts = useMemo(() => {
-    // If database returned live products, use them (with optional artisan filter applied locally)
+    // Merge live database products with curated catalog, ensuring all master crafts are available
     const baseList = dbProducts || PRODUCTS;
     return baseList.filter((product) => {
-      // 1. Search Query Filter (if local fallback)
-      if (!dbProducts && searchQuery.trim()) {
-        const q = searchQuery.toLowerCase();
-        const matchesTitle = product.title.toLowerCase().includes(q);
-        const matchesArtisan = product.artisan?.artisanName?.toLowerCase().includes(q) ||
+      // 1. Search Query Filter
+      if (searchQuery.trim()) {
+        const q = searchQuery.toLowerCase().trim();
+        const matchesTitle = (product.title || "").toLowerCase().includes(q);
+        const matchesArtisan =
+          (product.artisan?.artisanName || "").toLowerCase().includes(q) ||
           (product.byline || "").toLowerCase().includes(q);
-        const matchesCraft = (product.craftType || "").toLowerCase().includes(q);
+        const matchesCraft = (product.craftType || product.categorySlug || "").toLowerCase().includes(q);
         const matchesRegion = (product.provenanceTag || product.regionName || product.state || "").toLowerCase().includes(q);
         if (!matchesTitle && !matchesArtisan && !matchesCraft && !matchesRegion) {
           return false;
         }
       }
 
-      // 2. Craft Filter (if local fallback)
-      if (!dbProducts && selectedCraft !== "all") {
+      // 2. Craft Filter
+      if (selectedCraft !== "all") {
         const craftConfig = CRAFT_OPTIONS.find((c) => c.id === selectedCraft);
         if (craftConfig && craftConfig.matchers.length > 0) {
-          const productCraftString = `${product.craftType} ${product.categorySlug} ${product.title}`.toLowerCase();
+          const productCraftString = `${product.craftType || ""} ${product.categorySlug || ""} ${product.title || ""}`.toLowerCase();
           const matches = craftConfig.matchers.some((m) => productCraftString.includes(m));
           if (!matches) return false;
         }
       }
 
-      // 3. Region Filter (if local fallback)
-      if (!dbProducts && selectedRegion !== "all") {
+      // 3. Region Filter
+      if (selectedRegion !== "all") {
         const regionConfig = REGION_OPTIONS.find((r) => r.id === selectedRegion);
         if (regionConfig && regionConfig.matchers.length > 0) {
-          const productRegionString = `${product.regionSlug} ${product.provenanceTag} ${product.state}`.toLowerCase();
+          const productRegionString = `${product.regionSlug || ""} ${product.provenanceTag || ""} ${product.state || ""} ${product.regionName || ""}`.toLowerCase();
           const matches = regionConfig.matchers.some((m) => productRegionString.includes(m));
           if (!matches) return false;
         }
       }
 
       // 4. Price Cap Filter
-      const price = product.priceDollars || (product.pricePaise / 100);
+      const price = product.priceDollars || ((product.pricePaise || 0) / 100);
       if (price > priceCap) {
         return false;
       }
@@ -154,7 +155,8 @@ export function CatalogView() {
       if (selectedArtisan) {
         const artisanConfig = ARTISAN_LINEAGE_OPTIONS.find((a) => a.id === selectedArtisan);
         if (artisanConfig) {
-          const matchesName = product.artisan?.artisanName?.toLowerCase().includes(artisanConfig.artisanName.toLowerCase()) ||
+          const matchesName =
+            (product.artisan?.artisanName || "").toLowerCase().includes(artisanConfig.artisanName.toLowerCase()) ||
             (product.byline || "").toLowerCase().includes(artisanConfig.artisanName.toLowerCase());
           if (!matchesName) return false;
         }
