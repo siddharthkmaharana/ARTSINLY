@@ -21,8 +21,16 @@ interface Bucket {
   resetTime: number;
 }
 
-// Memory cache for client IP buckets
-const rateLimitStore = new Map<string, Bucket>();
+// Memory cache for client IP buckets (anchored to globalThis in development)
+const globalForRateLimit = globalThis as unknown as {
+  rateLimitStore?: Map<string, Bucket>;
+};
+export const rateLimitStore =
+  globalForRateLimit.rateLimitStore ?? new Map<string, Bucket>();
+
+if (process.env.NODE_ENV !== "production") {
+  globalForRateLimit.rateLimitStore = rateLimitStore;
+}
 
 // Periodic cleanup of expired buckets every 5 minutes (Edge runtime safe)
 const cleanupTimer = setInterval(() => {

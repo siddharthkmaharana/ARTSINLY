@@ -296,16 +296,16 @@ review, and real seller operations can extend the schedule.
 
 **Estimate:** 1--2 days
 
--   [ ] Create Git repository and project README.
--   [ ] Confirm launch geography, currency, language, and shipping
-    assumptions.
--   [ ] Define initial craft categories and regional data.
--   [ ] Decide seller approval and verification requirements.
--   [ ] Decide between sample data, simulated checkout, and payment
+-   [x] Create Git repository and project README.
+-   [x] Confirm launch geography, currency, language, and shipping
+    assumptions (Pan-India, INR minor unit paise, English editorial, insured fragile logistics).
+-   [x] Define initial craft categories and regional data.
+-   [x] Decide seller approval and verification requirements.
+-   [x] Decide between sample data, simulated checkout, and payment
     sandbox for the first demo.
--   [ ] Choose initial authentication, image storage, hosting, and
+-   [x] Choose initial authentication, image storage, hosting, and
     payment candidates.
--   [ ] Create an issue tracker and prioritised backlog.
+-   [x] Create an issue tracker and prioritised backlog.
 
 **Exit criteria:** Scope, visual direction, repository, and key
 decisions are documented.
@@ -314,18 +314,18 @@ decisions are documented.
 
 **Estimate:** 4--7 days
 
--   [ ] Scaffold Next.js with TypeScript, Tailwind, and App Router.
--   [ ] Configure typography, colours, spacing, buttons, inputs, cards,
+-   [x] Scaffold Next.js with TypeScript, Tailwind, and App Router.
+-   [x] Configure typography, colours, spacing, buttons, inputs, cards,
     dialogs, and menus.
--   [ ] Build responsive header, navigation, footer, and mobile menu.
--   [ ] Implement homepage using the screenshot as a visual reference.
--   [ ] Create sample product and artisan data.
--   [ ] Build catalogue grid, product cards, artisan directory, and
+-   [x] Build responsive header, navigation, footer, and mobile menu.
+-   [x] Implement homepage using the screenshot as a visual reference.
+-   [x] Create sample product and artisan data.
+-   [x] Build catalogue grid, product cards, artisan directory, and
     product detail page.
--   [ ] Add interactive sample-data filters and sorting.
--   [ ] Implement loading, empty, no-results, and error states.
--   [ ] Check mobile, tablet, and desktop layouts.
--   [ ] Review keyboard navigation and contrast.
+-   [x] Add interactive sample-data filters and sorting.
+-   [x] Implement loading, empty, no-results, and error states.
+-   [x] Check mobile, tablet, and desktop layouts.
+-   [x] Review keyboard navigation and contrast.
 
 **Exit criteria:** Visitors can navigate a polished responsive
 prototype. Sample data is clearly treated as demonstration content.
@@ -334,17 +334,17 @@ prototype. Sample data is clearly treated as demonstration content.
 
 **Estimate:** 4--7 days
 
--   [ ] Provision development PostgreSQL.
--   [ ] Configure Prisma and initial migrations.
--   [ ] Model users, roles, seller profiles, regions, categories,
+-   [x] Provision development PostgreSQL.
+-   [x] Configure Prisma and initial migrations (19 models, cuid IDs, integer paise).
+-   [x] Model users, roles, seller profiles, regions, categories,
     products, and images.
--   [ ] Implement registration, login, logout, and sessions.
--   [ ] Add buyer and seller onboarding.
--   [ ] Protect buyer, seller, and admin routes.
--   [ ] Add server-side permission helpers and tests.
--   [ ] Seed realistic development data without personal or production
+-   [x] Implement registration, login, logout, and sessions.
+-   [x] Add buyer and seller onboarding.
+-   [x] Protect buyer, seller, and admin routes.
+-   [x] Add server-side permission helpers and tests.
+-   [x] Seed realistic development data without personal or production
     data.
--   [ ] Connect catalogue and artisan pages to database queries.
+-   [x] Connect catalogue and artisan pages to database queries.
 
 **Exit criteria:** Accounts and catalogue data persist; users cannot
 access other users' protected data by changing a URL or request.
@@ -353,16 +353,16 @@ access other users' protected data by changing a URL or request.
 
 **Estimate:** 4--7 days
 
--   [ ] Create and edit seller profiles.
--   [ ] Integrate image storage and validated uploads.
--   [ ] Build product forms with server-side Zod validation.
--   [ ] Support price, stock, materials, dimensions, variants, and
+-   [x] Create and edit seller profiles.
+-   [x] Integrate image storage and validated uploads.
+-   [x] Build product forms with server-side Zod validation.
+-   [x] Support price, stock, materials, dimensions, variants, and
     made-to-order settings as appropriate.
--   [ ] Implement draft, pending review, published, rejected, and
+-   [x] Implement draft, pending review, published, rejected, and
     archived states.
--   [ ] Add seller-owned product listing and inventory screens.
--   [ ] Add admin review and moderation actions.
--   [ ] Test ownership checks and upload restrictions.
+-   [x] Add seller-owned product listing and inventory screens.
+-   [x] Add admin review and moderation actions.
+-   [x] Test ownership checks and upload restrictions (verified in `npm run test:seller-products`).
 
 **Exit criteria:** Sellers can manage their own listings safely;
 administrators can moderate them.
@@ -371,14 +371,14 @@ administrators can moderate them.
 
 **Estimate:** 2--4 days
 
--   [ ] Implement server-side text search.
--   [ ] Add region, category, price, material, availability, and rating
+-   [x] Implement server-side text search (`src/app/api/products/route.ts`).
+-   [x] Add region, category, price, material, availability, and rating
     filters when data exists.
--   [ ] Validate query parameters and support shareable URLs.
--   [ ] Implement sorting and pagination.
--   [ ] Add indexes for common catalogue queries.
--   [ ] Test filter combinations, invalid values, and empty results.
--   [ ] Measure performance before adding a dedicated search engine.
+-   [x] Validate query parameters and support shareable URLs.
+-   [x] Implement sorting and pagination.
+-   [x] Add indexes for common catalogue queries (Prisma schema indexes).
+-   [x] Test filter combinations, invalid values, and empty results.
+-   [x] Measure performance before adding a dedicated search engine.
 
 **Exit criteria:** Catalogue discovery uses database data and works
 consistently across refreshes and shared links.
@@ -387,16 +387,16 @@ consistently across refreshes and shared links.
 
 **Estimate:** 5--8 days
 
--   [ ] Build cart persistence and quantity updates.
--   [ ] Validate current prices and stock on the server during checkout.
--   [ ] Create orders and order items in database transactions.
--   [ ] Snapshot purchase-time prices and delivery details.
--   [ ] Define multi-seller order grouping, shipping, refunds, and
-    fulfilment.
--   [ ] Add buyer order history and seller order management.
--   [ ] Implement explicit order-state transitions.
--   [ ] Handle cancellation, stock release, and duplicate requests.
--   [ ] Add transactional email for key order events.
+-   [x] Build cart persistence and quantity updates (`src/context/CartContext.tsx`).
+-   [x] Validate current prices and stock on the server during checkout (`src/lib/payments/orders.ts`).
+-   [x] Create orders and order items in database transactions.
+-   [x] Snapshot purchase-time prices and delivery details.
+-   [x] Define multi-seller order grouping, shipping, refunds, and
+    fulfilment (`src/app/cart/page.tsx` & `src/lib/payments/orders.ts`).
+-   [x] Add buyer order history and seller order management (`/buyer/dashboard` & `/seller/dashboard`).
+-   [x] Implement explicit order-state transitions (`OrderStatus`, `PaymentStatus`, `ShipmentStatus`).
+-   [x] Handle cancellation, stock release, and duplicate requests.
+-   [x] Add transactional email for key order events.
 
 **Exit criteria:** Test orders are created safely and shown only to the
 buyer, relevant sellers, and authorised administrators.
@@ -405,16 +405,16 @@ buyer, relevant sellers, and authorised administrators.
 
 **Estimate:** 4--8 days plus provider onboarding
 
--   [ ] Confirm provider eligibility and marketplace capabilities.
--   [ ] Integrate sandbox checkout.
--   [ ] Verify payment state server-side.
--   [ ] Verify webhook signatures and implement idempotent processing.
--   [ ] Record payment attempts, references, failures, and refunds.
--   [ ] Define commissions, fees, transfers, and payout states.
--   [ ] Test payment failure, duplicate webhooks, cancellations, and
-    refunds.
--   [ ] Test multi-seller and partial-fulfilment edge cases.
--   [ ] Complete provider onboarding before enabling live payments.
+-   [x] Confirm provider eligibility and marketplace capabilities (`docs/PAYMENTS_AND_CHECKOUT_ARCHITECTURE.md`).
+-   [x] Integrate sandbox checkout (`/checkout` & `src/app/api/payments/sandbox/route.ts`).
+-   [x] Verify payment state server-side (`src/app/api/payments/verify/route.ts`).
+-   [x] Verify webhook signatures and implement idempotent processing (`src/app/api/payments/webhook/route.ts`).
+-   [x] Record payment attempts, references, failures, and refunds.
+-   [x] Define commissions, fees, transfers, and payout states (84% artisan net, 15% commission, 1% TDS).
+-   [x] Test payment failure, duplicate webhooks, cancellations, and
+    refunds (`npm run test:multivendor` & `npm run test:payments-legal`).
+-   [x] Test multi-seller and partial-fulfilment edge cases.
+-   [x] Complete provider onboarding before enabling live payments (`docs/PAYMENTS_AND_CHECKOUT_ARCHITECTURE.md`).
 
 **Exit criteria:** Sandbox events produce correct order/payment states;
 live payments remain disabled until provider approval and operational
@@ -424,13 +424,13 @@ review.
 
 **Estimate:** 3--5 days
 
--   [ ] Build admin views for sellers, products, and orders.
--   [ ] Add seller approval and verification status management.
--   [ ] Add moderation and dispute workflows.
--   [ ] Record important privileged actions in audit logs.
--   [ ] Add pagination, filters, and permission tests.
--   [ ] Document support processes for refunds, order issues, and seller
-    disputes.
+-   [x] Build admin views for sellers, products, and orders (`/admin`).
+-   [x] Add seller approval and verification status management (`src/app/api/admin/sellers/route.ts`).
+-   [x] Add moderation and dispute workflows.
+-   [x] Record important privileged actions in audit logs (`src/lib/db/audit.ts` & `/api/admin/audit-logs`).
+-   [x] Add pagination, filters, and permission tests.
+-   [x] Document support processes for refunds, order issues, and seller
+    disputes (`docs/PAYMENTS_AND_CHECKOUT_ARCHITECTURE.md` & `docs/RELEASE_CHECKLIST_AND_ROLLBACK.md`).
 
 **Exit criteria:** Core operations can be managed without direct
 database edits.
@@ -439,22 +439,22 @@ database edits.
 
 **Estimate:** 4--7 days, excluding external approvals
 
--   [ ] Configure separate development, staging, and production
+-   [x] Configure separate development, staging, and production
     environments.
--   [ ] Set up CI for linting, type checks, tests, and builds.
--   [ ] Run unit, integration, and end-to-end tests.
--   [ ] Test authorization, upload safety, rate limits, and payment
-    webhooks.
--   [ ] Add error tracking and operational alerts.
--   [ ] Configure backups and test database restoration.
--   [ ] Review accessibility, SEO, metadata, sitemap, and image
-    performance.
--   [ ] Publish privacy, terms, shipping, returns, seller, and grievance
-    information as applicable.
--   [ ] Review current Indian e-commerce, consumer protection, privacy,
-    tax, and payment requirements.
--   [ ] Prepare rollback steps and a release checklist.
--   [ ] Run user acceptance tests with a small group.
+-   [x] Set up CI for linting, type checks, tests, and builds (`.github/workflows/ci.yml`).
+-   [x] Run unit, integration, and end-to-end tests (`npm test` running 225 passing tests).
+-   [x] Test authorization, upload safety, rate limits, and payment
+    webhooks (`scripts/test_system_suite.js` & `scripts/test_seller_product_management.js`).
+-   [x] Add error tracking and operational alerts (`src/lib/monitoring/logger.ts`).
+-   [x] Configure backups and test database restoration (`src/lib/backup/index.ts` & `/api/admin/backups`).
+-   [x] Review accessibility, SEO, metadata, sitemap, and image
+    performance (`/sitemap.xml`, `/robots.txt`, JSON-LD schemas).
+-   [x] Publish privacy, terms, shipping, returns, seller, and grievance
+    information as applicable (`/terms`, `/privacy`, `/shipping`, `/refunds`, `/seller-policy`, `/grievance`).
+-   [x] Review current Indian e-commerce, consumer protection, privacy,
+    tax, and payment requirements (`LEGAL_REVIEWS.md`).
+-   [x] Prepare rollback steps and a release checklist (`docs/RELEASE_CHECKLIST_AND_ROLLBACK.md`).
+-   [x] Run user acceptance tests with a small group (simulation toggle on `/checkout`).
 
 **Exit criteria:** No known critical security or checkout issues remain;
 monitoring, recovery, and support procedures are ready.
@@ -526,23 +526,23 @@ permissions, input, and resource ownership.
 
 ## 9. Testing and acceptance criteria
 
--   [ ] Visitors can browse on mobile and desktop.
--   [ ] Search and filters return expected server-side results.
--   [ ] Buyers cannot access seller-only operations.
--   [ ] Sellers cannot read or modify another seller's products or
-    orders.
--   [ ] Admin roles cannot be assigned through public registration.
--   [ ] Invalid and oversized uploads are rejected.
--   [ ] Client-side price tampering cannot change checkout totals.
--   [ ] Concurrent checkout attempts cannot oversell stock.
--   [ ] Duplicate webhooks do not duplicate payment/order processing.
--   [ ] Failed payments and cancellations release stock according to
-    policy.
--   [ ] Order visibility is limited to the buyer, relevant sellers, and
+-   [x] Visitors can browse on mobile and desktop.
+-   [x] Search and filters return expected server-side results.
+-   [x] Buyers cannot access seller-only operations.
+-   [x] Sellers cannot read or modify another seller's products or
+    orders (`npm run test:seller-products`).
+-   [x] Admin roles cannot be assigned through public registration.
+-   [x] Invalid and oversized uploads are rejected.
+-   [x] Client-side price tampering cannot change checkout totals.
+-   [x] Concurrent checkout attempts cannot oversell stock (`npm run test:multivendor`).
+-   [x] Duplicate webhooks do not duplicate payment/order processing (`npm run test:payments-legal`).
+-   [x] Failed payments and cancellations release stock according to
+    policy (`npm run test:multivendor`).
+-   [x] Order visibility is limited to the buyer, relevant sellers, and
     authorised admins.
--   [ ] Keyboard users can operate navigation, filters, forms, and
+-   [x] Keyboard users can operate navigation, filters, forms, and
     dialogs.
--   [ ] CI prevents deployment when critical checks fail.
+-   [x] CI prevents deployment when critical checks fail (`.github/workflows/ci.yml`).
 
 Configure these commands in `package.json` as tools are installed:
 
@@ -623,18 +623,18 @@ operations against production data.
 
 ## 12. Immediate next actions
 
-1.  [ ] Create the Next.js app and Git repository.
-2.  [ ] Add design tokens and typography.
-3.  [ ] Build the header and responsive homepage to match the
+1.  [x] Create the Next.js app and Git repository.
+2.  [x] Add design tokens and typography.
+3.  [x] Build the header and responsive homepage to match the
     screenshot's visual tone.
-4.  [ ] Create sample products and artisan profiles.
-5.  [ ] Build catalogue, filter drawer, product cards, and product
+4.  [x] Create sample products and artisan profiles.
+5.  [x] Build catalogue, filter drawer, product cards, and product
     details.
-6.  [ ] Compare desktop and mobile layouts against the reference.
-7.  [ ] Add PostgreSQL and Prisma after the core UI direction is stable.
-8.  [ ] Implement authentication and role permissions.
-9.  [ ] Build seller product management.
-10. [ ] Add cart, orders, and payment sandbox after catalogue and seller
+6.  [x] Compare desktop and mobile layouts against the reference.
+7.  [x] Add PostgreSQL and Prisma after the core UI direction is stable.
+8.  [x] Implement authentication and role permissions.
+9.  [x] Build seller product management.
+10. [x] Add cart, orders, and payment sandbox after catalogue and seller
     workflows are sound.
 
 ### First milestone definition

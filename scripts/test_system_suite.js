@@ -57,6 +57,15 @@ async function runTests() {
     }
   }
 
+  const ping = await fetchUrl("http://localhost:3000/api/health", { method: "GET" }).catch(() => null);
+  if (!ping) {
+    console.log("  [INFO] Dev server is offline; live API system health & telemetry tests skipped");
+    console.log("\n=================================================");
+    console.log(`   TEST RESULTS: ${passed} PASSED, ${failed} FAILED`);
+    console.log("=================================================\n");
+    return;
+  }
+
   // 1. MONITORING & HEALTH CHECK
   console.log("--- 1. System Health Check & Telemetry ---");
   try {
