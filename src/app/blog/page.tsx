@@ -130,7 +130,7 @@ export default function BlogPage() {
                 >
                   <img
                     src={post.imageUrl}
-                    alt={post.title}
+                    alt={post.title || "Artisan heritage story cover"}
                     className="w-full h-full object-cover object-center group-hover:scale-103 transition-transform duration-500 ease-out"
                     loading="lazy"
                   />
@@ -202,7 +202,7 @@ export default function BlogPage() {
               <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden bg-[#ECE6DC]">
                 <img
                   src={selectedPost.imageUrl}
-                  alt={selectedPost.title}
+                  alt={selectedPost.title || "Artisan heritage story visual"}
                   className="w-full h-full object-cover"
                 />
               </div>

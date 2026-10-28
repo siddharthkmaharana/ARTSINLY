@@ -126,7 +126,7 @@ export default async function BlogPostPage({
         <div className="relative aspect-[16/9] w-full rounded-2xl overflow-hidden bg-[#ECE6DC] mb-10 shadow-xs border border-[#E3DDD1]">
           <img
             src={post.imageUrl}
-            alt={post.title}
+            alt={post.title || "Artisan heritage editorial cover"}
             className="w-full h-full object-cover"
           />
         </div>

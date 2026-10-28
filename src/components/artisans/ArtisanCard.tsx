@@ -15,7 +15,7 @@ export function ArtisanCard({ artisan }: ArtisanCardProps) {
           <div className="relative w-16 h-16 rounded-full overflow-hidden shrink-0 border border-[#DCD0BD]">
             <img
               src={artisan.avatarUrl}
-              alt={artisan.artisanName}
+              alt={artisan.artisanName || "Master Artisan Portrait"}
               className="w-full h-full object-cover"
             />
             {artisan.isVerified && (

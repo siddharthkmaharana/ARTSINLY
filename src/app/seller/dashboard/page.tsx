@@ -1112,7 +1112,7 @@ export default function SellerDashboardPage() {
                         <div className="aspect-[4/3] w-full overflow-hidden bg-[#ECE6DC] relative">
                           <img
                             src={item.imageUrl}
-                            alt={item.title}
+                            alt={item.title || "Handcrafted artisan product"}
                             className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500"
                           />
 
@@ -1436,7 +1436,7 @@ export default function SellerDashboardPage() {
                               {item.imageUrl && (
                                 <img
                                   src={item.imageUrl}
-                                  alt={item.title}
+                                  alt={item.title || "Ordered handcrafted craft item"}
                                   className="w-12 h-12 object-cover rounded border border-[#E5E0D7]"
                                 />
                               )}
@@ -2400,7 +2400,7 @@ export default function SellerDashboardPage() {
                         {activeImg ? (
                           <img
                             src={activeImg}
-                            alt={newTitle || "Craft Preview"}
+                            alt={newTitle.trim() || "Handcrafted artisan craft preview"}
                             className="w-full h-full object-cover"
                           />
                         ) : (
@@ -2436,7 +2436,7 @@ export default function SellerDashboardPage() {
                               : "border-transparent opacity-70 hover:opacity-100"
                           }`}
                         >
-                          <img src={img.url} alt="thumb" className="w-full h-full object-cover" />
+                          <img src={img.url} alt={img.altText || `${newTitle.trim() || "Craft"} thumbnail ${i + 1}`} className="w-full h-full object-cover" />
                         </button>
                       ))}
                     </div>
@@ -3067,7 +3067,7 @@ export default function SellerDashboardPage() {
                         {activeImg ? (
                           <img
                             src={activeImg}
-                            alt={editTitle || "Craft Preview"}
+                            alt={editTitle.trim() || "Handcrafted artisan craft preview"}
                             className="w-full h-full object-cover"
                           />
                         ) : (
@@ -3100,7 +3100,7 @@ export default function SellerDashboardPage() {
                               : "border-transparent opacity-70 hover:opacity-100"
                           }`}
                         >
-                          <img src={img.url} alt="thumb" className="w-full h-full object-cover" />
+                          <img src={img.url} alt={img.altText || `${editTitle.trim() || "Craft"} thumbnail ${i + 1}`} className="w-full h-full object-cover" />
                         </button>
                       ))}
                     </div>

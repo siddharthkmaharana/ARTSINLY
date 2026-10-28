@@ -134,7 +134,7 @@ export default function ArtisansPage() {
               <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-[#ECE6DC] shadow-xs border border-[#DDD5C8]">
                 <img
                   src={artisan.imageUrl}
-                  alt={artisan.artisanWithLocation}
+                  alt={artisan.artisanWithLocation || "Featured master artisan"}
                   className="w-full h-full object-cover group-hover:scale-104 transition-transform duration-500 ease-out"
                   loading="lazy"
                 />

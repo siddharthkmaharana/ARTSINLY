@@ -332,7 +332,7 @@ function BuyerDashboardContent() {
                       <div className="flex items-center gap-4">
                         <img
                           src={item.imageUrl}
-                          alt={item.title}
+                          alt={item.title || "Ordered artisan craft item"}
                           className="w-16 h-20 object-cover rounded bg-[#F3ECE1] border border-[#DCD0BD]"
                         />
                         <div>

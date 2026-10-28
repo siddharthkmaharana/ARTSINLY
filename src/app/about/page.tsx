@@ -224,7 +224,7 @@ export default function AboutPage() {
                   <div className="relative aspect-[4/3] w-full bg-[#ECE6DC] overflow-hidden">
                     <img
                       src={terroir.imageUrl}
-                      alt={terroir.craft}
+                      alt={terroir.craft || "Regional craft terroir"}
                       className="w-full h-full object-cover group-hover:scale-104 transition-transform duration-500 ease-out"
                       loading="lazy"
                     />

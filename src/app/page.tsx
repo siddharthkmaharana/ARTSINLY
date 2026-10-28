@@ -275,7 +275,7 @@ export default function HomePage() {
                 <div className="aspect-[4/3] w-full overflow-hidden bg-[#ECE6DC]">
                   <img
                     src={category.imageUrl}
-                    alt={category.name}
+                    alt={category.name || "Handcrafted artisan craft category"}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                     loading="lazy"
                   />
@@ -334,7 +334,7 @@ export default function HomePage() {
                     <Link href={`/products/${item.slug}`}>
                       <img
                         src={item.imageUrl}
-                        alt={item.title}
+                        alt={item.title || "Best seller handcrafted craft"}
                         className="w-full h-full object-cover object-center group-hover:scale-103 transition-transform duration-500 ease-out"
                         loading="lazy"
                       />
@@ -413,7 +413,7 @@ export default function HomePage() {
                     <Link href={`/products/${item.slug}`}>
                       <img
                         src={item.imageUrl}
-                        alt={item.title}
+                        alt={item.title || "Curated craft product"}
                         className="w-full h-full object-cover object-center group-hover:scale-103 transition-transform duration-500 ease-out"
                         loading="lazy"
                       />
@@ -482,7 +482,7 @@ export default function HomePage() {
                 <div className="relative aspect-square w-full rounded-2xl overflow-hidden bg-[#ECE6DC] shadow-xs border border-[#DDD5C8]">
                   <img
                     src={artisan.imageUrl}
-                    alt={artisan.artisanWithLocation}
+                    alt={artisan.artisanWithLocation || "Featured heritage master artisan"}
                     className="w-full h-full object-cover group-hover:scale-104 transition-transform duration-500 ease-out"
                     loading="lazy"
                   />

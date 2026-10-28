@@ -780,7 +780,7 @@ export default function AdminPage() {
                               {p.imageUrl && (
                                 <img
                                   src={p.imageUrl}
-                                  alt={p.title}
+                                  alt={p.title || "Product listing thumbnail"}
                                   className="w-10 h-10 object-cover rounded border border-[#EAE5DD]"
                                 />
                               )}
@@ -982,7 +982,7 @@ export default function AdminPage() {
                               {item.product?.images?.[0]?.url && (
                                 <img
                                   src={item.product.images[0].url}
-                                  alt={item.title}
+                                  alt={item.title || "Ordered craft product thumbnail"}
                                   className="w-12 h-12 object-cover rounded border border-[#EAE5DD]"
                                 />
                               )}

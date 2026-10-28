@@ -149,7 +149,7 @@ export default function ImageUploader({
               <div className="relative w-20 h-20 rounded-lg overflow-hidden bg-[#ECE6DC] shrink-0 border border-[#DDD5C8]">
                 <img
                   src={value}
-                  alt="Uploaded Artwork"
+                  alt={label ? `${label} preview` : "Uploaded artwork craft preview"}
                   className="w-full h-full object-cover object-center"
                 />
               </div>

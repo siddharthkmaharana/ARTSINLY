@@ -169,7 +169,7 @@ export default function CartPage() {
                           >
                             <img
                               src={primaryImg}
-                              alt={item.product.title}
+                              alt={item.product.title || "Cart product craft item"}
                               className="w-full h-full object-cover"
                             />
                           </Link>

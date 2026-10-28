@@ -135,7 +135,7 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
                 >
                   <img
                     src={img.url}
-                    alt={img.altText}
+                    alt={img.altText || `${currentProduct.title || "Craft item"} thumbnail view ${idx + 1}`}
                     className="w-full h-full object-cover"
                   />
                 </button>
@@ -146,7 +146,7 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
             <div className="relative flex-grow aspect-[4/5] rounded overflow-hidden bg-[#EFEBE4] group border border-[#E5E0D7] shadow-xs">
               <img
                 src={currentImage}
-                alt={currentProduct.title}
+                alt={currentProduct.title || "Handcrafted heritage masterpiece"}
                 style={getLightingStyle()}
                 className="w-full h-full object-cover transition-all duration-300"
               />
@@ -338,7 +338,7 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
               <div className="flex items-center gap-3">
                 <img
                   src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80"
-                  alt="Devendra Prajapati"
+                  alt="Devendra Prajapati, Master Terracotta Sculptor"
                   className="w-10 h-10 rounded-full object-cover border border-[#D5CFC5] shrink-0"
                 />
                 <div>
@@ -397,7 +397,7 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
                 <div className="relative aspect-square w-full overflow-hidden bg-[#EFEBE4]">
                   <img
                     src={item.imageUrl}
-                    alt={item.title}
+                    alt={item.title || "Guild pairing craft item"}
                     className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500 ease-out"
                   />
                 </div>

@@ -35,7 +35,7 @@ export default function ArtisanProfilePage({ params }: ArtisanPageProps) {
         {artisan.bannerUrl ? (
           <img
             src={artisan.bannerUrl}
-            alt={artisan.shopName}
+            alt={artisan.shopName || "Artisan atelier banner"}
             className="w-full h-full object-cover opacity-60"
           />
         ) : (
@@ -51,7 +51,7 @@ export default function ArtisanProfilePage({ params }: ArtisanPageProps) {
             <div className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-full overflow-hidden border-4 border-white shadow-md shrink-0 bg-[#F3ECE1]">
               <img
                 src={artisan.avatarUrl}
-                alt={artisan.artisanName}
+                alt={artisan.artisanName || "Artisan portrait"}
                 className="w-full h-full object-cover"
               />
               {artisan.isVerified && (
