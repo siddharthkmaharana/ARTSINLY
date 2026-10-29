@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: "Terms of Service & Pavilion Intermediary Agreement",
   description:
     "Statutory terms governing collector purchases, artisan marketplace transactions, GI heritage authenticity, and intermediary responsibilities under Indian Law.",
+  alternates: {
+    canonical: "/terms",
+  },
 };
 
 export default function TermsPage() {

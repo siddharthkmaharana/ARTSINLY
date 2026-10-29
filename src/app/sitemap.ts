@@ -1,5 +1,12 @@
 import { MetadataRoute } from "next";
 import { prisma } from "@/lib/prisma";
+import { PRODUCTS, ARTISANS } from "@/lib/mock-data";
+
+const BLOG_SLUGS = [
+  "the-sacred-smoke-kilns-of-molela",
+  "ajrakh-printing-in-synchrony-with-the-stars",
+  "why-imperfection-is-the-true-mark-of-heritage",
+];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://artsinly.com";
@@ -23,6 +30,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: "daily",
       priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/explore`,
+      lastModified: new Date(),
+      changeFrequency: "daily",
+      priority: 0.8,
     },
     {
       url: `${baseUrl}/artisans`,
@@ -92,36 +105,76 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
+  // Blog article routes
+  const blogRoutes: MetadataRoute.Sitemap = BLOG_SLUGS.map((slug) => ({
+    url: `${baseUrl}/blog/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
+
   try {
-    // Dynamic products from PostgreSQL
-    const products = await prisma.product.findMany({
-      where: { status: "PUBLISHED" },
-      select: { slug: true, updatedAt: true },
-    });
+    // Dynamic products from PostgreSQL with mock fallback
+    let productRoutes: MetadataRoute.Sitemap = [];
+    try {
+      const dbProducts = await prisma.product.findMany({
+        where: { status: "PUBLISHED" },
+        select: { slug: true, updatedAt: true },
+      });
 
-    const productRoutes: MetadataRoute.Sitemap = products.map((product) => ({
-      url: `${baseUrl}/products/${product.slug}`,
-      lastModified: product.updatedAt,
-      changeFrequency: "weekly",
-      priority: 0.8,
-    }));
+      if (dbProducts.length > 0) {
+        productRoutes = dbProducts.map((product) => ({
+          url: `${baseUrl}/products/${product.slug}`,
+          lastModified: product.updatedAt,
+          changeFrequency: "weekly",
+          priority: 0.8,
+        }));
+      }
+    } catch {
+      // Prisma not connected or table empty; fall back to static catalog
+    }
 
-    // Dynamic artisans/sellers from PostgreSQL
-    const sellers = await prisma.sellerProfile.findMany({
-      where: { isVerified: true },
-      select: { slug: true, updatedAt: true },
-    });
+    if (productRoutes.length === 0) {
+      productRoutes = PRODUCTS.map((product) => ({
+        url: `${baseUrl}/products/${product.slug}`,
+        lastModified: new Date(),
+        changeFrequency: "weekly",
+        priority: 0.8,
+      }));
+    }
 
-    const sellerRoutes: MetadataRoute.Sitemap = sellers.map((seller) => ({
-      url: `${baseUrl}/artisans/${seller.slug}`,
-      lastModified: seller.updatedAt,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    }));
+    // Dynamic artisans/sellers from PostgreSQL with mock fallback
+    let sellerRoutes: MetadataRoute.Sitemap = [];
+    try {
+      const dbSellers = await prisma.sellerProfile.findMany({
+        where: { isVerified: true },
+        select: { slug: true, updatedAt: true },
+      });
 
-    return [...staticRoutes, ...productRoutes, ...sellerRoutes];
+      if (dbSellers.length > 0) {
+        sellerRoutes = dbSellers.map((seller) => ({
+          url: `${baseUrl}/artisans/${seller.slug}`,
+          lastModified: seller.updatedAt,
+          changeFrequency: "monthly",
+          priority: 0.7,
+        }));
+      }
+    } catch {
+      // Prisma not connected or table empty; fall back to static artisans
+    }
+
+    if (sellerRoutes.length === 0) {
+      sellerRoutes = ARTISANS.map((artisan) => ({
+        url: `${baseUrl}/artisans/${artisan.slug}`,
+        lastModified: new Date(),
+        changeFrequency: "monthly",
+        priority: 0.7,
+      }));
+    }
+
+    return [...staticRoutes, ...blogRoutes, ...productRoutes, ...sellerRoutes];
   } catch (err) {
     console.error("Error generating dynamic sitemap:", err);
-    return staticRoutes;
+    return [...staticRoutes, ...blogRoutes];
   }
 }

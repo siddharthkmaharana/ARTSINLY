@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: "Artisan Seller Agreement & Code of Fair Trade Ethics",
   description:
     "Standards, payout economics (84% direct remittance), GI authenticity warranty, and marketplace operational terms for master artisans on ARTSINLY.",
+  alternates: {
+    canonical: "/seller-policy",
+  },
 };
 
 export default function SellerPolicyPage() {

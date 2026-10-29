@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import type { Metadata } from "next";
 import {
   Award,
   ShieldCheck,
@@ -10,6 +11,21 @@ import {
   Sparkles,
   HeartHandshake,
 } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Our Manifesto & Fair Trade Guild | Preserving Living Heritage",
+  description:
+    "Learn how ARTSINLY bridges generational Indian master artisans directly with global collectors through fair trade payouts, verified GI certification, and archival craft preservation.",
+  alternates: {
+    canonical: "/about",
+  },
+  openGraph: {
+    title: "Our Manifesto & Fair Trade Guild | ARTSINLY",
+    description:
+      "Bridging generational Indian master artisans directly with collectors worldwide through verifiable GI certification.",
+    url: "/about",
+  },
+};
 
 export default function AboutPage() {
   const craftTerroirs = [

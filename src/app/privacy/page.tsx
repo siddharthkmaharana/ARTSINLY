@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: "Privacy Policy — Digital Personal Data Protection (DPDP)",
   description:
     "Statutory disclosure of data collection, processing, storage, and Data Principal rights under India's Digital Personal Data Protection Act, 2023.",
+  alternates: {
+    canonical: "/privacy",
+  },
 };
 
 export default function PrivacyPage() {

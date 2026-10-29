@@ -1,6 +1,22 @@
 import React from "react";
 import Link from "next/link";
+import type { Metadata } from "next";
 import { Award, ShieldCheck, Globe } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Meet Master Guild Artisans & Shilp Guru Awardees",
+  description:
+    "Discover generational master makers, Shilp Guru awardees, and state master artisans preserving indigenous pottery, handloom weaving, miniature painting, and metalcraft.",
+  alternates: {
+    canonical: "/artisans",
+  },
+  openGraph: {
+    title: "Meet Master Guild Artisans | ARTSINLY",
+    description:
+      "Generational master makers preserving indigenous pottery, handloom weaving, miniature painting, and metalcraft across India.",
+    url: "/artisans",
+  },
+};
 
 interface ArtisanShowcaseItem {
   id: string;

@@ -6,6 +6,40 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
+        userAgent: "Googlebot",
+        allow: [
+          "/",
+          "/catalog",
+          "/products",
+          "/products/*",
+          "/artisans",
+          "/artisans/*",
+          "/about",
+          "/blog",
+          "/blog/*",
+          "/new-arrivals",
+          "/best-sellers",
+          "/terms",
+          "/privacy",
+          "/shipping",
+          "/refunds",
+          "/seller-policy",
+          "/grievance",
+          "/_next/static/*",
+          "/_next/image*",
+          "/favicon.ico",
+        ],
+        disallow: [
+          "/admin",
+          "/admin/*",
+          "/api/*",
+          "/buyer/*",
+          "/seller/*",
+          "/checkout",
+          "/cart",
+        ],
+      },
+      {
         userAgent: "*",
         allow: [
           "/",
@@ -16,6 +50,7 @@ export default function robots(): MetadataRoute.Robots {
           "/artisans/*",
           "/about",
           "/blog",
+          "/blog/*",
           "/new-arrivals",
           "/best-sellers",
           "/terms",
