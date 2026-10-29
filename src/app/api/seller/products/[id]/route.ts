@@ -10,6 +10,10 @@ interface RouteParams {
   params: Promise<{ id: string }>;
 }
 
+function getFallbackStore(): any[] {
+  return (globalThis as any).__artsinly_seller_products || fallbackSellerProducts;
+}
+
 async function withDbTimeout<T>(promise: Promise<T>, ms = 2000): Promise<T> {
   let timer: NodeJS.Timeout;
   const timeoutPromise = new Promise<never>((_, reject) => {
@@ -94,7 +98,7 @@ export async function GET(req: NextRequest, { params }: RouteParams) {
       // Database offline fallback
     }
 
-    const fallback = fallbackSellerProducts.find((p) => p.id === id);
+    const fallback = getFallbackStore().find((p: any) => p.id === id);
     if (fallback) {
       if (fallback.sellerId !== seller.id) {
         return NextResponse.json(
@@ -361,9 +365,10 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
     }
 
     // Fallback store update with strict authorization check
-    const fallbackIdx = fallbackSellerProducts.findIndex((p) => p.id === id);
+    const store = getFallbackStore();
+    const fallbackIdx = store.findIndex((p: any) => p.id === id);
     if (fallbackIdx >= 0) {
-      const current = fallbackSellerProducts[fallbackIdx];
+      const current = store[fallbackIdx];
       // Strict ownership check
       if (current.sellerId !== seller.id) {
         return NextResponse.json(
@@ -450,7 +455,7 @@ export async function PUT(req: NextRequest, { params }: RouteParams) {
           },
         ],
       };
-      fallbackSellerProducts[fallbackIdx] = updatedProd;
+      store[fallbackIdx] = updatedProd;
       return NextResponse.json({ success: true, product: updatedProd });
     }
 
@@ -533,9 +538,10 @@ export async function DELETE(req: NextRequest, { params }: RouteParams) {
     }
 
     // Remove or archive in fallback store
-    const idx = fallbackSellerProducts.findIndex((p) => p.id === id);
+    const store = getFallbackStore();
+    const idx = store.findIndex((p: any) => p.id === id);
     if (idx >= 0) {
-      const item = fallbackSellerProducts[idx];
+      const item = store[idx];
       // Strict ownership check
       if (item.sellerId !== seller.id) {
         return NextResponse.json(
@@ -543,7 +549,7 @@ export async function DELETE(req: NextRequest, { params }: RouteParams) {
           { status: 403 }
         );
       }
-      fallbackSellerProducts.splice(idx, 1);
+      store.splice(idx, 1);
       return NextResponse.json({
         success: true,
         action: "DELETED",

@@ -72,7 +72,7 @@ export interface ResilientSellerProduct {
   };
 }
 
-export const fallbackSellerProducts: ResilientSellerProduct[] = [
+const initialFallbackSellerProducts: ResilientSellerProduct[] = [
   {
     id: "sp_painting_001",
     sellerId: "cmvdxyd9c000lqwxwurax8s29",
@@ -263,6 +263,16 @@ export const fallbackSellerProducts: ResilientSellerProduct[] = [
     },
   },
 ];
+
+declare global {
+  var __artsinly_seller_products: ResilientSellerProduct[] | undefined;
+}
+
+if (!globalThis.__artsinly_seller_products) {
+  globalThis.__artsinly_seller_products = [...initialFallbackSellerProducts];
+}
+
+export const fallbackSellerProducts = globalThis.__artsinly_seller_products;
 
 export async function GET(req: NextRequest) {
   try {

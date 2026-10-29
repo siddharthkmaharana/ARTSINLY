@@ -35,7 +35,7 @@ export function ProductCard({ product, variant = "default" }: ProductCardProps) 
   const primaryImage =
     product.images.find((img) => img.isPrimary)?.url ||
     product.images[0]?.url ||
-    "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=800&q=80";
+    "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&fm=webp&w=800&q=80";
 
   const displayPrice = product.priceDisplay || `₹${(product.priceDollars || (product.pricePaise / 100)).toFixed(0)}`;
 
@@ -50,9 +50,16 @@ export function ProductCard({ product, variant = "default" }: ProductCardProps) 
         >
           <img
             src={primaryImage}
-            alt={product.title || "Handcrafted artisan product"}
+            alt={
+              product.title
+                ? `${product.title} — Handcrafted ${product.craftType} from ${product.state}`
+                : "Authentic Indian Handcrafted Heritage Craft"
+            }
+            width={400}
+            height={400}
             className="w-full h-full object-cover object-center group-hover:scale-103 transition-transform duration-500 ease-out"
             loading="lazy"
+            decoding="async"
           />
 
           {/* Region Tag Pill on top-left of image */}

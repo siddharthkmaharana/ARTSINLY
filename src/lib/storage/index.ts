@@ -111,10 +111,31 @@ export function getOptimizedImageUrl(
   // Unsplash CDN parameter optimization
   if (url.includes("images.unsplash.com")) {
     const widthParam = options.width ? `&w=${options.width}` : "";
-    return `${url}&auto=format&fit=crop${widthParam}&q=85`;
+    return `${url}&auto=format&fit=crop&fm=webp${widthParam}&q=85`;
   }
 
   // Local / S3 default
+  return url;
+}
+
+/**
+ * Ensures any image URL is converted to modern WebP format
+ */
+export function toWebpUrl(url: string, width?: number): string {
+  if (!url) return "";
+  if (url.includes("images.unsplash.com")) {
+    let res = url;
+    if (!res.includes("auto=format")) res += "&auto=format";
+    if (!res.includes("fit=crop")) res += "&fit=crop";
+    if (!res.includes("fm=webp")) res += "&fm=webp";
+    if (width && !res.includes(`w=`)) res += `&w=${width}`;
+    return res;
+  }
+  if (url.includes("res.cloudinary.com")) {
+    if (!url.includes("f_webp") && !url.includes("f_auto")) {
+      return url.replace("/upload/", "/upload/f_webp,q_auto:good/");
+    }
+  }
   return url;
 }
 

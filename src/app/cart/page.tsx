@@ -170,6 +170,10 @@ export default function CartPage() {
                             <img
                               src={primaryImg}
                               alt={item.product.title || "Cart product craft item"}
+                              width={96}
+                              height={112}
+                              loading="lazy"
+                              decoding="async"
                               className="w-full h-full object-cover"
                             />
                           </Link>

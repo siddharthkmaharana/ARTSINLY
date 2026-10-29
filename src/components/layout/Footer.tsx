@@ -28,30 +28,40 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Column 2: CRAFT DISCIPLINES */}
-          <nav aria-label="Craft Disciplines" className="lg:col-span-2 space-y-3">
-            <h5 className="text-[11px] font-semibold text-[#1E1E1C] uppercase tracking-wider">
-              Craft Disciplines
+          {/* Column 2: CRAFT DISCIPLINES & COLLECTIONS */}
+          <nav aria-label="Craft Disciplines & Collections" className="lg:col-span-2 space-y-3">
+            <h5 className="text-[11px] font-semibold text-[#1E1E1C] dark:text-white uppercase tracking-wider">
+              Collections &amp; Crafts
             </h5>
-            <ul className="space-y-2 text-xs text-[#68645C]">
+            <ul className="space-y-2 text-xs text-[#68645C] dark:text-[#A8A297]">
               <li>
-                <Link href="/catalog?craft=pottery" className="hover:text-[#1E1E1C] transition-colors">
-                  Kutch Terracotta
+                <Link href="/products" className="hover:text-[#1E1E1C] dark:hover:text-white transition-colors">
+                  All Certified Crafts
                 </Link>
               </li>
               <li>
-                <Link href="/catalog?craft=wood-carving" className="hover:text-[#1E1E1C] transition-colors">
-                  Sheesham Wood Carving
+                <Link href="/catalog" className="hover:text-[#1E1E1C] dark:hover:text-white transition-colors">
+                  Regional Craft Catalog
                 </Link>
               </li>
               <li>
-                <Link href="/catalog?craft=miniature-painting" className="hover:text-[#1E1E1C] transition-colors">
-                  Pichwai Miniatures
+                <Link href="/new-arrivals" className="hover:text-[#1E1E1C] dark:hover:text-white transition-colors">
+                  New Kiln Arrivals
                 </Link>
               </li>
               <li>
-                <Link href="/catalog?craft=metalwork" className="hover:text-[#1E1E1C] transition-colors">
-                  Dhokra Lost-Wax
+                <Link href="/best-sellers" className="hover:text-[#1E1E1C] dark:hover:text-white transition-colors">
+                  Best Seller Masterpieces
+                </Link>
+              </li>
+              <li>
+                <Link href="/explore" className="hover:text-[#1E1E1C] dark:hover:text-white transition-colors">
+                  Interactive Atelier
+                </Link>
+              </li>
+              <li>
+                <Link href="/artisans" className="hover:text-[#1E1E1C] dark:hover:text-white transition-colors">
+                  Shilp Guru Makers
                 </Link>
               </li>
             </ul>
@@ -59,28 +69,38 @@ export function Footer() {
 
           {/* Column 3: PAVILION PERSPECTIVES */}
           <nav aria-label="Pavilion Perspectives" className="lg:col-span-2 space-y-3">
-            <h5 className="text-[11px] font-semibold text-[#1E1E1C] uppercase tracking-wider">
-              Pavilion Perspectives
+            <h5 className="text-[11px] font-semibold text-[#1E1E1C] dark:text-white uppercase tracking-wider">
+              Guild &amp; Heritage
             </h5>
-            <ul className="space-y-2 text-xs text-[#68645C]">
+            <ul className="space-y-2 text-xs text-[#68645C] dark:text-[#A8A297]">
               <li>
-                <Link href="/catalog" className="hover:text-[#1E1E1C] transition-colors">
-                  Collector View
+                <Link href="/about" className="hover:text-[#1E1E1C] dark:hover:text-white transition-colors">
+                  Heritage Manifesto &amp; Ethics
                 </Link>
               </li>
               <li>
-                <Link href="/seller/dashboard" className="hover:text-[#1E1E1C] transition-colors">
-                  Artisan Guild Login
+                <Link href="/blog" className="hover:text-[#1E1E1C] dark:hover:text-white transition-colors">
+                  Stories Behind The Kilns
                 </Link>
               </li>
               <li>
-                <Link href="/admin" className="hover:text-[#1E1E1C] transition-colors">
+                <Link href="/artisan-studio" className="hover:text-[#1E1E1C] dark:hover:text-white transition-colors">
+                  Artisan Studio Portal
+                </Link>
+              </li>
+              <li>
+                <Link href="/seller/onboarding" className="hover:text-[#1E1E1C] dark:hover:text-white transition-colors">
+                  Artisan Application
+                </Link>
+              </li>
+              <li>
+                <Link href="/seller/dashboard" className="hover:text-[#1E1E1C] dark:hover:text-white transition-colors">
+                  Artisan Dashboard
+                </Link>
+              </li>
+              <li>
+                <Link href="/admin" className="hover:text-[#1E1E1C] dark:hover:text-white transition-colors">
                   GI Moderation Portal
-                </Link>
-              </li>
-              <li>
-                <Link href="/about" className="hover:text-[#1E1E1C] transition-colors">
-                  Fair Pricing Ethics
                 </Link>
               </li>
             </ul>

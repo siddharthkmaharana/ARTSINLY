@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { PRODUCTS } from "@/lib/mock-data";
 import { ProductCard } from "@/components/products/ProductCard";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Search, Check } from "lucide-react";
 
 interface CraftOption {
@@ -169,18 +170,14 @@ export function CatalogView() {
   return (
     <div className="bg-[#FAF7F2] min-h-screen py-5 sm:py-7">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Breadcrumb line from screenshot */}
-        <nav className="flex items-center space-x-2 text-[11px] text-[#8C877E] mb-5 overflow-x-auto whitespace-nowrap scrollbar-none">
-          <Link href="/" className="hover:text-[#1E1E1C] transition-colors">
-            Home
-          </Link>
-          <span>•</span>
-          <span className="text-[#6B665E] font-medium">Catalog</span>
-          <span>•</span>
-          <span className="text-[#6B665E] truncate">
-            All Curated Masterpieces
-          </span>
-        </nav>
+        {/* Breadcrumb line */}
+        <Breadcrumbs
+          items={[
+            { name: "Catalog", url: "/catalog" },
+            { name: "All Curated Masterpieces", url: "/catalog" },
+          ]}
+          className="mb-5"
+        />
 
         {/* Section Header with Title and Search Input */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">

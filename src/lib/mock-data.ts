@@ -6,7 +6,7 @@ export const CATEGORIES: Category[] = [
     name: "Terracotta Pottery",
     slug: "terracotta-pottery",
     description: "Hand-thrown earthen vessels, indigenous urns, and sculptural clay crafts.",
-    imageUrl: "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=800&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&fm=webp&w=800&q=80",
     itemCount: 42,
   },
   {
@@ -14,7 +14,7 @@ export const CATEGORIES: Category[] = [
     name: "Block Print",
     slug: "block-print",
     description: "Authentic Ajrakh mud-resist, Sanganeri florals, and hand-loomed textiles.",
-    imageUrl: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=800&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&fm=webp&w=800&q=80",
     itemCount: 58,
   },
   {
@@ -22,7 +22,7 @@ export const CATEGORIES: Category[] = [
     name: "Dhokra Metal",
     slug: "dhokra-metal",
     description: "Ancient lost-wax bell metal casting and handcrafted tribal bronze.",
-    imageUrl: "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&fm=webp&w=800&q=80",
     itemCount: 29,
   },
   {
@@ -30,7 +30,7 @@ export const CATEGORIES: Category[] = [
     name: "Blue Pottery",
     slug: "blue-pottery",
     description: "Powdered quartz stone, Egyptian paste, and cobalt Persian floral glazes.",
-    imageUrl: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&fm=webp&w=800&q=80",
     itemCount: 35,
   },
   {
@@ -38,7 +38,7 @@ export const CATEGORIES: Category[] = [
     name: "Wood Carving",
     slug: "wood-carving",
     description: "Hand-chiseled walnut root jali work, Channapatna turnery, and teak carvings.",
-    imageUrl: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&fm=webp&w=800&q=80",
     itemCount: 24,
   },
 ];
@@ -50,7 +50,7 @@ export const REGIONS: Region[] = [
     slug: "gujarat",
     state: "Gujarat",
     description: "Famed for Kutch terracotta, Ajrakh mud-resist block printing, and Rogan art.",
-    imageUrl: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=800&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&fm=webp&w=800&q=80",
     craftTraditions: ["Terracotta Pottery", "Ajrakh Block Print", "Rogan Art"],
   },
   {
@@ -59,7 +59,7 @@ export const REGIONS: Region[] = [
     slug: "bengal",
     state: "Bengal",
     description: "Centuries-old lost-wax Dhokra bell metal casting, terracotta temples, and Kantha weaves.",
-    imageUrl: "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&fm=webp&w=800&q=80",
     craftTraditions: ["Dhokra Lost-Wax Metal", "Terracotta Pottery", "Kantha Stitch"],
   },
   {
@@ -68,7 +68,7 @@ export const REGIONS: Region[] = [
     slug: "rajasthan",
     state: "Rajasthan",
     description: "Home of Jaipur cobalt quartz blue pottery, miniature murals, and Dabu resist.",
-    imageUrl: "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=800&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&fm=webp&w=800&q=80",
     craftTraditions: ["Jaipur Blue Pottery", "Sanganeri Print", "Kundan Meenakari"],
   },
   {
@@ -77,7 +77,7 @@ export const REGIONS: Region[] = [
     slug: "kashmir",
     state: "Kashmir",
     description: "Intricate walnut wood root lattice openwork, hand-spun Pashmina, and papier-mâché.",
-    imageUrl: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=800&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&fm=webp&w=800&q=80",
     craftTraditions: ["Walnut Wood Carving", "Pashmina Weaving", "Sozni Embroidery"],
   },
   {
@@ -86,7 +86,7 @@ export const REGIONS: Region[] = [
     slug: "bihar",
     state: "Bihar",
     description: "Sacred Mithila Madhubani line art, Sikki golden grass crafts, and stone relief.",
-    imageUrl: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&fm=webp&w=800&q=80",
     craftTraditions: ["Madhubani Painting", "Sikki Grass Craft"],
   },
   {
@@ -95,7 +95,7 @@ export const REGIONS: Region[] = [
     slug: "karnataka",
     state: "Karnataka",
     description: "Channapatna natural lacquerware wood turning and Mysuru sandalwood carvings.",
-    imageUrl: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&fm=webp&w=800&q=80",
     craftTraditions: ["Channapatna Lacquer Wood", "Bidriware Metal"],
   },
 ];
@@ -112,7 +112,7 @@ export const ARTISANS: Artisan[] = [
     state: "Gujarat",
     locality: "Bhuj, Kutch",
     isVerified: true,
-    avatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80",
+    avatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&fm=webp&w=300&q=80",
     yearsOfExperience: 28,
     featuredQuote: "The clay listens before it turns. In simplicity lies eternity.",
     productCount: 8,
@@ -128,7 +128,7 @@ export const ARTISANS: Artisan[] = [
     state: "Gujarat",
     locality: "Ajrakhpur, Kutch",
     isVerified: true,
-    avatarUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=300&q=80",
+    avatarUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&fm=webp&w=300&q=80",
     yearsOfExperience: 34,
     featuredQuote: "When the wooden block kisses the cloth with indigo, history repeats itself in symmetry.",
     productCount: 12,
@@ -144,7 +144,7 @@ export const ARTISANS: Artisan[] = [
     state: "Bengal",
     locality: "Bikna, Bankura",
     isVerified: true,
-    avatarUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80",
+    avatarUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&fm=webp&w=300&q=80",
     yearsOfExperience: 31,
     featuredQuote: "Fire gives permanent life to what the bee created with wax.",
     productCount: 9,
@@ -160,7 +160,7 @@ export const ARTISANS: Artisan[] = [
     state: "Rajasthan",
     locality: "Sanganer, Jaipur",
     isVerified: true,
-    avatarUrl: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=300&q=80",
+    avatarUrl: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&fm=webp&w=300&q=80",
     yearsOfExperience: 26,
     featuredQuote: "No clay wheel touches our vessels; stone and indigo remember the desert light.",
     productCount: 14,
@@ -176,7 +176,7 @@ export const ARTISANS: Artisan[] = [
     state: "Kashmir",
     locality: "Downtown Srinagar",
     isVerified: true,
-    avatarUrl: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=300&q=80",
+    avatarUrl: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&fm=webp&w=300&q=80",
     yearsOfExperience: 38,
     featuredQuote: "The grain of the walnut tree guides the chisel; the craftsman merely reveals its spirit.",
     productCount: 11,
@@ -192,7 +192,7 @@ export const ARTISANS: Artisan[] = [
     state: "Rajasthan",
     locality: "Jaipur, Rajasthan",
     isVerified: true,
-    avatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80",
+    avatarUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&fm=webp&w=300&q=80",
     yearsOfExperience: 32,
     featuredQuote: "Wood breathes long after the tree has fallen.",
     productCount: 15,
@@ -208,7 +208,7 @@ export const ARTISANS: Artisan[] = [
     state: "Rajasthan",
     locality: "Bhilwara, Rajasthan",
     isVerified: true,
-    avatarUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=300&q=80",
+    avatarUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&fm=webp&w=300&q=80",
     yearsOfExperience: 35,
     featuredQuote: "Every brushstroke is a silent prayer to the divine cosmos.",
     productCount: 18,
@@ -224,7 +224,7 @@ export const ARTISANS: Artisan[] = [
     state: "Uttar Pradesh",
     locality: "Chowk, Lucknow",
     isVerified: true,
-    avatarUrl: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=300&q=80",
+    avatarUrl: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&fm=webp&w=300&q=80",
     yearsOfExperience: 29,
     featuredQuote: "Gold and velvet preserve the grandeur of royal courts.",
     productCount: 10,
@@ -240,7 +240,7 @@ export const ARTISANS: Artisan[] = [
     state: "Rajasthan",
     locality: "Sanganer, Jaipur",
     isVerified: true,
-    avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80",
+    avatarUrl: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&fm=webp&w=300&q=80",
     yearsOfExperience: 24,
     featuredQuote: "The cobalt hues mirror Rajasthan's clear winter skies.",
     productCount: 16,
@@ -256,7 +256,7 @@ export const ARTISANS: Artisan[] = [
     state: "Andhra Pradesh",
     locality: "Srikalahasti, Andhra Pradesh",
     isVerified: true,
-    avatarUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=300&q=80",
+    avatarUrl: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&fm=webp&w=300&q=80",
     yearsOfExperience: 33,
     featuredQuote: "The bamboo pen flows where mythology and nature intertwine.",
     productCount: 12,
@@ -272,7 +272,7 @@ export const ARTISANS: Artisan[] = [
     state: "Madhya Pradesh",
     locality: "Bhopal, Madhya Pradesh",
     isVerified: true,
-    avatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=300&q=80",
+    avatarUrl: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&fm=webp&w=300&q=80",
     yearsOfExperience: 40,
     featuredQuote: "Every living tree has a spirit; our art is its song.",
     productCount: 14,
@@ -326,13 +326,13 @@ export const PRODUCTS: Product[] = [
     images: [
       {
         id: "img-vase-1",
-        url: "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=1200&q=85",
+        url: "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&fm=webp&w=1200&q=85",
         altText: "Modern Ethnic Ceramic Vase – Terracotta Vase with Indigenous Pattern",
         isPrimary: true,
       },
       {
         id: "img-vase-2",
-        url: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=1000&q=85",
+        url: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&fm=webp&w=1000&q=85",
         altText: "Artisanal handcrafted ceramic plates and dishes on wooden workshop table",
       },
     ],
@@ -375,7 +375,7 @@ export const PRODUCTS: Product[] = [
     images: [
       {
         id: "img-clock-1",
-        url: "https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?auto=format&fit=crop&w=1000&q=85",
+        url: "https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?auto=format&fit=crop&fm=webp&w=1000&q=85",
         altText: "Hand-Carved Floral High-Relief Sheesham Clock on wall with potted plant",
         isPrimary: true,
       },
@@ -419,7 +419,7 @@ export const PRODUCTS: Product[] = [
     images: [
       {
         id: "img-pichwai-1",
-        url: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1000&q=85",
+        url: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&fm=webp&w=1000&q=85",
         altText: "Sacred Srinathji Gold-Leaf Pichwai Miniature Painting with classical floral composition",
         isPrimary: true,
       },
@@ -463,7 +463,7 @@ export const PRODUCTS: Product[] = [
     images: [
       {
         id: "img-dhokra-1",
-        url: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=1000&q=85",
+        url: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&fm=webp&w=1000&q=85",
         altText: "Dhokra Primitive Tribal Bell-Metal craft vessel hanging on wall",
         isPrimary: true,
       },
@@ -507,7 +507,7 @@ export const PRODUCTS: Product[] = [
     images: [
       {
         id: "img-zardozi-1",
-        url: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1000&q=85",
+        url: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&fm=webp&w=1000&q=85",
         altText: "Zardozi Hand-Embroidered Velvet gold jewelry and adornments",
         isPrimary: true,
       },
@@ -551,7 +551,7 @@ export const PRODUCTS: Product[] = [
     images: [
       {
         id: "img-ajrakh-1",
-        url: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=1000&q=85",
+        url: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&fm=webp&w=1000&q=85",
         altText: "Heritage Ajrakh 16-Stage Indigo Botanical Throw textile details",
         isPrimary: true,
       },
@@ -595,7 +595,7 @@ export const PRODUCTS: Product[] = [
     images: [
       {
         id: "img-plates-1",
-        url: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=1000&q=85",
+        url: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&fm=webp&w=1000&q=85",
         altText: "Jaipur Persian Quartz Blue Glazed Dinner Plates stacked on rustic wood",
         isPrimary: true,
       },
@@ -639,7 +639,7 @@ export const PRODUCTS: Product[] = [
     images: [
       {
         id: "img-kalamkari-1",
-        url: "https://images.unsplash.com/photo-1582560475093-ba66accbc424?auto=format&fit=crop&w=1000&q=85",
+        url: "https://images.unsplash.com/photo-1582560475093-ba66accbc424?auto=format&fit=crop&fm=webp&w=1000&q=85",
         altText: "Kalamkari Tree of Life Hand-Drawn Narrative Scroll floral artwork",
         isPrimary: true,
       },
@@ -683,7 +683,7 @@ export const PRODUCTS: Product[] = [
     images: [
       {
         id: "img-lamp-1",
-        url: "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=1000&q=85",
+        url: "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&fm=webp&w=1000&q=85",
         altText: "Dhokra Lost-Wax Cast Brass Tribal Forest Lamp artifact",
         isPrimary: true,
       },
@@ -725,7 +725,7 @@ export const PRODUCTS: Product[] = [
     images: [
       {
         id: "img-bluepottery-1",
-        url: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1000&q=85",
+        url: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&fm=webp&w=1000&q=85",
         altText: "Jaipur Persian Quartz Blue Pottery Vessel with classical Dutch floral still life painting",
         isPrimary: true,
       },
@@ -767,7 +767,7 @@ export const PRODUCTS: Product[] = [
     images: [
       {
         id: "img-walnut-1",
-        url: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=1000&q=85",
+        url: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&fm=webp&w=1000&q=85",
         altText: "Walnut Wood Intricate Lattice Carved Box beside modern minimal plant and clock",
         isPrimary: true,
       },
@@ -830,7 +830,7 @@ export const GUILD_PAIRINGS: GuildPairing[] = [
     title: "Hand-Carved Floral High-Relief Sheesham...",
     categoryTag: "WOOD CARVING • RAJASTHAN",
     price: "₹700",
-    imageUrl: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&fm=webp&w=800&q=80",
     slug: "hand-carved-floral-high-relief-sheesham-clock",
   },
   {
@@ -838,7 +838,7 @@ export const GUILD_PAIRINGS: GuildPairing[] = [
     title: "Sacred Srinathji Gold-Leaf Pichwai...",
     categoryTag: "MINIATURE PAINTING • RAJASTHAN",
     price: "₹1,500",
-    imageUrl: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&fm=webp&w=800&q=80",
     slug: "sacred-srinathji-gold-leaf-pichwai-miniature",
   },
   {
@@ -846,7 +846,7 @@ export const GUILD_PAIRINGS: GuildPairing[] = [
     title: "Dhokra Primitive Tribal Bell-Metal Lost-...",
     categoryTag: "METALWORK • WEST BENGAL",
     price: "₹190",
-    imageUrl: "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&fm=webp&w=800&q=80",
     slug: "dhokra-primitive-tribal-bell-metal-vessel",
   },
   {
@@ -854,7 +854,7 @@ export const GUILD_PAIRINGS: GuildPairing[] = [
     title: "Zardozi Hand-Embroidered Velvet Wall...",
     categoryTag: "ZARDOZI EMBROIDERY • UTTAR PRADESH",
     price: "₹540",
-    imageUrl: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=800&q=80",
+    imageUrl: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&fm=webp&w=800&q=80",
     slug: "zardozi-hand-embroidered-velvet-adornment",
   },
 ];
