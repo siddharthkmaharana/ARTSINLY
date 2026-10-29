@@ -32,9 +32,10 @@ export async function generateMetadata({
   }
 
   const title = `${artisan.shopName} — Master Artisan | ARTSINLY`;
+  const originText = [artisan.locality, artisan.state].filter(Boolean).join(", ");
   const description = artisan.bio
     ? artisan.bio.slice(0, 160)
-    : `Explore master craftwork, generational heritage, and GI certified artifacts by ${artisan.shopName} from ${artisan.origin}.`;
+    : `Explore master craftwork, generational heritage, and GI certified artifacts by ${artisan.shopName}${originText ? ` from ${originText}` : ""}.`;
 
   return {
     title,

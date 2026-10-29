@@ -44,7 +44,9 @@ export async function generateMetadata({
     description = mockProduct.description
       ? mockProduct.description.slice(0, 160)
       : description;
-    imageUrl = mockProduct.imageUrl;
+    if (mockProduct.images && mockProduct.images.length > 0) {
+      imageUrl = mockProduct.images[0].url;
+    }
   }
 
   return {
