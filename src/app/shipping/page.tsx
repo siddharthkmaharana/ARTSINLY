@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: "Shipping & Heritage Packaging Policy",
   description:
     "Domestic PAN-India logistics, museum-grade protective packaging for fragile crafts, transit timelines, and shipment tracking on ARTSINLY.",
+  alternates: {
+    canonical: "/shipping",
+  },
 };
 
 export default function ShippingPage() {

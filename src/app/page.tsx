@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "next/link";
+import type { Metadata } from "next";
 import { PRODUCTS, ARTISANS, CATEGORIES } from "@/lib/mock-data";
 import {
   ArrowRight,
@@ -10,6 +11,15 @@ import {
   Globe,
   Compass,
 } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "ARTSINLY — Regional Artisans Marketplace | Certified Heritage Crafts",
+  description:
+    "Discover authentic Indian heritage crafts, handmade terracotta pottery, handloom textiles, folk art, and Dokra metalcraft directly from certified master artisans.",
+  alternates: {
+    canonical: "/",
+  },
+};
 
 export default function HomePage() {
   // Top 3 bestsellers matching the ranked Best Sellers design

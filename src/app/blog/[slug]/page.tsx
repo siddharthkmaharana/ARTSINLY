@@ -76,8 +76,55 @@ const BLOG_POSTS: Record<string, BlogPostItem> = {
   },
 };
 
+import type { Metadata } from "next";
+
 export async function generateStaticParams() {
   return Object.keys(BLOG_POSTS).map((slug) => ({ slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const resolvedParams = await params;
+  const post = BLOG_POSTS[resolvedParams.slug];
+
+  if (!post) {
+    return {
+      title: "Field Notes & Essays | ARTSINLY",
+    };
+  }
+
+  const title = `${post.title} | ARTSINLY Craft Field Notes`;
+  const description = post.excerpt;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `/blog/${post.slug}`,
+    },
+    openGraph: {
+      title,
+      description,
+      url: `/blog/${post.slug}`,
+      images: [
+        {
+          url: post.imageUrl,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [post.imageUrl],
+    },
+  };
 }
 
 export default async function BlogPostPage({

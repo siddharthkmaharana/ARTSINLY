@@ -1,6 +1,7 @@
-import React, { use } from "react";
+import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import { ARTISANS, PRODUCTS } from "@/lib/mock-data";
 import { ProductCard } from "@/components/products/ProductCard";
 import {
@@ -17,8 +18,48 @@ interface ArtisanPageProps {
   params: Promise<{ slug: string }>;
 }
 
-export default function ArtisanProfilePage({ params }: ArtisanPageProps) {
-  const resolvedParams = use(params);
+export async function generateMetadata({
+  params,
+}: ArtisanPageProps): Promise<Metadata> {
+  const resolvedParams = await params;
+  const slug = resolvedParams.slug;
+  const artisan = ARTISANS.find((a) => a.slug === slug);
+
+  if (!artisan) {
+    return {
+      title: "Artisan Profile | ARTSINLY",
+    };
+  }
+
+  const title = `${artisan.shopName} — Master Artisan | ARTSINLY`;
+  const originText = [artisan.locality, artisan.state].filter(Boolean).join(", ");
+  const description = artisan.bio
+    ? artisan.bio.slice(0, 160)
+    : `Explore master craftwork, generational heritage, and GI certified artifacts by ${artisan.shopName}${originText ? ` from ${originText}` : ""}.`;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `/artisans/${slug}`,
+    },
+    openGraph: {
+      title,
+      description,
+      url: `/artisans/${slug}`,
+      images: artisan.avatarUrl ? [{ url: artisan.avatarUrl }] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: artisan.avatarUrl ? [artisan.avatarUrl] : undefined,
+    },
+  };
+}
+
+export default async function ArtisanProfilePage({ params }: ArtisanPageProps) {
+  const resolvedParams = await params;
   const slug = resolvedParams.slug;
   const artisan = ARTISANS.find((a) => a.slug === slug);
 

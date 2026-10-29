@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: "Returns, Replacements & Refund Policy",
   description:
     "Statutory consumer return rights, damaged item replacement guarantees, and fair-trade refund timelines compliant with Indian Consumer Protection Rules.",
+  alternates: {
+    canonical: "/refunds",
+  },
 };
 
 export default function RefundsPage() {
