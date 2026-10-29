@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { GUILD_PAIRINGS, PRODUCTS } from "@/lib/mock-data";
 import { useCart } from "@/context/CartContext";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import {
   Heart,
   ChevronLeft,
@@ -42,17 +43,17 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
       : [
           {
             id: "img-1",
-            url: "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=1200&q=85",
+            url: "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&fm=webp&w=1200&q=85",
             altText: currentProduct.title,
           },
           {
             id: "img-2",
-            url: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=1000&q=85",
+            url: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&fm=webp&w=1000&q=85",
             altText: "Ceramic vessels",
           },
           {
             id: "img-3",
-            url: "https://images.unsplash.com/photo-1581783342308-f792dbdd27c5?auto=format&fit=crop&w=1000&q=85",
+            url: "https://images.unsplash.com/photo-1581783342308-f792dbdd27c5?auto=format&fit=crop&fm=webp&w=1000&q=85",
             altText: "White vase",
           },
         ];
@@ -107,15 +108,13 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
     <div className="bg-[#FAF8F5] min-h-screen py-6 sm:py-8 text-[#1E1E1C]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* 1. Breadcrumbs */}
-        <nav className="flex items-center space-x-2 text-[11px] text-[#8C877E] mb-6">
-          <Link href="/" className="hover:text-[#1E1E1C]">Home</Link>
-          <span>•</span>
-          <Link href="/explore" className="hover:text-[#1E1E1C]">Explore</Link>
-          <span>•</span>
-          <span className="hover:text-[#1E1E1C] cursor-pointer">Vases</span>
-          <span>•</span>
-          <span className="text-[#68645C] truncate">{currentProduct.title}</span>
-        </nav>
+        <Breadcrumbs
+          items={[
+            { name: "Explore", url: "/explore" },
+            { name: currentProduct.title, url: `/products/${currentProduct.slug}` },
+          ]}
+          className="mb-6"
+        />
 
         {/* 2. Main Product Showcase (Left Gallery + Right Info) */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start mb-16">
@@ -136,6 +135,10 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
                   <img
                     src={img.url}
                     alt={img.altText || `${currentProduct.title || "Craft item"} thumbnail view ${idx + 1}`}
+                    width={64}
+                    height={64}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover"
                   />
                 </button>
@@ -147,6 +150,9 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
               <img
                 src={currentImage}
                 alt={currentProduct.title || "Handcrafted heritage masterpiece"}
+                width={600}
+                height={750}
+                decoding="async"
                 style={getLightingStyle()}
                 className="w-full h-full object-cover transition-all duration-300"
               />
@@ -337,8 +343,12 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
             <div className="bg-[#F7F4EE] border border-[#E8E2D8] rounded-lg p-3 sm:p-3.5 flex items-center justify-between gap-3 mt-4">
               <div className="flex items-center gap-3">
                 <img
-                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80"
+                  src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&fm=webp&w=120&q=80"
                   alt="Devendra Prajapati, Master Terracotta Sculptor"
+                  width={40}
+                  height={40}
+                  loading="lazy"
+                  decoding="async"
                   className="w-10 h-10 rounded-full object-cover border border-[#D5CFC5] shrink-0"
                 />
                 <div>
@@ -398,6 +408,10 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
                   <img
                     src={item.imageUrl}
                     alt={item.title || "Guild pairing craft item"}
+                    width={320}
+                    height={320}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500 ease-out"
                   />
                 </div>

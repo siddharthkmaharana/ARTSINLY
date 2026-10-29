@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { ARTISANS, PRODUCTS } from "@/lib/mock-data";
 import { ProductCard } from "@/components/products/ProductCard";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import {
   MapPin,
   Award,
@@ -71,12 +72,25 @@ export default async function ArtisanProfilePage({ params }: ArtisanPageProps) {
 
   return (
     <div className="bg-[#F8F5EF] min-h-screen pb-16">
+      {/* Accessible Breadcrumbs */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+        <Breadcrumbs
+          items={[
+            { name: "Artisans & Guilds", url: "/artisans" },
+            { name: artisan.artisanName, url: `/artisans/${slug}` },
+          ]}
+        />
+      </div>
+
       {/* Banner / Cover */}
       <div className="relative h-64 sm:h-80 w-full overflow-hidden bg-[#20201D]">
         {artisan.bannerUrl ? (
           <img
             src={artisan.bannerUrl}
-            alt={artisan.shopName || "Artisan atelier banner"}
+            alt={`${artisan.shopName} atelier workshop`}
+            width={1600}
+            height={400}
+            decoding="async"
             className="w-full h-full object-cover opacity-60"
           />
         ) : (
@@ -92,7 +106,11 @@ export default async function ArtisanProfilePage({ params }: ArtisanPageProps) {
             <div className="relative w-28 h-28 sm:w-36 sm:h-36 rounded-full overflow-hidden border-4 border-white shadow-md shrink-0 bg-[#F3ECE1]">
               <img
                 src={artisan.avatarUrl}
-                alt={artisan.artisanName || "Artisan portrait"}
+                alt={`${artisan.artisanName}, Master Artisan`}
+                width={144}
+                height={144}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover"
               />
               {artisan.isVerified && (

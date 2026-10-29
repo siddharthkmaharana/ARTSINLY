@@ -1,6 +1,8 @@
 import React from "react";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
+import { FaqSection } from "@/components/seo/FaqSection";
 import {
   Award,
   ShieldCheck,
@@ -36,7 +38,7 @@ export default function AboutPage() {
       description:
         "Riverbed clay reduction firing and 16-stage natural indigo mud-resist printing practiced in Dhamadka and Khavda.",
       imageUrl:
-        "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&fm=webp&w=800&q=80",
     },
     {
       region: "Rajasthan • Nathdwara & Jaipur",
@@ -45,7 +47,7 @@ export default function AboutPage() {
       description:
         "Crushed lapis lazuli on hand-loomed khadi with 24K gold leafing, and clay-free quartz faience low-fired in wood kilns.",
       imageUrl:
-        "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&fm=webp&w=800&q=80",
     },
     {
       region: "Andhra Pradesh • Srikalahasti",
@@ -54,7 +56,7 @@ export default function AboutPage() {
       description:
         "Bamboo reed kalam drawing with fermented iron-jaggery liquor, washed in the sacred Swarnamukhi temple waters.",
       imageUrl:
-        "https://images.unsplash.com/photo-1582560475093-ba66accbc424?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1582560475093-ba66accbc424?auto=format&fit=crop&fm=webp&w=800&q=80",
     },
     {
       region: "West Bengal • Bankura & Bikna",
@@ -63,7 +65,7 @@ export default function AboutPage() {
       description:
         "Non-ferrous bronze cast hollow over clay cores wrapped in pure beeswax threads, preserving 4,000-year Mohenjo-daro metallurgy.",
       imageUrl:
-        "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=800&q=80",
+        "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&fm=webp&w=800&q=80",
     },
   ];
 
@@ -71,17 +73,12 @@ export default function AboutPage() {
     <div className="bg-[#FAF7F2] min-h-screen text-[#1E1E1C] py-5 sm:py-7">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb matching exact site standard */}
-        <nav className="flex items-center space-x-2 text-[11px] text-[#8C877E] mb-8 overflow-x-auto whitespace-nowrap scrollbar-none">
-          <Link href="/" className="hover:text-[#1E1E1C] transition-colors">
-            Home
-          </Link>
-          <span>•</span>
-          <span className="text-[#6B665E]">About Us</span>
-          <span>•</span>
-          <span className="text-[#6B665E] truncate">
-            The ARTSINLY Heritage Charter & Savoir-Faire
-          </span>
-        </nav>
+        <Breadcrumbs
+          items={[
+            { name: "About Us & Charter", url: "/about" },
+          ]}
+          className="mb-8"
+        />
 
         {/* 1. Header Manifesto */}
         <div className="max-w-3xl mb-14 sm:mb-18 space-y-3">
@@ -132,8 +129,11 @@ export default function AboutPage() {
           <div className="lg:col-span-6">
             <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-[#DDD5C8] shadow-md bg-[#ECE6DC]">
               <img
-                src="https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=1200&q=85"
+                src="https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&fm=webp&w=1200&q=85"
                 alt="Master Artisan shaping clay and minerals in traditional workshop"
+                width={600}
+                height={450}
+                decoding="async"
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#1E1E1C]/85 to-transparent p-6 text-white">
@@ -241,8 +241,11 @@ export default function AboutPage() {
                     <img
                       src={terroir.imageUrl}
                       alt={terroir.craft || "Regional craft terroir"}
-                      className="w-full h-full object-cover group-hover:scale-104 transition-transform duration-500 ease-out"
+                      width={400}
+                      height={300}
                       loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover group-hover:scale-104 transition-transform duration-500 ease-out"
                     />
                     <div className="absolute top-2.5 left-2.5">
                       <span className="bg-white/90 backdrop-blur-xs text-[#1E1E1C] text-[10px] font-mono font-medium px-2 py-0.5 rounded-full shadow-2xs border border-black/5">
@@ -352,7 +355,143 @@ export default function AboutPage() {
           </div>
         </div>
 
-        {/* 6. Closing Call to Action: The Ebony Pavilion Banner */}
+        {/* Curatorial Council & Master Artisan Advisors (Human Author Bio & E-E-A-T) */}
+        <div className="mb-20 sm:mb-28">
+          <div className="max-w-2xl mb-10">
+            <span className="text-[10px] sm:text-[11px] font-semibold text-[#C2410C] uppercase tracking-[0.2em] block mb-1">
+              CURATORIAL AUTHORITY & ADVISORY
+            </span>
+            <h2 className="font-serif text-2xl sm:text-3xl font-normal text-[#1E1E1C] tracking-tight">
+              Curatorial Council & Master Craftsmen
+            </h2>
+            <p className="text-xs sm:text-sm text-[#6E6A62] mt-2 leading-relaxed font-light">
+              ARTSINLY is governed by acclaimed master craftspeople, field historians, and museum conservators dedicated to living provenance.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+            <div className="bg-white border border-[#E8E2D6] rounded-xl p-5 sm:p-6 shadow-xs flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="relative w-16 h-16 rounded-full overflow-hidden bg-[#ECE6DC] shrink-0 border border-[#D5CFC5]">
+                    <img
+                      src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&fm=webp&w=300&q=80"
+                      alt="Pandit Devendra Prajapati, Master Terracotta Sculptor"
+                      width={64}
+                      height={64}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div>
+                    <h3 className="font-serif text-base font-semibold text-[#1E1E1C]">
+                      Pandit Devendra Prajapati
+                    </h3>
+                    <p className="text-[11px] text-[#C2410C] font-medium">
+                      Master Ceramicist & Shilp Guru Awardee
+                    </p>
+                    <p className="text-[10px] text-[#8C877E]">
+                      Kutch Terroir Guild • 40+ Years Practice
+                    </p>
+                  </div>
+                </div>
+                <p className="text-xs text-[#6E6A62] leading-relaxed font-light">
+                  Directs ARTSINLY&apos;s kiln verification council. He oversees raw riverbed clay sourcing, firewood temperature standards, and organic pigment consistency across 24 rural pottery clusters.
+                </p>
+              </div>
+              <div className="mt-4 pt-3 border-t border-[#F0ECE4] text-[11px]">
+                <Link href="/artisans/devendra-prajapati" className="text-[#C2410C] hover:underline font-medium inline-flex items-center gap-1">
+                  <span>View Artisan Atelier</span>
+                  <ArrowRight className="w-3 h-3" />
+                </Link>
+              </div>
+            </div>
+
+            <div className="bg-white border border-[#E8E2D6] rounded-xl p-5 sm:p-6 shadow-xs flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="relative w-16 h-16 rounded-full overflow-hidden bg-[#ECE6DC] shrink-0 border border-[#D5CFC5]">
+                    <img
+                      src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&fm=webp&w=300&q=80"
+                      alt="Dr. Radhika Sen, Curator of Heritage Conservation"
+                      width={64}
+                      height={64}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div>
+                    <h3 className="font-serif text-base font-semibold text-[#1E1E1C]">
+                      Dr. Radhika Sen
+                    </h3>
+                    <p className="text-[11px] text-[#C2410C] font-medium">
+                      Lead Curator & Heritage Conservator
+                    </p>
+                    <p className="text-[10px] text-[#8C877E]">
+                      PhD Textile History, NID Ahmedabad
+                    </p>
+                  </div>
+                </div>
+                <p className="text-xs text-[#6E6A62] leading-relaxed font-light">
+                  Author of <em>Indigo &amp; Alizarin: The Lost Vats of Coromandel</em>. Dr. Sen oversees GI tag provenance records, scholarly documentation of sacred temple motifs, and fair-trade wage audits.
+                </p>
+              </div>
+              <div className="mt-4 pt-3 border-t border-[#F0ECE4] text-[11px]">
+                <Link href="/blog" className="text-[#C2410C] hover:underline font-medium inline-flex items-center gap-1">
+                  <span>Read Curatorial Dispatches</span>
+                  <ArrowRight className="w-3 h-3" />
+                </Link>
+              </div>
+            </div>
+
+            <div className="bg-white border border-[#E8E2D6] rounded-xl p-5 sm:p-6 shadow-xs flex flex-col justify-between">
+              <div>
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="relative w-16 h-16 rounded-full overflow-hidden bg-[#ECE6DC] shrink-0 border border-[#D5CFC5]">
+                    <img
+                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&fm=webp&w=300&q=80"
+                      alt="Ismail Mohammed Khatri, Master Block Printer"
+                      width={64}
+                      height={64}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div>
+                    <h3 className="font-serif text-base font-semibold text-[#1E1E1C]">
+                      Ismail Mohammed Khatri
+                    </h3>
+                    <p className="text-[11px] text-[#C2410C] font-medium">
+                      9th-Gen Ajrakh Master &amp; Padma Shri
+                    </p>
+                    <p className="text-[10px] text-[#8C877E]">
+                      Ajrakhpur, Gujarat • Living Legend
+                    </p>
+                  </div>
+                </div>
+                <p className="text-xs text-[#6E6A62] leading-relaxed font-light">
+                  Pioneer of pure natural dyeing revitalization across the subcontinent. Mentors apprentice circles in mineral resist chemistry, harda washing, and double-sided symmetrical block printing.
+                </p>
+              </div>
+              <div className="mt-4 pt-3 border-t border-[#F0ECE4] text-[11px]">
+                <Link href="/catalog" className="text-[#C2410C] hover:underline font-medium inline-flex items-center gap-1">
+                  <span>Explore Ajrakh Masterpieces</span>
+                  <ArrowRight className="w-3 h-3" />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 6. On-Page FAQ Section & Schema */}
+        <div className="mb-20">
+          <FaqSection />
+        </div>
+
+        {/* 7. Closing Call to Action: The Ebony Pavilion Banner */}
         <div className="bg-[#1A1A18] text-[#FAF7F2] rounded-2xl p-8 sm:p-14 text-center space-y-6 mb-16 shadow-xl">
           <span className="text-[10px] sm:text-[11px] font-semibold text-[#C2410C] tracking-[0.25em] uppercase">
             AN INVITATION TO PATRONS & GUILDS

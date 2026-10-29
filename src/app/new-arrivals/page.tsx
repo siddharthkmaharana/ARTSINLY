@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { PRODUCTS } from "@/lib/mock-data";
 import { useCart } from "@/context/CartContext";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Check } from "lucide-react";
 
 interface NewDropItem {
@@ -28,7 +29,7 @@ const FRESH_DROPS: NewDropItem[] = [
       "Elevate your home decor with this exquisite set of 2 modern ceramic vases, featuring a sculptural, abstract design that combines organic warmth with contemporary living room, shelf, and tabletop styling.",
     priceDisplay: "₹126.99",
     imageUrl:
-      "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=1000&q=85",
+      "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&fm=webp&w=1000&q=85",
   },
   {
     id: "drop-2",
@@ -40,7 +41,7 @@ const FRESH_DROPS: NewDropItem[] = [
       "Painted with squirrel-hair brushes under high magnification. Features the divine cow and lotus pond symbolism of Nathdwara shrines executed with crushed lapis and malachite bound with natural gums.",
     priceDisplay: "₹1,500.00",
     imageUrl:
-      "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1000&q=85",
+      "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&fm=webp&w=1000&q=85",
   },
   {
     id: "drop-3",
@@ -52,7 +53,7 @@ const FRESH_DROPS: NewDropItem[] = [
       "Created over 140 artisan-hours on a stretched wooden Adda frame. Intricate couching holds hand-cut metallic wires in royal court relief, bordered by heirloom seed pearls and floral bullion filigree.",
     priceDisplay: "₹540.00",
     imageUrl:
-      "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1000&q=85",
+      "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&fm=webp&w=1000&q=85",
   },
   {
     id: "drop-4",
@@ -64,7 +65,7 @@ const FRESH_DROPS: NewDropItem[] = [
       "An exceptional example of Jaipur blue pottery, formulated without clay from powdered quartz stone and natural plant gum, low-fired in wood-burning kilns for durable vitreous beauty.",
     priceDisplay: "₹110.00",
     imageUrl:
-      "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=1000&q=85",
+      "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&fm=webp&w=1000&q=85",
   },
 ];
 
@@ -88,24 +89,13 @@ export default function NewArrivalsPage() {
   return (
     <div className="bg-[#FAF7F2] min-h-screen py-5 sm:py-7">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Breadcrumb line from screenshot */}
-        <nav className="flex items-center space-x-2 text-[11px] text-[#8C877E] mb-6 overflow-x-auto whitespace-nowrap scrollbar-none">
-          <Link href="/" className="hover:text-[#1E1E1C] transition-colors">
-            Home
-          </Link>
-          <span>•</span>
-          <Link href="/explore" className="hover:text-[#1E1E1C] transition-colors">
-            Explore
-          </Link>
-          <span>•</span>
-          <span className="hover:text-[#1E1E1C] transition-colors cursor-pointer">
-            Vases
-          </span>
-          <span>•</span>
-          <span className="text-[#6B665E] truncate">
-            Modern Ethnic Ceramic Vase – Terracotta Vase with Indigenous Pattern
-          </span>
-        </nav>
+        {/* Breadcrumb line */}
+        <Breadcrumbs
+          items={[
+            { name: "Fresh Drops & New Arrivals", url: "/new-arrivals" },
+          ]}
+          className="mb-6"
+        />
 
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8 sm:mb-10">
@@ -141,8 +131,11 @@ export default function NewArrivalsPage() {
                   <img
                     src={drop.imageUrl}
                     alt={drop.title || "New arrival craft drop"}
-                    className="w-full h-full object-cover object-center group-hover:scale-103 transition-transform duration-500 ease-out"
+                    width={350}
+                    height={350}
                     loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover object-center group-hover:scale-103 transition-transform duration-500 ease-out"
                   />
                 </Link>
 

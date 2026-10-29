@@ -11,6 +11,7 @@ import {
   Globe,
   Compass,
 } from "lucide-react";
+import { FaqSection } from "@/components/seo/FaqSection";
 
 export const metadata: Metadata = {
   title: "ARTSINLY — Regional Artisans Marketplace | Certified Heritage Crafts",
@@ -33,7 +34,7 @@ export default function HomePage() {
       ratingText: "4.92 / 5.0 (38 verified collectors)",
       priceDisplay: "₹126.99",
       imageUrl:
-        "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=1000&q=85",
+        "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&fm=webp&w=1000&q=85",
     },
     {
       id: "top-2",
@@ -44,7 +45,7 @@ export default function HomePage() {
       ratingText: "4.96 / 5.0 (22 verified collectors)",
       priceDisplay: "₹700.00",
       imageUrl:
-        "https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?auto=format&fit=crop&w=1000&q=85",
+        "https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?auto=format&fit=crop&fm=webp&w=1000&q=85",
     },
     {
       id: "top-3",
@@ -55,7 +56,7 @@ export default function HomePage() {
       ratingText: "5 / 5.0 (14 verified collectors)",
       priceDisplay: "₹1,500.00",
       imageUrl:
-        "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1000&q=85",
+        "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&fm=webp&w=1000&q=85",
     },
   ];
 
@@ -71,7 +72,7 @@ export default function HomePage() {
       editionNote: "Single Batch • 1 of 4 Casts",
       priceDisplay: "₹190.00",
       imageUrl:
-        "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=1000&q=85",
+        "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&fm=webp&w=1000&q=85",
     },
     {
       id: "drop-2",
@@ -82,7 +83,7 @@ export default function HomePage() {
       editionNote: "Natural Indigo • River Washed",
       priceDisplay: "₹184.00",
       imageUrl:
-        "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=1000&q=85",
+        "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&fm=webp&w=1000&q=85",
     },
     {
       id: "drop-3",
@@ -93,7 +94,7 @@ export default function HomePage() {
       editionNote: "140 Artisan-Hours • Semi-Precious Agate",
       priceDisplay: "₹540.00",
       imageUrl:
-        "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1000&q=85",
+        "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&fm=webp&w=1000&q=85",
     },
   ];
 
@@ -106,7 +107,7 @@ export default function HomePage() {
       artisanWithLocation: "Devendra Prajapati • Kutch",
       giCode: "GI-IN-GJ-449",
       imageUrl:
-        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&fm=webp&w=600&q=80",
     },
     {
       id: "artisan-2",
@@ -115,7 +116,7 @@ export default function HomePage() {
       artisanWithLocation: "Meenakshi Rathore • Jaipur",
       giCode: "GI-IN-RJ-102",
       imageUrl:
-        "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&fm=webp&w=600&q=80",
     },
     {
       id: "artisan-3",
@@ -124,7 +125,7 @@ export default function HomePage() {
       artisanWithLocation: "Rameshwar Chitrakar • Srikalahasti",
       giCode: "GI-IN-AP-018",
       imageUrl:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&fm=webp&w=600&q=80",
     },
     {
       id: "artisan-4",
@@ -133,7 +134,7 @@ export default function HomePage() {
       artisanWithLocation: "Bhuri Bai • Dindori",
       giCode: "GI-IN-MP-204",
       imageUrl:
-        "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=600&q=80",
+        "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&fm=webp&w=600&q=80",
     },
   ];
 
@@ -220,8 +221,12 @@ export default function HomePage() {
             <div className="lg:col-span-5 relative">
               <div className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden border border-[#DDD5C8] shadow-md bg-[#ECE6DC] group">
                 <img
-                  src="https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=1200&q=85"
+                  src="https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&fm=webp&w=1200&q=85"
                   alt="Modern Ethnic Ceramic Vase – Terracotta Vase with Indigenous Pattern"
+                  width={600}
+                  height={750}
+                  fetchPriority="high"
+                  decoding="async"
                   className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-700 ease-out"
                 />
 
@@ -286,8 +291,11 @@ export default function HomePage() {
                   <img
                     src={category.imageUrl}
                     alt={category.name || "Handcrafted artisan craft category"}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                    width={400}
+                    height={300}
                     loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
                   />
                 </div>
                 <div className="p-3.5 flex flex-col justify-between flex-grow">
@@ -345,8 +353,11 @@ export default function HomePage() {
                       <img
                         src={item.imageUrl}
                         alt={item.title || "Best seller handcrafted craft"}
-                        className="w-full h-full object-cover object-center group-hover:scale-103 transition-transform duration-500 ease-out"
+                        width={400}
+                        height={300}
                         loading="lazy"
+                        decoding="async"
+                        className="w-full h-full object-cover object-center group-hover:scale-103 transition-transform duration-500 ease-out"
                       />
                     </Link>
                     <div className="absolute top-2.5 right-2.5 bg-[#C2410C] text-white text-[9.5px] font-semibold px-2.5 py-0.5 rounded-full z-10 tracking-wider shadow-xs pointer-events-none uppercase">
@@ -424,8 +435,11 @@ export default function HomePage() {
                       <img
                         src={item.imageUrl}
                         alt={item.title || "Curated craft product"}
-                        className="w-full h-full object-cover object-center group-hover:scale-103 transition-transform duration-500 ease-out"
+                        width={400}
+                        height={300}
                         loading="lazy"
+                        decoding="async"
+                        className="w-full h-full object-cover object-center group-hover:scale-103 transition-transform duration-500 ease-out"
                       />
                     </Link>
                     <div className="absolute top-2.5 right-2.5 bg-[#1E1E1C] text-white text-[10px] font-semibold px-2.5 py-0.5 rounded-full z-10 tracking-wider shadow-xs pointer-events-none">
@@ -493,8 +507,11 @@ export default function HomePage() {
                   <img
                     src={artisan.imageUrl}
                     alt={artisan.artisanWithLocation || "Featured heritage master artisan"}
-                    className="w-full h-full object-cover group-hover:scale-104 transition-transform duration-500 ease-out"
+                    width={400}
+                    height={400}
                     loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover group-hover:scale-104 transition-transform duration-500 ease-out"
                   />
                 </div>
 
@@ -524,6 +541,8 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Frequently Asked Questions with FAQPage Schema */}
+      <FaqSection className="bg-[#FAF7F2] border-t border-[#EFEBE4]" />
 
       {/* 6. The Maison Manifesto: High Luxury Dark Editorial Pavilion */}
       <section className="py-20 sm:py-28 bg-[#1A1A18] text-[#FAF7F2] relative overflow-hidden">

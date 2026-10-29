@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { ArrowUpRight, X, Clock, Calendar, BookOpen, Share2 } from "lucide-react";
 
 interface BlogPostItem {
@@ -27,7 +28,7 @@ const BLOG_POSTS: BlogPostItem[] = [
     excerpt:
       "On the banks of river Banas, clay is venerated as divine mother earth. Explore how terracotta votive plaques preserve 900 years of tribal lore.",
     imageUrl:
-      "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?auto=format&fit=crop&w=1000&q=85",
+      "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?auto=format&fit=crop&fm=webp&w=1000&q=85",
     publishedDate: "October 2026",
     author: "Curatorial Field Notes • Nathdwara & Molela Guild",
     content: [
@@ -46,7 +47,7 @@ const BLOG_POSTS: BlogPostItem[] = [
     excerpt:
       "Derived from \"Azrak\", meaning blue in Arabic, Ajrakh is not merely textile printing—it is astronomy, river biochemistry, and devotional discipline.",
     imageUrl:
-      "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=1000&q=85",
+      "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&fm=webp&w=1000&q=85",
     publishedDate: "September 2026",
     author: "Editorial Pavilion • Dhamadka & Ajrakhpur Guilds",
     content: [
@@ -65,7 +66,7 @@ const BLOG_POSTS: BlogPostItem[] = [
     excerpt:
       "In an era of synthetic 3D printing, the uneven kiss of firewood kiln smoke and the tremor of an artisan's hand is the ultimate luxury.",
     imageUrl:
-      "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=1000&q=85",
+      "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&fm=webp&w=1000&q=85",
     publishedDate: "October 2026",
     author: "Design Philosophy • Curatorial Pavilion",
     content: [
@@ -83,24 +84,13 @@ export default function BlogPage() {
   return (
     <div className="bg-[#FAF7F2] min-h-screen py-5 sm:py-7">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Breadcrumb line from screenshot */}
-        <nav className="flex items-center space-x-2 text-[11px] text-[#8C877E] mb-8 overflow-x-auto whitespace-nowrap scrollbar-none">
-          <Link href="/" className="hover:text-[#1E1E1C] transition-colors">
-            Home
-          </Link>
-          <span>•</span>
-          <Link href="/explore" className="hover:text-[#1E1E1C] transition-colors">
-            Explore
-          </Link>
-          <span>•</span>
-          <span className="hover:text-[#1E1E1C] transition-colors cursor-pointer">
-            Vases
-          </span>
-          <span>•</span>
-          <span className="text-[#6B665E] truncate">
-            Modern Ethnic Ceramic Vase – Terracotta Vase with Indigenous Pattern
-          </span>
-        </nav>
+        {/* Breadcrumb line */}
+        <Breadcrumbs
+          items={[
+            { name: "Dispatches & Field Notes", url: "/blog" },
+          ]}
+          className="mb-8"
+        />
 
         {/* Section Header - Left Aligned exactly matching uploaded screenshot */}
         <div className="max-w-2xl mb-9">
@@ -131,8 +121,11 @@ export default function BlogPage() {
                   <img
                     src={post.imageUrl}
                     alt={post.title || "Artisan heritage story cover"}
-                    className="w-full h-full object-cover object-center group-hover:scale-103 transition-transform duration-500 ease-out"
+                    width={400}
+                    height={300}
                     loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover object-center group-hover:scale-103 transition-transform duration-500 ease-out"
                   />
                 </div>
 
@@ -203,6 +196,9 @@ export default function BlogPage() {
                 <img
                   src={selectedPost.imageUrl}
                   alt={selectedPost.title || "Artisan heritage story visual"}
+                  width={800}
+                  height={450}
+                  decoding="async"
                   className="w-full h-full object-cover"
                 />
               </div>

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { PRODUCTS } from "@/lib/mock-data";
 import { useCart } from "@/context/CartContext";
+import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { Award, Check } from "lucide-react";
 
 interface BestSellerItem {
@@ -27,7 +28,7 @@ const BEST_SELLERS: BestSellerItem[] = [
     ratingText: "4.92 / 5.0 (38 verified collectors)",
     priceDisplay: "₹126.99",
     imageUrl:
-      "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=1000&q=85",
+      "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&fm=webp&w=1000&q=85",
   },
   {
     id: "seller-2",
@@ -38,7 +39,7 @@ const BEST_SELLERS: BestSellerItem[] = [
     ratingText: "4.96 / 5.0 (22 verified collectors)",
     priceDisplay: "₹700.00",
     imageUrl:
-      "https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?auto=format&fit=crop&w=1000&q=85",
+      "https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?auto=format&fit=crop&fm=webp&w=1000&q=85",
   },
   {
     id: "seller-3",
@@ -49,7 +50,7 @@ const BEST_SELLERS: BestSellerItem[] = [
     ratingText: "5 / 5.0 (14 verified collectors)",
     priceDisplay: "₹1500.00",
     imageUrl:
-      "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1000&q=85",
+      "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&fm=webp&w=1000&q=85",
   },
   {
     id: "seller-4",
@@ -60,7 +61,7 @@ const BEST_SELLERS: BestSellerItem[] = [
     ratingText: "4.88 / 5.0 (45 verified collectors)",
     priceDisplay: "₹190.00",
     imageUrl:
-      "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&w=1000&q=85",
+      "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&fm=webp&w=1000&q=85",
   },
   {
     id: "seller-5",
@@ -71,7 +72,7 @@ const BEST_SELLERS: BestSellerItem[] = [
     ratingText: "4.98 / 5.0 (67 verified collectors)",
     priceDisplay: "₹184.00",
     imageUrl:
-      "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=1000&q=85",
+      "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&fm=webp&w=1000&q=85",
   },
   {
     id: "seller-6",
@@ -82,7 +83,7 @@ const BEST_SELLERS: BestSellerItem[] = [
     ratingText: "4.93 / 5.0 (16 verified collectors)",
     priceDisplay: "₹320.00",
     imageUrl:
-      "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1000&q=85",
+      "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&fm=webp&w=1000&q=85",
   },
 ];
 
@@ -107,24 +108,13 @@ export default function BestSellersPage() {
   return (
     <div className="bg-[#FAF7F2] min-h-screen py-5 sm:py-7">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Breadcrumb line matching exact screenshot */}
-        <nav className="flex items-center space-x-2 text-[11px] text-[#8C877E] mb-6 overflow-x-auto whitespace-nowrap scrollbar-none">
-          <Link href="/" className="hover:text-[#1E1E1C] transition-colors">
-            Home
-          </Link>
-          <span>•</span>
-          <Link href="/explore" className="hover:text-[#1E1E1C] transition-colors">
-            Explore
-          </Link>
-          <span>•</span>
-          <span className="hover:text-[#1E1E1C] transition-colors cursor-pointer">
-            Vases
-          </span>
-          <span>•</span>
-          <span className="text-[#6B665E] truncate">
-            Modern Ethnic Ceramic Vase – Terracotta Vase with Indigenous Pattern
-          </span>
-        </nav>
+        {/* Breadcrumb line */}
+        <Breadcrumbs
+          items={[
+            { name: "Ranked Best Sellers", url: "/best-sellers" },
+          ]}
+          className="mb-6"
+        />
 
         {/* Section Header */}
         <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14 space-y-2">
@@ -156,8 +146,11 @@ export default function BestSellersPage() {
                       <img
                         src={item.imageUrl}
                         alt={item.title || "Best seller handcrafted craft"}
-                        className="w-full h-full object-cover object-center group-hover:scale-103 transition-transform duration-500 ease-out"
+                        width={400}
+                        height={300}
                         loading="lazy"
+                        decoding="async"
+                        className="w-full h-full object-cover object-center group-hover:scale-103 transition-transform duration-500 ease-out"
                       />
                     </Link>
 
