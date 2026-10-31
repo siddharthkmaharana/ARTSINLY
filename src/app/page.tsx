@@ -138,6 +138,118 @@ export default function HomePage() {
     },
   ];
 
+  // 12 Authentic Indian Regional Crafts directly matching the master catalog and user reference
+  const regionalCraftShowcase = [
+    {
+      id: "reg-craft-1",
+      title: "Ancestral Sheesham Wood High-Relief Jali Carved Panel",
+      craftType: "Wood Carving",
+      provenanceTag: "Saharanpur • Wood Carving",
+      priceDisplay: "₹1,500",
+      slug: "ancestral-sheesham-wood-high-relief-jali-carved-panel",
+      imageUrl: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&fm=webp&w=800&q=85",
+    },
+    {
+      id: "reg-craft-2",
+      title: "Sacred Srinathji Gold-Leaf Pichwai Miniature Painting",
+      craftType: "Miniature Painting",
+      provenanceTag: "Rajasthan • Pichwai Gold Leaf",
+      priceDisplay: "₹1,500",
+      slug: "sacred-srinathji-gold-leaf-pichwai-miniature",
+      imageUrl: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&fm=webp&w=800&q=85",
+    },
+    {
+      id: "reg-craft-3",
+      title: "Molela Hand-Pressed Terracotta Votive Temple Plaque",
+      craftType: "Terracotta Relief",
+      provenanceTag: "Rajasthan • Molela Terracotta",
+      priceDisplay: "₹2,200",
+      slug: "molela-hand-pressed-terracotta-votive-temple-plaque",
+      imageUrl: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&fm=webp&w=800&q=85",
+    },
+    {
+      id: "reg-craft-4",
+      title: "Hand-Painted Terracotta Earthenware Matka Cluster",
+      craftType: "Terracotta Pottery",
+      provenanceTag: "Rajasthan • Painted Matkas",
+      priceDisplay: "₹1,100",
+      slug: "hand-painted-terracotta-earthenware-matka-cluster",
+      imageUrl: "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&fm=webp&w=800&q=85",
+    },
+    {
+      id: "reg-craft-5",
+      title: "Gorakhpur Hand-Etched Terracotta Decorative Floral Urn",
+      craftType: "Terracotta Pottery",
+      provenanceTag: "Uttar Pradesh • Gorakhpur Clay",
+      priceDisplay: "₹1,400",
+      slug: "gorakhpur-hand-etched-terracotta-decorative-floral-urn",
+      imageUrl: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&fm=webp&w=800&q=85",
+    },
+    {
+      id: "reg-craft-6",
+      title: "Moradabad Hand-Engraved Meenakari Brass Floral Jar",
+      craftType: "Metalwork",
+      provenanceTag: "Uttar Pradesh • Moradabad Brass",
+      priceDisplay: "₹3,200",
+      slug: "moradabad-hand-engraved-meenakari-brass-floral-jar",
+      imageUrl: "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&fm=webp&w=800&q=85",
+    },
+    {
+      id: "reg-craft-7",
+      title: "Jaipur Cobalt Quartz Blue Pottery Floral Urn",
+      craftType: "Blue Pottery",
+      provenanceTag: "Rajasthan • Jaipur Blue Pottery",
+      priceDisplay: "₹1,600",
+      slug: "jaipur-cobalt-quartz-blue-pottery-floral-urn",
+      imageUrl: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&fm=webp&w=800&q=85",
+    },
+    {
+      id: "reg-craft-8",
+      title: "Kutch Khavda Burnished Clay Surahi & Earthen Pot Trio",
+      craftType: "Terracotta Pottery",
+      provenanceTag: "Gujarat • Khavda Terracotta",
+      priceDisplay: "₹1,200",
+      slug: "kutch-khavda-burnished-clay-surahi-earthen-pot-trio",
+      imageUrl: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&fm=webp&w=800&q=85",
+    },
+    {
+      id: "reg-craft-9",
+      title: "Kutch Rabari Bharatkaam Hand-Embroidered Mirrorwork Tapestry",
+      craftType: "Rabari Needlework",
+      provenanceTag: "Gujarat • Rabari Mirrorwork",
+      priceDisplay: "₹1,500",
+      slug: "kutch-rabari-bharatkaam-hand-embroidered-mirrorwork-tapestry",
+      imageUrl: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&fm=webp&w=800&q=85",
+    },
+    {
+      id: "reg-craft-10",
+      title: "Bastar Bell Metal Dhokra Handcrafted Sacred Lota & Vessel Set",
+      craftType: "Dhokra Bell Metal",
+      provenanceTag: "West Bengal • Dhokra Metal",
+      priceDisplay: "₹1,800",
+      slug: "bastar-bell-metal-dhokra-handcrafted-sacred-lota-vessel-set",
+      imageUrl: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&fm=webp&w=800&q=85",
+    },
+    {
+      id: "reg-craft-11",
+      title: "Cuttack & Bengal Tarakasi Silver Filigree Sacred Temple Shrine",
+      craftType: "Silver Filigree",
+      provenanceTag: "West Bengal • Silver Filigree",
+      priceDisplay: "₹2,800",
+      slug: "cuttack-bengal-tarakasi-silver-filigree-sacred-temple-shrine",
+      imageUrl: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&fm=webp&w=800&q=85",
+    },
+    {
+      id: "reg-craft-12",
+      title: "Nakshi Kantha Narrative Hand-Embroidered Silk Tapestry",
+      craftType: "Kantha Embroidery",
+      provenanceTag: "West Bengal • Kantha Stitch",
+      priceDisplay: "₹2,400",
+      slug: "nakshi-kantha-narrative-hand-embroidered-silk-tapestry",
+      imageUrl: "https://images.unsplash.com/photo-1582560475093-ba66accbc424?auto=format&fit=crop&fm=webp&w=800&q=85",
+    },
+  ];
+
 
   return (
     <div className="bg-[#FAF7F2] min-h-screen text-[#1E1E1C]">
@@ -399,7 +511,78 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* 4. Recognized Excellence: Top Bestsellers Showcase */}
+      {/* 4. Living Terroirs of India: Authentic Regional Crafts Gallery (User Catalog Reference) */}
+      <section className="py-16 sm:py-20 border-b border-[#EAE5DD] bg-[#FAF8F5]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+            <div>
+              <span className="text-[10px] sm:text-[11px] font-semibold text-[#C2410C] uppercase tracking-[0.2em] block mb-1">
+                AUTHENTIC REGIONAL HANDICRAFTS
+              </span>
+              <h2 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-normal text-[#1E1E1C] tracking-tight">
+                Living Terroirs of India
+              </h2>
+              <p className="text-xs text-[#6E6A62] mt-1 max-w-xl leading-relaxed">
+                Handmade earthen ceramics, temple terracotta reliefs, Moradabad brassware, and ancestral needlecraft preserved across India&apos;s verified heritage clusters.
+              </p>
+            </div>
+            <Link
+              href="/catalog"
+              className="text-xs font-semibold text-[#1E1E1C] hover:text-[#C2410C] transition-colors inline-flex items-center gap-1 shrink-0"
+            >
+              <span>Explore All 24 Master Pieces</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+            {regionalCraftShowcase.map((craft) => (
+              <Link
+                key={craft.id}
+                href={`/products/${craft.slug}`}
+                className="group bg-white border border-[#E3DDD1] rounded-xl overflow-hidden hover:border-[#C2410C]/50 hover:shadow-md transition-all flex flex-col"
+              >
+                <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#ECE6DC]">
+                  <img
+                    src={craft.imageUrl}
+                    alt={craft.title}
+                    width={400}
+                    height={300}
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover group-hover:scale-104 transition-transform duration-500 ease-out"
+                  />
+                  <div className="absolute top-2 left-2 bg-[#1E1E1C]/80 backdrop-blur-xs text-white text-[9px] font-medium px-2 py-0.5 rounded tracking-wide uppercase">
+                    {craft.craftType}
+                  </div>
+                </div>
+
+                <div className="p-3 sm:p-3.5 flex flex-col justify-between flex-grow">
+                  <div>
+                    <span className="text-[10px] font-medium text-[#C2410C] block mb-1 uppercase tracking-wider">
+                      {craft.provenanceTag}
+                    </span>
+                    <h3 className="font-serif text-xs sm:text-[13px] font-medium text-[#1E1E1C] group-hover:text-[#C2410C] transition-colors line-clamp-2 leading-snug">
+                      {craft.title}
+                    </h3>
+                  </div>
+
+                  <div className="mt-3 pt-2 border-t border-[#F1ECE4] flex items-center justify-between">
+                    <span className="font-medium text-xs sm:text-sm text-[#1E1E1C]">
+                      {craft.priceDisplay}
+                    </span>
+                    <span className="text-[11px] font-medium text-[#C2410C] group-hover:underline">
+                      Acquire ↗
+                    </span>
+                  </div>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 5. Recognized Excellence: Top Bestsellers Showcase */}
       <section className="py-16 sm:py-20 border-b border-[#EAE5DD]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">

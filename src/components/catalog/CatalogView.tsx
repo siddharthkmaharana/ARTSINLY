@@ -16,12 +16,12 @@ interface CraftOption {
 
 const CRAFT_OPTIONS: CraftOption[] = [
   { id: "all", label: "All Traditional Crafts", matchers: [] },
-  { id: "wood-carving", label: "Wood Carving", matchers: ["wood", "carving", "sheesham", "walnut"] },
+  { id: "wood-carving", label: "Wood Carving", matchers: ["wood", "carving", "sheesham", "walnut", "jali"] },
   { id: "miniature-painting", label: "Miniature Painting", matchers: ["miniature", "pichwai", "painting"] },
   { id: "kalamkari-painting", label: "Kalamkari Painting", matchers: ["kalamkari"] },
-  { id: "zardozi-embroidery", label: "Zardozi Embroidery", matchers: ["zardozi", "embroidery"] },
-  { id: "pottery", label: "Pottery", matchers: ["pottery", "terracotta", "ceramic", "vase", "plates"] },
-  { id: "metalwork", label: "Metalwork", matchers: ["metal", "dhokra", "brass", "bell"] },
+  { id: "zardozi-embroidery", label: "Heritage Needlework & Embroidery", matchers: ["zardozi", "embroidery", "kantha", "rabari", "mirrorwork", "bharatkaam"] },
+  { id: "pottery", label: "Terracotta Pottery & Ceramics", matchers: ["pottery", "terracotta", "ceramic", "vase", "plates", "matka", "surahi", "molela", "urn", "khavda", "bishnupur"] },
+  { id: "metalwork", label: "Metalwork & Bell Metal", matchers: ["metal", "dhokra", "brass", "bell", "moradabad", "lota", "filigree", "tarakasi", "bidriware", "meenakari"] },
   { id: "block-printing", label: "Block Printing", matchers: ["block", "print", "ajrakh", "indigo"] },
 ];
 
@@ -33,10 +33,12 @@ interface RegionOption {
 
 const REGION_OPTIONS: RegionOption[] = [
   { id: "all", label: "All Indian Regions", matchers: [] },
-  { id: "rajasthan", label: "Rajasthan", matchers: ["rajasthan"] },
-  { id: "uttar-pradesh", label: "Uttar Pradesh", matchers: ["uttar pradesh", "uttar-pradesh", "lucknow"] },
-  { id: "gujarat", label: "Gujarat", matchers: ["gujarat", "kutch"] },
-  { id: "west-bengal", label: "West Bengal", matchers: ["west bengal", "west-bengal", "bengal", "bankura"] },
+  { id: "rajasthan", label: "Rajasthan", matchers: ["rajasthan", "jaipur", "molela", "pokhran"] },
+  { id: "uttar-pradesh", label: "Uttar Pradesh", matchers: ["uttar pradesh", "uttar-pradesh", "lucknow", "moradabad", "saharanpur", "gorakhpur"] },
+  { id: "gujarat", label: "Gujarat", matchers: ["gujarat", "kutch", "khavda", "bhujodi"] },
+  { id: "west-bengal", label: "West Bengal", matchers: ["west bengal", "west-bengal", "bengal", "bankura", "shantiniketan", "bishnupur"] },
+  { id: "karnataka", label: "Karnataka", matchers: ["karnataka", "bidar", "channapatna"] },
+  { id: "kashmir", label: "Kashmir", matchers: ["kashmir", "srinagar"] },
   { id: "andhra-pradesh", label: "Andhra Pradesh", matchers: ["andhra pradesh", "andhra-pradesh", "srikalahasti"] },
 ];
 
@@ -47,9 +49,13 @@ interface ArtisanLineageOption {
 }
 
 const ARTISAN_LINEAGE_OPTIONS: ArtisanLineageOption[] = [
-  { id: "devendra", label: "Devendra Prajapati (Pottery)", artisanName: "Devendra Prajapati" },
-  { id: "meenakshi", label: "Meenakshi Rathore (Meenakari Jewel...)", artisanName: "Meenakshi Rathore" },
-  { id: "rameshwar", label: "Rameshwar Chitrakar (Kalamkari Pain...)", artisanName: "Rameshwar Chitrakar" },
+  { id: "devendra", label: "Devendra Prajapati (Kutch Pottery)", artisanName: "Devendra Prajapati" },
+  { id: "jamnalal", label: "Jamnalal Kumhar (Molela Terracotta)", artisanName: "Jamnalal Kumhar" },
+  { id: "ramswaroop", label: "Ram Swaroop Sharma (Moradabad Brass)", artisanName: "Ram Swaroop Sharma" },
+  { id: "subhash", label: "Subhash Karmakar (Dhokra Bell Metal)", artisanName: "Subhash Karmakar" },
+  { id: "malati", label: "Malati Ghosh (Nakshi Kantha)", artisanName: "Malati Ghosh" },
+  { id: "meenakshi", label: "Meenakshi Rathore (Blue Quartz)", artisanName: "Meenakshi Rathore" },
+  { id: "rameshwar", label: "Rameshwar Chitrakar (Kalamkari)", artisanName: "Rameshwar Chitrakar" },
   { id: "bhuribai", label: "Bhuri Bai (Gond Art)", artisanName: "Bhuri Bai" },
 ];
 
