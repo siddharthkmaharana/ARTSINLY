@@ -87,7 +87,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
         </div>
       }
     >
-      <ExploreShowcase productSlug={resolvedParams.slug} />
+      <ExploreShowcase productSlug={resolvedParams.slug} key={resolvedParams.slug} />
     </Suspense>
   );
 }
