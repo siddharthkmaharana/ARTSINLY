@@ -112,6 +112,57 @@ export interface Product {
   reviewCount: number;
   tags: string[];
   createdAt: string;
+
+  // Showcase layout customization
+  showcaseAspectRatio?: "landscape" | "portrait" | "square";
+  imageFit?: "cover" | "contain";
+
+  // Extended heritage, GI & variant specifications
+  craftTechnique?: string;
+  weight?: string;
+  shippingWeight?: string;
+  shippingWeightGrams?: number;
+  giCode?: string;
+  giProduct?: string;
+  giStatus?: string;
+  giApplicationNumber?: string | number;
+  giCertificateNumber?: string | number;
+  giRegistrationDate?: string;
+  giGeographicalArea?: string;
+  giValidity?: string;
+  giRegistryUrl?: string;
+  giDisclaimer?: string;
+  artisanCommunity?: string;
+  craftLineage?: string;
+  craftCluster?: string;
+  productionMethod?: string;
+  authenticityProof?: string;
+  artisanIdentification?: string;
+  guildOrCooperative?: string;
+  authenticityStatement?: string;
+  hasColorThemes?: boolean;
+  availableSizes?: {
+    id: string;
+    name: string;
+    dimensions: string;
+    pricePaise: number;
+    priceDisplay: string;
+    originalPricePaise?: number;
+    originalPriceDisplay?: string;
+  }[];
+  availableColors?: {
+    name: string;
+    hex: string;
+  }[];
+  variants?: {
+    id: string;
+    size: string;
+    dimensions: string;
+    colorTheme: string;
+    pricePaise: number;
+    priceDisplay: string;
+    isDefault?: boolean;
+  }[];
 }
 
 export interface CartItem {

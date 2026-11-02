@@ -16,6 +16,7 @@ interface CraftOption {
 
 const CRAFT_OPTIONS: CraftOption[] = [
   { id: "all", label: "All Traditional Crafts", matchers: [] },
+  { id: "pattachitra-painting", label: "Pattachitra Painting", matchers: ["pattachitra", "patta", "raghurajpur", "cloth preparation", "traditional painting"] },
   { id: "wood-carving", label: "Wood Carving", matchers: ["wood", "carving", "sheesham", "walnut", "jali"] },
   { id: "miniature-painting", label: "Miniature Painting", matchers: ["miniature", "pichwai", "painting"] },
   { id: "kalamkari-painting", label: "Kalamkari Painting", matchers: ["kalamkari"] },
@@ -33,6 +34,7 @@ interface RegionOption {
 
 const REGION_OPTIONS: RegionOption[] = [
   { id: "all", label: "All Indian Regions", matchers: [] },
+  { id: "odisha", label: "Odisha", matchers: ["odisha", "puri", "raghurajpur", "cuttack", "bhubaneswar"] },
   { id: "rajasthan", label: "Rajasthan", matchers: ["rajasthan", "jaipur", "molela", "pokhran"] },
   { id: "uttar-pradesh", label: "Uttar Pradesh", matchers: ["uttar pradesh", "uttar-pradesh", "lucknow", "moradabad", "saharanpur", "gorakhpur"] },
   { id: "gujarat", label: "Gujarat", matchers: ["gujarat", "kutch", "khavda", "bhujodi"] },
@@ -49,6 +51,7 @@ interface ArtisanLineageOption {
 }
 
 const ARTISAN_LINEAGE_OPTIONS: ArtisanLineageOption[] = [
+  { id: "chitrakara", label: "Chitrakara Guild (Raghurajpur Pattachitra)", artisanName: "Chitrakara" },
   { id: "devendra", label: "Devendra Prajapati (Kutch Pottery)", artisanName: "Devendra Prajapati" },
   { id: "jamnalal", label: "Jamnalal Kumhar (Molela Terracotta)", artisanName: "Jamnalal Kumhar" },
   { id: "ramswaroop", label: "Ram Swaroop Sharma (Moradabad Brass)", artisanName: "Ram Swaroop Sharma" },
@@ -68,7 +71,7 @@ export function CatalogView() {
 
   const [selectedCraft, setSelectedCraft] = useState(initialCraft);
   const [selectedRegion, setSelectedRegion] = useState(initialRegion);
-  const [priceCap, setPriceCap] = useState(1500);
+  const [priceCap, setPriceCap] = useState(10000);
   const [selectedArtisan, setSelectedArtisan] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState(initialQuery);
   const [dbProducts, setDbProducts] = useState<any[] | null>(null);
@@ -84,7 +87,7 @@ export function CatalogView() {
         if (searchQuery.trim()) params.set("search", searchQuery.trim());
         if (selectedCraft !== "all") params.set("craft", selectedCraft);
         if (selectedRegion !== "all") params.set("region", selectedRegion);
-        if (priceCap < 1500) params.set("maxPrice", priceCap.toString());
+        if (priceCap < 10000) params.set("maxPrice", priceCap.toString());
 
         const res = await fetch(`/api/products?${params.toString()}`);
         if (res.ok) {
@@ -109,7 +112,7 @@ export function CatalogView() {
   const handleReset = () => {
     setSelectedCraft("all");
     setSelectedRegion("all");
-    setPriceCap(1500);
+    setPriceCap(10000);
     setSelectedArtisan(null);
     setSearchQuery("");
   };

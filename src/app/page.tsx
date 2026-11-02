@@ -141,6 +141,15 @@ export default function HomePage() {
   // 12 Authentic Indian Regional Crafts directly matching the master catalog and user reference
   const regionalCraftShowcase = [
     {
+      id: "reg-craft-pattachitra",
+      title: "Jagannath Divine Heritage Pattachitra",
+      craftType: "Traditional Painting – Pattachitra",
+      provenanceTag: "Raghurajpur, Puri • Odisha",
+      priceDisplay: "₹4,500",
+      slug: "jagannath-divine-heritage-pattachitra",
+      imageUrl: "/images/products/Odisha Pattachitra painting with Frame.png",
+    },
+    {
       id: "reg-craft-1",
       title: "Ancestral Sheesham Wood High-Relief Jali Carved Panel",
       craftType: "Wood Carving",
