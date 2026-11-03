@@ -95,7 +95,11 @@ function getProductShowcaseLayout(product: Product): ShowcaseLayoutConfig {
 
 export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
   const currentProduct =
-    PRODUCTS.find((p) => p.slug === productSlug) || PRODUCTS[0];
+    PRODUCTS.find((p) => p.slug === productSlug) ||
+    (productSlug === "indian-mythological-palace-painting" || productSlug === "divine-court-of-the-gods-pattachitra"
+      ? PRODUCTS.find((p) => p.id === "prod-mythological-palace-painting")
+      : undefined) ||
+    PRODUCTS[0];
 
   const { addToCart, toggleWishlist, isInWishlist } = useCart();
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -122,8 +126,10 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
         },
       ];
 
-  // Default to Medium if available, else first size
+  // Default to size marked isDefault or matching currentProduct.dimensions, else Medium, else first size
   const defaultSize =
+    availableSizes.find((s) => s.isDefault) ||
+    availableSizes.find((s) => s.dimensions === currentProduct.dimensions) ||
     availableSizes.find((s) => s.name.toLowerCase() === "medium") ||
     availableSizes[0];
   const [selectedSize, setSelectedSize] = useState(defaultSize);
@@ -133,6 +139,10 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
   const showColorThemes =
     currentProduct.hasColorThemes !== false &&
     currentProduct.slug !== "jagannath-divine-heritage-pattachitra" &&
+    currentProduct.slug !== "divine-court-of-the-gods-pattachitra" &&
+    currentProduct.slug !== "indian-mythological-palace-painting" &&
+    currentProduct.slug !== "jagannath-trinity-divine-heritage-pattachitra" &&
+    currentProduct.slug !== "divine-krishna-leela-radha-krishna-pattachitra" &&
     ((currentProduct.availableColors && currentProduct.availableColors.length > 0) ||
       (currentProduct.colorSwatches && currentProduct.colorSwatches.length > 0));
 
@@ -820,28 +830,66 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
             {/* Traditional Unframed Cloth Canvas (Patta) Presentation (Only for Pattachitra) */}
             {(currentProduct.slug === "jagannath-divine-heritage-pattachitra" ||
               currentProduct.craftType?.toLowerCase().includes("pattachitra")) && (
-              <div className="mt-6 pt-5 border-t border-[#EAE5DD]">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs font-semibold text-[#1E1E1C] uppercase tracking-wider">
-                    Traditional Cloth Canvas (Patta) Detailing
-                  </span>
-                  <span className="text-[11px] text-[#7A756D] font-mono">
-                    Pure natural pigments & tamarind glue canvas
-                  </span>
+              <div className="mt-6 pt-5 border-t border-[#EAE5DD] space-y-6">
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-xs font-semibold text-[#1E1E1C] uppercase tracking-wider">
+                      Traditional Cloth Canvas (Patta) Detailing
+                    </span>
+                    <span className="text-[11px] text-[#7A756D] font-mono">
+                      Pure natural pigments & tamarind glue canvas
+                    </span>
+                  </div>
+                  <div className="rounded-xl overflow-hidden border border-[#E5E0D7] bg-[#FAF8F5] p-2 sm:p-3">
+                    <img
+                      src={
+                        currentProduct.images && currentProduct.images.length > 1
+                          ? currentProduct.images[1].url
+                          : "/images/products/Odisha Pattachitra painting.png"
+                      }
+                      alt={`${currentProduct.title} canvas detail`}
+                      width={1200}
+                      height={896}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-auto rounded-lg object-contain shadow-2xs"
+                    />
+                    <div className="pt-2 px-1 flex flex-col sm:flex-row sm:items-center justify-between text-[11px] text-[#6E6A62] gap-1">
+                      <span>Individually hand-painted freehand linework with natural mineral pigments (without frame)</span>
+                      <span className="italic font-serif">Raghurajpur Heritage Crafts Village · Puri, Odisha</span>
+                    </div>
+                  </div>
                 </div>
-                <div className="rounded-xl overflow-hidden border border-[#E5E0D7] bg-[#FAF8F5] p-2 sm:p-3">
-                  <img
-                    src="/images/products/Odisha Pattachitra painting.png"
-                    alt="Odisha Pattachitra painting canvas detail"
-                    width={1200}
-                    height={896}
-                    loading="lazy"
-                    decoding="async"
-                    className="w-full h-auto rounded-lg object-contain shadow-2xs"
-                  />
-                  <div className="pt-2 px-1 flex flex-col sm:flex-row sm:items-center justify-between text-[11px] text-[#6E6A62] gap-1">
-                    <span>Individually hand-painted freehand linework with natural mineral pigments (without frame)</span>
-                    <span className="italic font-serif">Raghurajpur Heritage Crafts Village · Puri, Odisha</span>
+
+                <div>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-xs font-semibold text-[#1E1E1C] uppercase tracking-wider">
+                      Original Masterwork Painting (High-Resolution Scroll)
+                    </span>
+                    <span className="text-[11px] text-[#7A756D] font-mono">
+                      Authentic master linework & sacred motifs
+                    </span>
+                  </div>
+                  <div className="rounded-xl overflow-hidden border border-[#E5E0D7] bg-[#FAF8F5] p-2 sm:p-3">
+                    <img
+                      src={
+                        currentProduct.images && currentProduct.images.length > 2
+                          ? currentProduct.images[2].url
+                          : currentProduct.images && currentProduct.images.length > 1
+                          ? currentProduct.images[1].url
+                          : "/images/products/Odisha Pattachitra painting Original.png"
+                      }
+                      alt={`${currentProduct.title} original scroll`}
+                      width={1200}
+                      height={896}
+                      loading="lazy"
+                      decoding="async"
+                      className="w-full h-auto rounded-lg object-contain shadow-2xs"
+                    />
+                    <div className="pt-2 px-1 flex flex-col sm:flex-row sm:items-center justify-between text-[11px] text-[#6E6A62] gap-1">
+                      <span>Full original scroll composition – {currentProduct.title}</span>
+                      <span className="italic font-serif">Chitrakara Heritage Lineage · Puri, Odisha</span>
+                    </div>
                   </div>
                 </div>
               </div>

@@ -38,7 +38,11 @@ export async function generateMetadata({
     // Fallback to static mock data
   }
 
-  const mockProduct = PRODUCTS.find((p) => p.slug === slug);
+  const mockProduct =
+    PRODUCTS.find((p) => p.slug === slug) ||
+    (slug === "indian-mythological-palace-painting" || slug === "divine-court-of-the-gods-pattachitra"
+      ? PRODUCTS.find((p) => p.id === "prod-mythological-palace-painting")
+      : undefined);
   if (mockProduct) {
     title = `${mockProduct.title} | ARTSINLY`;
     description = mockProduct.description
