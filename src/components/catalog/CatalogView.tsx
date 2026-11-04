@@ -17,13 +17,13 @@ interface CraftOption {
 const CRAFT_OPTIONS: CraftOption[] = [
   { id: "all", label: "All Traditional Crafts", matchers: [] },
   { id: "pattachitra-painting", label: "Pattachitra Painting", matchers: ["pattachitra", "patta", "raghurajpur", "cloth preparation", "traditional painting"] },
-  { id: "wood-carving", label: "Wood Carving", matchers: ["wood", "carving", "sheesham", "walnut", "jali", "toy", "toys", "elephant", "gamhari"] },
+  { id: "wood-carving", label: "Wood Carving", matchers: ["wood", "carving", "sheesham", "walnut", "jali", "toy", "toys", "elephant", "gamhari", "bargarh"] },
   { id: "miniature-painting", label: "Miniature Painting", matchers: ["miniature", "pichwai", "painting"] },
   { id: "kalamkari-painting", label: "Kalamkari Painting", matchers: ["kalamkari"] },
-  { id: "applique-textiles", label: "Pipili Appliqué & Patchwork", matchers: ["applique", "appliqué", "pipili", "pipli", "chandua", "patchwork"] },
+  { id: "applique-textiles", label: "Pipili Appliqu� & Patchwork", matchers: ["applique", "appliqu�", "pipili", "pipli", "chandua", "patchwork"] },
   { id: "zardozi-embroidery", label: "Heritage Needlework & Embroidery", matchers: ["zardozi", "embroidery", "kantha", "rabari", "mirrorwork", "bharatkaam"] },
-  { id: "papier-mache", label: "Papier-Mâché & Folk Masks", matchers: ["papier-mâché", "papier-mache", "paper", "mask", "masks", "pulp"] },
-  { id: "pottery", label: "Terracotta Pottery & Ceramics", matchers: ["pottery", "terracotta", "ceramic", "vase", "plates", "matka", "surahi", "molela", "urn", "khavda", "bishnupur", "lantern", "horse", "figurines"] },
+  { id: "papier-mache", label: "Papier-M�ch� & Folk Masks", matchers: ["papier-m�ch�", "papier-mache", "papiermache", "paper", "mask", "masks", "pulp", "kali", "tiger"] },
+  { id: "pottery", label: "Terracotta Pottery & Ceramics", matchers: ["pottery", "terracotta", "ceramic", "ceramics", "vase", "plates", "matka", "surahi", "molela", "urn", "khavda", "bishnupur", "lantern", "horse", "figurines", "clay"] },
   { id: "metalwork", label: "Metalwork & Bell Metal", matchers: ["metal", "dhokra", "brass", "bell", "moradabad", "lota", "filigree", "tarakasi", "bidriware", "meenakari", "casting", "lost-wax", "procession", "musician", "drummer"] },
   { id: "block-printing", label: "Block Printing", matchers: ["block", "print", "ajrakh", "indigo"] },
 ];
@@ -36,7 +36,7 @@ interface RegionOption {
 
 const REGION_OPTIONS: RegionOption[] = [
   { id: "all", label: "All Indian Regions", matchers: [] },
-  { id: "odisha", label: "Odisha", matchers: ["odisha", "puri", "raghurajpur", "cuttack", "bhubaneswar", "sambalpur", "balasore", "bargarh", "dhenkanal", "sadeibareni"] },
+  { id: "odisha", label: "Odisha", matchers: ["odisha", "orissa", "puri", "raghurajpur", "cuttack", "bhubaneswar", "sambalpur", "balasore", "bargarh", "dhenkanal", "sadeibareni", "pipili", "pipli"] },
   { id: "rajasthan", label: "Rajasthan", matchers: ["rajasthan", "jaipur", "molela", "pokhran"] },
   { id: "uttar-pradesh", label: "Uttar Pradesh", matchers: ["uttar pradesh", "uttar-pradesh", "lucknow", "moradabad", "saharanpur", "gorakhpur"] },
   { id: "gujarat", label: "Gujarat", matchers: ["gujarat", "kutch", "khavda", "bhujodi"] },
@@ -73,29 +73,26 @@ export function CatalogView() {
 
   const [selectedCraft, setSelectedCraft] = useState(initialCraft);
   const [selectedRegion, setSelectedRegion] = useState(initialRegion);
-  const [priceCap, setPriceCap] = useState(10000);
+  const [priceCap, setPriceCap] = useState(15000);
   const [selectedArtisan, setSelectedArtisan] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState(initialQuery);
-  const [dbProducts, setDbProducts] = useState<any[] | null>(null);
+  const [allProducts, setAllProducts] = useState<any[]>(PRODUCTS);
   const [isLoadingDb, setIsLoadingDb] = useState(false);
 
-  // Fetch live products from PostgreSQL via API
+  // Fetch full catalog (live DB + curated products) once on mount to avoid flicker or products dropping
   useEffect(() => {
     let isCancelled = false;
     const fetchCatalog = async () => {
       try {
         setIsLoadingDb(true);
-        const params = new URLSearchParams();
-        if (searchQuery.trim()) params.set("search", searchQuery.trim());
-        if (selectedCraft !== "all") params.set("craft", selectedCraft);
-        if (selectedRegion !== "all") params.set("region", selectedRegion);
-        if (priceCap < 10000) params.set("maxPrice", priceCap.toString());
-
-        const res = await fetch(`/api/products?${params.toString()}`);
+        const res = await fetch("/api/products?limit=150");
         if (res.ok) {
           const data = await res.json();
-          if (!isCancelled && data.products) {
-            setDbProducts(data.products);
+          if (!isCancelled && Array.isArray(data.products) && data.products.length > 0) {
+            // Merge DB products with static master crafts so no product is ever dropped
+            const incomingIds = new Set(data.products.map((p: any) => p.id));
+            const merged = [...data.products, ...PRODUCTS.filter((p: any) => !incomingIds.has(p.id))];
+            setAllProducts(merged);
           }
         }
       } catch (err) {
@@ -109,20 +106,18 @@ export function CatalogView() {
     return () => {
       isCancelled = true;
     };
-  }, [searchQuery, selectedCraft, selectedRegion, priceCap]);
+  }, []);
 
   const handleReset = () => {
     setSelectedCraft("all");
     setSelectedRegion("all");
-    setPriceCap(10000);
+    setPriceCap(15000);
     setSelectedArtisan(null);
     setSearchQuery("");
   };
 
   const filteredProducts = useMemo(() => {
-    // Merge live database products with curated catalog, ensuring all master crafts are available
-    const baseList = dbProducts || PRODUCTS;
-    return baseList.filter((product) => {
+    return allProducts.filter((product) => {
       // 1. Search Query Filter
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase().trim();
@@ -157,10 +152,12 @@ export function CatalogView() {
         }
       }
 
-      // 4. Price Cap Filter
-      const price = product.priceDollars || ((product.pricePaise || 0) / 100);
-      if (price > priceCap) {
-        return false;
+      // 4. Price Cap Filter (only filters if slider moved below maximum threshold)
+      if (priceCap < 15000) {
+        const price = product.priceDollars || ((product.pricePaise || 0) / 100);
+        if (price > priceCap) {
+          return false;
+        }
       }
 
       // 5. Artisan Lineage Filter
@@ -176,7 +173,7 @@ export function CatalogView() {
 
       return true;
     });
-  }, [dbProducts, searchQuery, selectedCraft, selectedRegion, priceCap, selectedArtisan]);
+  }, [allProducts, searchQuery, selectedCraft, selectedRegion, priceCap, selectedArtisan]);
 
   return (
     <div className="bg-[#FAF7F2] min-h-screen py-5 sm:py-7">
@@ -313,9 +310,9 @@ export function CatalogView() {
               </div>
               <input
                 type="range"
-                min={100}
-                max={1500}
-                step={10}
+                min={500}
+                max={15000}
+                step={250}
                 value={priceCap}
                 onChange={(e) => setPriceCap(Number(e.target.value))}
                 className="w-full h-1.5 bg-[#1E1E1C] rounded-lg appearance-none cursor-pointer accent-[#1E1E1C]"
