@@ -17,12 +17,14 @@ interface CraftOption {
 const CRAFT_OPTIONS: CraftOption[] = [
   { id: "all", label: "All Traditional Crafts", matchers: [] },
   { id: "pattachitra-painting", label: "Pattachitra Painting", matchers: ["pattachitra", "patta", "raghurajpur", "cloth preparation", "traditional painting"] },
-  { id: "wood-carving", label: "Wood Carving", matchers: ["wood", "carving", "sheesham", "walnut", "jali"] },
+  { id: "wood-carving", label: "Wood Carving", matchers: ["wood", "carving", "sheesham", "walnut", "jali", "toy", "toys", "elephant", "gamhari"] },
   { id: "miniature-painting", label: "Miniature Painting", matchers: ["miniature", "pichwai", "painting"] },
   { id: "kalamkari-painting", label: "Kalamkari Painting", matchers: ["kalamkari"] },
+  { id: "applique-textiles", label: "Pipili Appliqué & Patchwork", matchers: ["applique", "appliqué", "pipili", "pipli", "chandua", "patchwork"] },
   { id: "zardozi-embroidery", label: "Heritage Needlework & Embroidery", matchers: ["zardozi", "embroidery", "kantha", "rabari", "mirrorwork", "bharatkaam"] },
-  { id: "pottery", label: "Terracotta Pottery & Ceramics", matchers: ["pottery", "terracotta", "ceramic", "vase", "plates", "matka", "surahi", "molela", "urn", "khavda", "bishnupur"] },
-  { id: "metalwork", label: "Metalwork & Bell Metal", matchers: ["metal", "dhokra", "brass", "bell", "moradabad", "lota", "filigree", "tarakasi", "bidriware", "meenakari"] },
+  { id: "papier-mache", label: "Papier-Mâché & Folk Masks", matchers: ["papier-mâché", "papier-mache", "paper", "mask", "masks", "pulp"] },
+  { id: "pottery", label: "Terracotta Pottery & Ceramics", matchers: ["pottery", "terracotta", "ceramic", "vase", "plates", "matka", "surahi", "molela", "urn", "khavda", "bishnupur", "lantern", "horse", "figurines"] },
+  { id: "metalwork", label: "Metalwork & Bell Metal", matchers: ["metal", "dhokra", "brass", "bell", "moradabad", "lota", "filigree", "tarakasi", "bidriware", "meenakari", "casting", "lost-wax", "procession", "musician", "drummer"] },
   { id: "block-printing", label: "Block Printing", matchers: ["block", "print", "ajrakh", "indigo"] },
 ];
 
@@ -34,7 +36,7 @@ interface RegionOption {
 
 const REGION_OPTIONS: RegionOption[] = [
   { id: "all", label: "All Indian Regions", matchers: [] },
-  { id: "odisha", label: "Odisha", matchers: ["odisha", "puri", "raghurajpur", "cuttack", "bhubaneswar"] },
+  { id: "odisha", label: "Odisha", matchers: ["odisha", "puri", "raghurajpur", "cuttack", "bhubaneswar", "sambalpur", "balasore", "bargarh", "dhenkanal", "sadeibareni"] },
   { id: "rajasthan", label: "Rajasthan", matchers: ["rajasthan", "jaipur", "molela", "pokhran"] },
   { id: "uttar-pradesh", label: "Uttar Pradesh", matchers: ["uttar pradesh", "uttar-pradesh", "lucknow", "moradabad", "saharanpur", "gorakhpur"] },
   { id: "gujarat", label: "Gujarat", matchers: ["gujarat", "kutch", "khavda", "bhujodi"] },

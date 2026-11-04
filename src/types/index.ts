@@ -149,6 +149,7 @@ export interface Product {
     priceDisplay: string;
     originalPricePaise?: number;
     originalPriceDisplay?: string;
+    isDefault?: boolean;
   }[];
   availableColors?: {
     name: string;

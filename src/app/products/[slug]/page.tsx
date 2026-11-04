@@ -38,7 +38,25 @@ export async function generateMetadata({
     // Fallback to static mock data
   }
 
-  const mockProduct = PRODUCTS.find((p) => p.slug === slug);
+  const mockProduct =
+    PRODUCTS.find((p) => p.slug === slug) ||
+    (slug === "indian-mythological-palace-painting" || slug === "divine-court-of-the-gods-pattachitra"
+      ? PRODUCTS.find((p) => p.id === "prod-mythological-palace-painting")
+      : slug === "royal-heritage-handcrafted-pipili-applique-wall-hanging" || slug === "royal-heritage-pipili-applique-wall-hanging" || slug === "pipili-applique-wall-hanging" || slug === "pipili-chandua-wall-hanging"
+      ? PRODUCTS.find((p) => p.id === "prod-pipili-applique-wall-hanging")
+      : slug === "sambalpur-heritage-handcrafted-terracotta-lantern" || slug === "sambalpur-terracotta-lantern"
+      ? PRODUCTS.find((p) => p.id === "prod-sambalpur-terracotta-lantern")
+      : slug === "balasore-heritage-handcrafted-terracotta-horse-pair" || slug === "balasore-terracotta-horse-pair"
+      ? PRODUCTS.find((p) => p.id === "prod-balasore-terracotta-horses")
+      : slug === "divine-expressions-kali-tiger-papier-mache-mask-set" || slug === "divine-expressions-handcrafted-traditional-mask-pair" || slug === "papier-mache-mask-set"
+      ? PRODUCTS.find((p) => p.id === "prod-papier-mache-mask-set")
+      : slug === "royal-heritage-hand-painted-wooden-elephant-pair" || slug === "royal-heritage-hand-painted-elephant-pair"
+      ? PRODUCTS.find((p) => p.id === "prod-bargarh-wooden-elephant-pair")
+      : slug === "royal-procession-handcrafted-dhokra-elephant-sculpture" || slug === "royal-procession-handcrafted-dhokra-brass-elephant"
+      ? PRODUCTS.find((p) => p.id === "prod-sadeibareni-dhokra-elephant")
+      : slug === "tribal-rhythms-handcrafted-dhokra-musician-sculpture" || slug === "tribal-rhythms-dhokra-musician"
+      ? PRODUCTS.find((p) => p.id === "prod-sadeibareni-dhokra-musician")
+      : undefined);
   if (mockProduct) {
     title = `${mockProduct.title} | ARTSINLY`;
     description = mockProduct.description
