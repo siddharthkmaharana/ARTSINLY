@@ -115,18 +115,51 @@ function matchesSearch(product: any, term: string): boolean {
   return title.includes(q) || desc.includes(q) || craft.includes(q) || prov.includes(q) || artisan.includes(q);
 }
 
+const CRAFT_OPTIONS = [
+  { id: "all", label: "All Traditional Crafts", matchers: [] },
+  { id: "pattachitra-painting", label: "Pattachitra Painting", matchers: ["pattachitra", "patta", "raghurajpur", "cloth preparation", "traditional painting"] },
+  { id: "wood-carving", label: "Wood Carving", matchers: ["wood", "carving", "sheesham", "walnut", "jali", "toy", "toys", "elephant", "gamhari", "bargarh"] },
+  { id: "miniature-painting", label: "Miniature Painting", matchers: ["miniature", "pichwai", "painting"] },
+  { id: "kalamkari-painting", label: "Kalamkari Painting", matchers: ["kalamkari"] },
+  { id: "applique-textiles", label: "Pipili Appliqu� & Patchwork", matchers: ["applique", "appliqu�", "pipili", "pipli", "chandua", "patchwork"] },
+  { id: "zardozi-embroidery", label: "Heritage Needlework & Embroidery", matchers: ["zardozi", "embroidery", "kantha", "rabari", "mirrorwork", "bharatkaam"] },
+  { id: "papier-mache", label: "Papier-M�ch� & Folk Masks", matchers: ["papier-m�ch�", "papier-mache", "papiermache", "paper", "mask", "masks", "pulp", "kali", "tiger"] },
+  { id: "pottery", label: "Terracotta Pottery & Ceramics", matchers: ["pottery", "terracotta", "ceramic", "ceramics", "vase", "plates", "matka", "surahi", "molela", "urn", "khavda", "bishnupur", "lantern", "horse", "figurines", "clay"] },
+  { id: "metalwork", label: "Metalwork & Bell Metal", matchers: ["metal", "dhokra", "brass", "bell", "moradabad", "lota", "filigree", "tarakasi", "bidriware", "meenakari", "casting", "lost-wax", "procession", "musician", "drummer"] },
+  { id: "block-printing", label: "Block Printing", matchers: ["block", "print", "ajrakh", "indigo"] },
+];
+
+const REGION_OPTIONS = [
+  { id: "all", label: "All Indian Regions", matchers: [] },
+  { id: "odisha", label: "Odisha", matchers: ["odisha", "orissa", "puri", "raghurajpur", "cuttack", "bhubaneswar", "sambalpur", "balasore", "bargarh", "dhenkanal", "sadeibareni", "pipili", "pipli"] },
+  { id: "rajasthan", label: "Rajasthan", matchers: ["rajasthan", "jaipur", "molela", "pokhran"] },
+  { id: "uttar-pradesh", label: "Uttar Pradesh", matchers: ["uttar pradesh", "uttar-pradesh", "lucknow", "moradabad", "saharanpur", "gorakhpur"] },
+  { id: "gujarat", label: "Gujarat", matchers: ["gujarat", "kutch", "khavda", "bhujodi"] },
+  { id: "west-bengal", label: "West Bengal", matchers: ["west bengal", "west-bengal", "bengal", "bankura", "shantiniketan", "bishnupur"] },
+  { id: "karnataka", label: "Karnataka", matchers: ["karnataka", "bidar", "channapatna"] },
+  { id: "kashmir", label: "Kashmir", matchers: ["kashmir", "srinagar"] },
+  { id: "andhra-pradesh", label: "Andhra Pradesh", matchers: ["andhra pradesh", "andhra-pradesh", "srikalahasti"] },
+];
+
 function matchesCategory(product: any, category: string): boolean {
   if (!category || category === "all") return true;
-  const target = category.toLowerCase().trim();
-  const keywords = target.split("-");
+  const craftOpt = CRAFT_OPTIONS.find((c) => c.id === category);
   const craftStr = `${product.craftType || ""} ${product.categorySlug || ""} ${product.title || ""}`.toLowerCase();
+  if (craftOpt && craftOpt.matchers.length > 0) {
+    return craftOpt.matchers.some((m) => craftStr.includes(m.toLowerCase()));
+  }
+  const keywords = category.toLowerCase().trim().split("-");
   return keywords.some((kw) => craftStr.includes(kw));
 }
 
 function matchesRegion(product: any, region: string): boolean {
   if (!region || region === "all") return true;
-  const target = region.toLowerCase().trim().replace("-", " ");
+  const regionOpt = REGION_OPTIONS.find((r) => r.id === region);
   const regionStr = `${product.regionSlug || ""} ${product.provenanceTag || ""} ${product.state || ""} ${product.regionName || ""}`.toLowerCase();
+  if (regionOpt && regionOpt.matchers.length > 0) {
+    return regionOpt.matchers.some((m) => regionStr.includes(m.toLowerCase()));
+  }
+  const target = region.toLowerCase().trim().replace("-", " ");
   return regionStr.includes(target) || regionStr.includes(region.toLowerCase().trim());
 }
 
@@ -145,7 +178,7 @@ export async function GET(req: NextRequest) {
     const region = searchParams.get("region") || "all";
     const maxPrice = searchParams.get("maxPrice") ? parseFloat(searchParams.get("maxPrice")!) : undefined;
     const page = parseInt(searchParams.get("page") || "1", 10);
-    const limit = parseInt(searchParams.get("limit") || "50", 10);
+    const limit = parseInt(searchParams.get("limit") || "100", 10);
 
     let dbProducts: any[] = [];
     try {

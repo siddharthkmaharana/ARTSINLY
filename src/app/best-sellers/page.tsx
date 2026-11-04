@@ -26,9 +26,9 @@ const BEST_SELLERS: BestSellerItem[] = [
     originAndCraft: "GUJARAT • TERRACOTTA POTTERY",
     title: "Modern Ethnic Ceramic Vase – Terracotta Vase with Indigenous Pattern",
     ratingText: "4.92 / 5.0 (38 verified collectors)",
-    priceDisplay: "₹126.99",
+    priceDisplay: "₹127",
     imageUrl:
-      "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&fm=webp&w=1000&q=85",
+      "/images/products/Modern Ethnic Ceramic Vase – Ivory Minimalist Edition.png",
   },
   {
     id: "seller-2",
@@ -48,9 +48,9 @@ const BEST_SELLERS: BestSellerItem[] = [
     originAndCraft: "RAJASTHAN • MINIATURE PAINTING",
     title: "Sacred Srinathji Gold-Leaf Pichwai Miniature Painting",
     ratingText: "5 / 5.0 (14 verified collectors)",
-    priceDisplay: "₹1500.00",
+    priceDisplay: "₹1,500",
     imageUrl:
-      "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&fm=webp&w=1000&q=85",
+      "/images/products/Sacred Srinathji Gold-Leaf Pichwai Miniature Painting.png",
   },
   {
     id: "seller-4",

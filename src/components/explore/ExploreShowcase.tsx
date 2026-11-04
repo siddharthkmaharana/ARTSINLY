@@ -112,6 +112,10 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
       ? PRODUCTS.find((p) => p.id === "prod-sadeibareni-dhokra-elephant")
       : productSlug === "tribal-rhythms-handcrafted-dhokra-musician-sculpture" || productSlug === "tribal-rhythms-dhokra-musician"
       ? PRODUCTS.find((p) => p.id === "prod-sadeibareni-dhokra-musician")
+      : productSlug === "modern-ethnic-ceramic-vase-ivory-minimalist-edition" || productSlug === "modern-ethnic-ceramic-vase-terracotta-vase" || productSlug === "modern-ethnic-ceramic-vase" || productSlug === "modern-ethnic-ceramic-vase-terracotta"
+      ? PRODUCTS.find((p) => p.id === "prod-vase")
+      : productSlug === "sacred-srinathji-gold-leaf-pichwai-miniature-painting" || productSlug === "sacred-srinathji-gold-leaf-pichwai" || productSlug === "sacred-srinathji-pichwai"
+      ? PRODUCTS.find((p) => p.id === "prod-pichwai")
       : undefined) ||
     PRODUCTS[0];
 
