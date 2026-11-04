@@ -98,6 +98,20 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
     PRODUCTS.find((p) => p.slug === productSlug) ||
     (productSlug === "indian-mythological-palace-painting" || productSlug === "divine-court-of-the-gods-pattachitra"
       ? PRODUCTS.find((p) => p.id === "prod-mythological-palace-painting")
+      : productSlug === "royal-heritage-handcrafted-pipili-applique-wall-hanging" || productSlug === "royal-heritage-pipili-applique-wall-hanging" || productSlug === "pipili-applique-wall-hanging" || productSlug === "pipili-chandua-wall-hanging"
+      ? PRODUCTS.find((p) => p.id === "prod-pipili-applique-wall-hanging")
+      : productSlug === "sambalpur-heritage-handcrafted-terracotta-lantern" || productSlug === "sambalpur-terracotta-lantern"
+      ? PRODUCTS.find((p) => p.id === "prod-sambalpur-terracotta-lantern")
+      : productSlug === "balasore-heritage-handcrafted-terracotta-horse-pair" || productSlug === "balasore-terracotta-horse-pair"
+      ? PRODUCTS.find((p) => p.id === "prod-balasore-terracotta-horses")
+      : productSlug === "divine-expressions-kali-tiger-papier-mache-mask-set" || productSlug === "divine-expressions-handcrafted-traditional-mask-pair" || productSlug === "papier-mache-mask-set"
+      ? PRODUCTS.find((p) => p.id === "prod-papier-mache-mask-set")
+      : productSlug === "royal-heritage-hand-painted-wooden-elephant-pair" || productSlug === "royal-heritage-hand-painted-elephant-pair"
+      ? PRODUCTS.find((p) => p.id === "prod-bargarh-wooden-elephant-pair")
+      : productSlug === "royal-procession-handcrafted-dhokra-elephant-sculpture" || productSlug === "royal-procession-handcrafted-dhokra-brass-elephant"
+      ? PRODUCTS.find((p) => p.id === "prod-sadeibareni-dhokra-elephant")
+      : productSlug === "tribal-rhythms-handcrafted-dhokra-musician-sculpture" || productSlug === "tribal-rhythms-dhokra-musician"
+      ? PRODUCTS.find((p) => p.id === "prod-sadeibareni-dhokra-musician")
       : undefined) ||
     PRODUCTS[0];
 
@@ -143,6 +157,16 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
     currentProduct.slug !== "indian-mythological-palace-painting" &&
     currentProduct.slug !== "jagannath-trinity-divine-heritage-pattachitra" &&
     currentProduct.slug !== "divine-krishna-leela-radha-krishna-pattachitra" &&
+    currentProduct.slug !== "sambalpur-heritage-handcrafted-terracotta-lantern" &&
+    currentProduct.slug !== "balasore-heritage-handcrafted-terracotta-horse-pair" &&
+    currentProduct.slug !== "divine-expressions-kali-tiger-papier-mache-mask-set" &&
+    currentProduct.slug !== "divine-expressions-handcrafted-traditional-mask-pair" &&
+    currentProduct.slug !== "royal-heritage-hand-painted-wooden-elephant-pair" &&
+    currentProduct.slug !== "royal-heritage-hand-painted-elephant-pair" &&
+    currentProduct.slug !== "royal-procession-handcrafted-dhokra-elephant-sculpture" &&
+    currentProduct.slug !== "royal-procession-handcrafted-dhokra-brass-elephant" &&
+    currentProduct.slug !== "tribal-rhythms-handcrafted-dhokra-musician-sculpture" &&
+    currentProduct.slug !== "tribal-rhythms-dhokra-musician" &&
     ((currentProduct.availableColors && currentProduct.availableColors.length > 0) ||
       (currentProduct.colorSwatches && currentProduct.colorSwatches.length > 0));
 
@@ -506,7 +530,9 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
                     <label className="text-[11px] font-semibold text-[#3C3A35]">
-                      Select Colour Theme:
+                      {availableColors[0]?.name.toLowerCase().includes("design")
+                        ? "Select Design Option:"
+                        : "Select Colour Theme:"}
                     </label>
                     <span className="text-[10px] font-mono font-medium text-[#1E1E1C]">
                       {selectedColor.name}
@@ -519,7 +545,12 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
                         <button
                           key={idx}
                           type="button"
-                          onClick={() => setSelectedColor(color)}
+                          onClick={() => {
+                            setSelectedColor(color);
+                            if (images && images.length > idx) {
+                              setSelectedImageIndex(idx);
+                            }
+                          }}
                           className={`group relative flex items-center gap-1.5 px-2.5 py-1.5 rounded-full border transition-all cursor-pointer ${
                             isSelected
                               ? "bg-[#1E1E1C] text-white border-[#1E1E1C] shadow-xs"
@@ -583,7 +614,11 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
                   {hasMultipleSizes
                     ? `${selectedSize.name} (${selectedSize.dimensions})`
                     : currentProduct.dimensions || "Standard Scale"}
-                  {showColorThemes && selectedColor ? ` · Colour ${selectedColor.name}` : ""}
+                  {showColorThemes && selectedColor
+                    ? selectedColor.name.toLowerCase().includes("design")
+                      ? ` · ${selectedColor.name}`
+                      : ` · Colour ${selectedColor.name}`
+                    : ""}
                 </span>
                 <span className="text-[10px] text-[#2E7D52] font-semibold flex items-center gap-1">
                   <Check className="w-3 h-3" /> Ready to dispatch
