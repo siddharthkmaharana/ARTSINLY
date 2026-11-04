@@ -58,6 +58,8 @@ export async function generateMetadata({
       ? PRODUCTS.find((p) => p.id === "prod-sadeibareni-dhokra-musician")
       : slug === "modern-ethnic-ceramic-vase-ivory-minimalist-edition" || slug === "modern-ethnic-ceramic-vase-terracotta-vase" || slug === "modern-ethnic-ceramic-vase" || slug === "modern-ethnic-ceramic-vase-terracotta"
       ? PRODUCTS.find((p) => p.id === "prod-vase")
+      : slug === "sacred-srinathji-gold-leaf-pichwai-miniature-painting" || slug === "sacred-srinathji-gold-leaf-pichwai" || slug === "sacred-srinathji-pichwai"
+      ? PRODUCTS.find((p) => p.id === "prod-pichwai")
       : undefined);
   if (mockProduct) {
     title = `${mockProduct.title} | ARTSINLY`;

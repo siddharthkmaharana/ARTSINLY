@@ -39,9 +39,9 @@ const FRESH_DROPS: NewDropItem[] = [
     subtitle: "Pure Mineral Pigments on Hand-Loomed Cotton with 24K Leafing",
     description:
       "Painted with squirrel-hair brushes under high magnification. Features the divine cow and lotus pond symbolism of Nathdwara shrines executed with crushed lapis and malachite bound with natural gums.",
-    priceDisplay: "₹1,500.00",
+    priceDisplay: "₹1,500",
     imageUrl:
-      "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&fm=webp&w=1000&q=85",
+      "/images/products/Sacred Srinathji Gold-Leaf Pichwai Miniature Painting.png",
   },
   {
     id: "drop-3",

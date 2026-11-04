@@ -54,9 +54,9 @@ export default function HomePage() {
       originAndCraft: "RAJASTHAN • MINIATURE PAINTING",
       title: "Sacred Srinathji Gold-Leaf Pichwai Miniature Painting",
       ratingText: "5 / 5.0 (14 verified collectors)",
-      priceDisplay: "₹1,500.00",
+      priceDisplay: "₹1,500",
       imageUrl:
-        "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&fm=webp&w=1000&q=85",
+        "/images/products/Sacred Srinathji Gold-Leaf Pichwai Miniature Painting.png",
     },
   ];
 
