@@ -11,6 +11,89 @@ interface ProductCardProps {
   variant?: "catalog" | "default";
 }
 
+function getDisplayCraft(craftType?: string, categorySlug?: string, title?: string): string {
+  const c = (craftType || "").toLowerCase();
+  const s = (categorySlug || "").toLowerCase();
+  const t = (title || "").toLowerCase();
+
+  if (c.includes("pattachitra") || s.includes("pattachitra") || t.includes("pattachitra")) return "Pattachitra Painting";
+  if (c.includes("applique") || c.includes("appliqué") || s.includes("applique") || t.includes("applique")) return "Pipili Appliqué";
+  if (c.includes("dhokra") || s.includes("dhokra") || t.includes("dhokra")) return "Dhokra Metal";
+  if (c.includes("papier") || c.includes("mask") || s.includes("mask") || t.includes("mask")) return "Papier-Mâché";
+  if (c.includes("wood") || c.includes("toy") || s.includes("wood") || t.includes("wood") || t.includes("elephant")) {
+    if (t.includes("dhokra")) return "Dhokra Metal";
+    return "Wood Carving";
+  }
+  if (c.includes("terracotta") || c.includes("pottery") || c.includes("clay") || s.includes("terracotta") || s.includes("pottery")) {
+    if (t.includes("blue pottery") || c.includes("blue")) return "Blue Pottery";
+    return "Terracotta Pottery";
+  }
+  if (c.includes("zardozi") || s.includes("zardozi")) return "Zardozi Embroidery";
+  if (c.includes("miniature") || c.includes("pichwai")) return "Miniature Painting";
+  if (c.includes("kalamkari")) return "Kalamkari Painting";
+  if (c.includes("block") || c.includes("ajrakh")) return "Block Print";
+  if (c.includes("filigree") || c.includes("tarakasi")) return "Silver Filigree";
+  if (c.includes("kantha")) return "Nakshi Kantha";
+  if (c.includes("bidriware")) return "Bidriware Metal";
+
+  if (craftType && craftType.length <= 22) return craftType;
+  return craftType ? craftType.split("/")[0].split("–")[0].trim() : "Traditional Craft";
+}
+
+function getDisplayByline(product: Product): string {
+  let byline = (product.byline || product.artisan?.artisanName || "").trim();
+  if (!byline) return "Master Guild";
+
+  if (byline.startsWith("Master Guild •")) {
+    byline = byline.replace(/^Master Guild\s*•\s*/, "").trim();
+  } else if (byline.startsWith("Master Guild")) {
+    byline = byline.replace(/^Master Guild\s*/, "").trim();
+  } else if (byline.startsWith("By ")) {
+    byline = byline.replace(/^By\s*/, "").trim();
+  }
+
+  byline = byline
+    .replace("Pipili Master Appliqué Artisan Cooperative", "Pipili Appliqué Guild")
+    .replace("Pipili Heritage Appliqué Cooperative", "Pipili Appliqué Guild")
+    .replace("Raghurajpur Heritage Chitrakara Guild", "Chitrakara Guild")
+    .replace("Saptasajya Dhokra Artisans Foundation", "Sadeibareni Dhokra Guild")
+    .replace("Sadeibareni Dhokra Artisan Guild", "Sadeibareni Dhokra Guild")
+    .replace("Sambalpur Master Terracotta Guild", "Sambalpur Terracotta Guild")
+    .replace("Sambalpur Terracotta Artisan Collective", "Sambalpur Terracotta Guild")
+    .replace("Balasore Heritage Kumbhar Guild", "Balasore Kumbhar Guild")
+    .replace("Balasore Kumbhar Heritage Artisans", "Balasore Kumbhar Guild")
+    .replace("Puri Heritage Papier-Mâché Guild", "Puri Papier-Mâché Guild")
+    .replace("Puri Heritage Papier-Mâché Artisans", "Puri Papier-Mâché Guild")
+    .replace("Bargarh Master Woodcraft Guild", "Bargarh Woodcraft Guild")
+    .replace("Bargarh Heritage Woodcarving Guild", "Bargarh Woodcraft Guild");
+
+  return `Master Guild • ${byline}`;
+}
+
+function getDisplayRegionTag(product: Product): string {
+  const prov = (product.provenanceTag || "").trim();
+  const state = (product.state || product.regionName || "").trim();
+
+  if (!prov || prov.toLowerCase() === "india") {
+    return state || "India";
+  }
+
+  if (prov.length <= 16 && !prov.includes(",")) {
+    return prov;
+  }
+
+  const cleanProv = prov.replace(/,?\s*India$/i, "").trim();
+  const parts = cleanProv.split(",").map((s) => s.trim().replace(/^Western\s+/i, ""));
+
+  if (parts.length >= 2) {
+    const city = parts[0];
+    const region = parts[parts.length - 1];
+    return `${city} • ${region}`;
+  }
+
+  return cleanProv;
+}
+
 export function ProductCard({ product, variant = "default" }: ProductCardProps) {
   const { addToCart, toggleWishlist, isInWishlist } = useCart();
   const [isAdded, setIsAdded] = useState(false);
@@ -65,7 +148,7 @@ export function ProductCard({ product, variant = "default" }: ProductCardProps) 
           {/* Region Tag Pill on top-left of image */}
           <div className="absolute top-2.5 left-2.5">
             <span className="bg-white/90 backdrop-blur-xs text-[#2A2926] text-[10px] font-medium px-2.5 py-0.5 rounded-full shadow-2xs border border-black/5">
-              {product.provenanceTag || product.state}
+              {getDisplayRegionTag(product)}
             </span>
           </div>
         </Link>
@@ -74,12 +157,12 @@ export function ProductCard({ product, variant = "default" }: ProductCardProps) 
         <div className="pt-2.5 px-0.5 flex flex-col flex-grow justify-between">
           <div>
             {/* Craft on left | Artisan on right in italic */}
-            <div className="flex items-center justify-between text-[11px] mb-1 gap-2">
-              <span className="text-[#7A756D] font-normal truncate">
-                {product.craftType}
+            <div className="flex items-center justify-between text-[11px] mb-1 gap-2 overflow-hidden w-full">
+              <span className="text-[#7A756D] font-normal truncate shrink min-w-0 max-w-[48%]">
+                {getDisplayCraft(product.craftType, product.categorySlug, product.title)}
               </span>
-              <span className="text-[#555049] italic truncate shrink-0">
-                {product.byline || product.artisan.artisanName}
+              <span className="text-[#555049] italic truncate shrink min-w-0 max-w-[52%] text-right">
+                {getDisplayByline(product)}
               </span>
             </div>
 
@@ -147,7 +230,7 @@ export function ProductCard({ product, variant = "default" }: ProductCardProps) 
         {/* Region Tag Pill on top-left of image */}
         <div className="absolute top-3.5 left-3.5">
           <span className="bg-white/90 backdrop-blur-xs text-[#20201D] text-[11px] font-medium px-2.5 py-0.5 rounded-full shadow-xs border border-black/5">
-            {product.provenanceTag || product.state}
+            {getDisplayRegionTag(product)}
           </span>
         </div>
       </Link>
@@ -156,12 +239,12 @@ export function ProductCard({ product, variant = "default" }: ProductCardProps) 
       <div className="p-5 flex flex-col flex-grow justify-between bg-[#FAF7F2]">
         <div>
           {/* Category on left | Artisan on right in italic */}
-          <div className="flex items-center justify-between text-xs mb-1.5 gap-2">
-            <span className="text-[#807C74] font-normal truncate">
-              {product.craftType}
+          <div className="flex items-center justify-between text-xs mb-1.5 gap-2 overflow-hidden w-full">
+            <span className="text-[#807C74] font-normal truncate shrink min-w-0 max-w-[48%]">
+              {getDisplayCraft(product.craftType, product.categorySlug, product.title)}
             </span>
-            <span className="text-[#706C64] italic truncate shrink-0">
-              {product.byline || `By ${product.artisan.artisanName}`}
+            <span className="text-[#706C64] italic truncate shrink min-w-0 max-w-[52%] text-right">
+              {getDisplayByline(product)}
             </span>
           </div>
 
