@@ -112,6 +112,8 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
       ? PRODUCTS.find((p) => p.id === "prod-sadeibareni-dhokra-elephant")
       : productSlug === "tribal-rhythms-handcrafted-dhokra-musician-sculpture" || productSlug === "tribal-rhythms-dhokra-musician"
       ? PRODUCTS.find((p) => p.id === "prod-sadeibareni-dhokra-musician")
+      : productSlug === "modern-ethnic-ceramic-vase-ivory-minimalist-edition" || productSlug === "modern-ethnic-ceramic-vase-terracotta-vase" || productSlug === "modern-ethnic-ceramic-vase" || productSlug === "modern-ethnic-ceramic-vase-terracotta"
+      ? PRODUCTS.find((p) => p.id === "prod-vase")
       : undefined) ||
     PRODUCTS[0];
 

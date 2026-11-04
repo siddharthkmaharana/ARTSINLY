@@ -27,9 +27,9 @@ const FRESH_DROPS: NewDropItem[] = [
     subtitle: "Minimalist Abstract Matte Decor for Living Room, Shelf & Tabletop Styling",
     description:
       "Elevate your home decor with this exquisite set of 2 modern ceramic vases, featuring a sculptural, abstract design that combines organic warmth with contemporary living room, shelf, and tabletop styling.",
-    priceDisplay: "₹126.99",
+    priceDisplay: "₹127",
     imageUrl:
-      "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&fm=webp&w=1000&q=85",
+      "/images/products/Modern Ethnic Ceramic Vase – Ivory Minimalist Edition.png",
   },
   {
     id: "drop-2",
