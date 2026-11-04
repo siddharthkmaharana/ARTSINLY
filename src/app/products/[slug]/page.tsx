@@ -60,6 +60,12 @@ export async function generateMetadata({
       ? PRODUCTS.find((p) => p.id === "prod-vase")
       : slug === "sacred-srinathji-gold-leaf-pichwai-miniature-painting" || slug === "sacred-srinathji-gold-leaf-pichwai" || slug === "sacred-srinathji-pichwai"
       ? PRODUCTS.find((p) => p.id === "prod-pichwai")
+      : slug === "jaipur-textured-floral-bouquet-painting" || slug === "textured-ginkgo-branch-at-sunset" || slug === "textured-floral-bouquet-handcrafted-vase-painting" || slug === "textured-floral-bouquet-painting" || slug === "textured-floral-bouquet"
+      ? PRODUCTS.find((p) => p.id === "prod-jaipur-textured-floral-bouquet")
+      : slug === "jodhpur-textured-floral-bouquet-painting" || slug === "textured-oil-bouquet-in-ceramic-vase" || slug === "textured-floral-bouquet-decorative-vase-painting" || slug === "jodhpur-textured-floral-bouquet"
+      ? PRODUCTS.find((p) => p.id === "prod-jodhpur-textured-floral-bouquet")
+      : slug === "jodhpur-textured-magnolia-floral-vase-painting" || slug === "painterly-magnolia-branch-in-glazed-vase" || slug === "painterly-magnolia-branches-decorative-vase-painting" || slug === "jodhpur-textured-magnolia-vase" || slug === "painterly-magnolia-branches"
+      ? PRODUCTS.find((p) => p.id === "prod-jodhpur-textured-magnolia-vase")
       : undefined);
   if (mockProduct) {
     title = `${mockProduct.title} | ARTSINLY`;

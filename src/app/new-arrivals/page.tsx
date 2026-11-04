@@ -45,27 +45,27 @@ const FRESH_DROPS: NewDropItem[] = [
   },
   {
     id: "drop-3",
-    slug: "zardozi-hand-embroidered-velvet-adornment",
+    slug: "royal-heritage-handcrafted-pipili-applique-wall-hanging",
     badgeText: "JUST UNFIRED",
-    title: "Zardozi Hand-Embroidered Velvet Wall Tapestry",
-    subtitle: "Gilded Metallic Wire Threading with Semi-Precious Agate Stones",
+    title: "Royal Heritage – Handcrafted Pipili Appliqué Wall Hanging",
+    subtitle: "Hand-Cut Pipili Cloth Appliqué with Intricate Geometric Borders",
     description:
-      "Created over 140 artisan-hours on a stretched wooden Adda frame. Intricate couching holds hand-cut metallic wires in royal court relief, bordered by heirloom seed pearls and floral bullion filigree.",
-    priceDisplay: "₹540.00",
+      "Bring the vibrant artistic heritage of Odisha into your home with this handcrafted Pipili appliqué wall hanging. Featuring an elaborate central floral mandala, colourful elephant and peacock motifs, and decorative borders.",
+    priceDisplay: "₹3,200",
     imageUrl:
-      "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&fm=webp&w=1000&q=85",
+      "/images/products/Royal Heritage – Handcrafted Pipili Appliqué Wall Hanging_1.png",
   },
   {
     id: "drop-4",
-    slug: "jaipur-persian-quartz-blue-glazed-dinner-plates",
+    slug: "jaipur-textured-floral-bouquet-painting",
     badgeText: "JUST UNFIRED",
-    title: "Jaipur Persian Quartz Blue Glazed Chalice",
-    subtitle: "Clay-Free Egyptian Faience with Cobalt Brushwork",
+    title: "Textured Floral Bouquet – Handcrafted Vase Painting",
+    subtitle: "Layered Palette-Knife Impasto Texture on Prepared Canvas",
     description:
-      "An exceptional example of Jaipur blue pottery, formulated without clay from powdered quartz stone and natural plant gum, low-fired in wood-burning kilns for durable vitreous beauty.",
-    priceDisplay: "₹110.00",
+      "An expressive floral still-life painting featuring white lilies, vibrant red hibiscus, golden-yellow flowers and delicate blue blossoms arranged in a decorative vase with raised dimensional texture.",
+    priceDisplay: "₹2,499",
     imageUrl:
-      "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&fm=webp&w=1000&q=85",
+      "/images/products/Textured Ginkgo Branch at Sunset.png",
   },
 ];
 

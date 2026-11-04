@@ -365,29 +365,29 @@ async function main() {
     },
   });
 
-  // Product 2: Hand-Carved Floral High-Relief Sheesham Panel
+  // Product 2: Royal Heritage Hand-Painted Wooden Elephant Pair
   const prodClock = await prisma.product.create({
     data: {
       sellerId: sellerShankar.id,
       categoryId: catWoodCarving.id,
       regionId: regRajasthan.id,
-      title: "Hand-Carved Floral High-Relief Sheesham Panel",
-      slug: "hand-carved-floral-high-relief-sheesham-clock",
-      description: "Intricately hand-sculpted from aged Sheesham timber, featuring deep vegetal floral relief in concentric geometric arrangements.",
-      story: "Shankar Lal Jangid carves seasoned Rajasthan rosewood with traditional gouges, honoring centuries-old architectural palace relief craft.",
-      craftType: "Wood Carving",
-      provenanceTag: "Rajasthan",
-      giCode: "GI-IN-RJ-312",
-      dimensions: "16\" Diameter × 2.5\" D",
-      materials: "Solid aged Sheesham timber, organic beeswax polish, silent brass movement",
-      careInstructions: "Dust regularly with soft dry cotton cloth. Keep away from excessive humidity.",
-      basePricePaise: 70000, // ₹700.00
+      title: "Royal Heritage – Hand-Painted Wooden Elephant Pair",
+      slug: "royal-heritage-hand-painted-wooden-elephant-pair",
+      description: "Handcrafted from indigenous seasoned wood, featuring vibrant mineral pigments and generational painted folk patterns.",
+      story: "Master woodcarvers and painters craft celebratory wooden elephant pairs using natural wood and rich lacquer finishes.",
+      craftType: "Wood Carving & Painted Toys",
+      provenanceTag: "Odisha",
+      giCode: "GI-IN-OD-105",
+      dimensions: "18 × 15 × 10 cm",
+      materials: "Seasoned Gamhari wood, natural mineral colours, fine lacquer finish",
+      careInstructions: "Keep in a dry environment. Wipe gently with a soft dry cloth.",
+      basePricePaise: 350000, // ₹3,500.00
       status: ProductStatus.PUBLISHED,
       images: {
         create: [
           {
-            url: "https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?auto=format&fit=crop&w=1000&q=85",
-            altText: "Hand-Carved Floral High-Relief Sheesham Clock on wall",
+            url: "/images/products/Royal Heritage – Hand-Painted Elephant Pair.png",
+            altText: "Royal Heritage Hand-Painted Wooden Elephant Pair",
             displayOrder: 0,
             isPrimary: true,
           },
@@ -399,12 +399,12 @@ async function main() {
   const variantClock = await prisma.productVariant.create({
     data: {
       productId: prodClock.id,
-      sku: "CLOCK-SHEESHAM-16",
-      name: "Seasoned Rosewood 16\"",
-      colorName: "Natural Sheesham",
-      colorHex: "#5B3A29",
-      sizeOption: "16\" Diameter",
-      pricePaise: 70000,
+      sku: "ELEPHANT-WOOD-PAIR",
+      name: "Handcrafted Elephant Pair",
+      colorName: "Traditional Crimson & Gold",
+      colorHex: "#8B1E1E",
+      sizeOption: "Pair (18 × 15 cm)",
+      pricePaise: 350000,
       isDefault: true,
     },
   });
@@ -413,10 +413,10 @@ async function main() {
     data: {
       productId: prodClock.id,
       variantId: variantClock.id,
-      quantity: 5,
+      quantity: 6,
       reservedQuantity: 0,
       lowStockThreshold: 1,
-      sku: "CLOCK-SHEESHAM-16",
+      sku: "ELEPHANT-WOOD-PAIR",
     },
   });
 

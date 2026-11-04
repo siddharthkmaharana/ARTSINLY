@@ -116,6 +116,12 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
       ? PRODUCTS.find((p) => p.id === "prod-vase")
       : productSlug === "sacred-srinathji-gold-leaf-pichwai-miniature-painting" || productSlug === "sacred-srinathji-gold-leaf-pichwai" || productSlug === "sacred-srinathji-pichwai"
       ? PRODUCTS.find((p) => p.id === "prod-pichwai")
+      : productSlug === "jaipur-textured-floral-bouquet-painting" || productSlug === "textured-ginkgo-branch-at-sunset" || productSlug === "textured-floral-bouquet-handcrafted-vase-painting" || productSlug === "textured-floral-bouquet-painting" || productSlug === "textured-floral-bouquet"
+      ? PRODUCTS.find((p) => p.id === "prod-jaipur-textured-floral-bouquet")
+      : productSlug === "jodhpur-textured-floral-bouquet-painting" || productSlug === "textured-oil-bouquet-in-ceramic-vase" || productSlug === "textured-floral-bouquet-decorative-vase-painting" || productSlug === "jodhpur-textured-floral-bouquet"
+      ? PRODUCTS.find((p) => p.id === "prod-jodhpur-textured-floral-bouquet")
+      : productSlug === "jodhpur-textured-magnolia-floral-vase-painting" || productSlug === "painterly-magnolia-branch-in-glazed-vase" || productSlug === "painterly-magnolia-branches-decorative-vase-painting" || productSlug === "jodhpur-textured-magnolia-vase" || productSlug === "painterly-magnolia-branches"
+      ? PRODUCTS.find((p) => p.id === "prod-jodhpur-textured-magnolia-vase")
       : undefined) ||
     PRODUCTS[0];
 
@@ -171,6 +177,9 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
     currentProduct.slug !== "royal-procession-handcrafted-dhokra-brass-elephant" &&
     currentProduct.slug !== "tribal-rhythms-handcrafted-dhokra-musician-sculpture" &&
     currentProduct.slug !== "tribal-rhythms-dhokra-musician" &&
+    currentProduct.slug !== "jaipur-textured-floral-bouquet-painting" &&
+    currentProduct.slug !== "jodhpur-textured-floral-bouquet-painting" &&
+    currentProduct.slug !== "jodhpur-textured-magnolia-floral-vase-painting" &&
     ((currentProduct.availableColors && currentProduct.availableColors.length > 0) ||
       (currentProduct.colorSwatches && currentProduct.colorSwatches.length > 0));
 
