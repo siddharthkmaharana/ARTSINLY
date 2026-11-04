@@ -198,7 +198,7 @@ const FALLBACK_PRODUCTS: StudioProduct[] = [
     priceDisplay: "₹3,500.00",
     status: "Live in Marketplace",
     imageUrl:
-      "/images/products/Royal Heritage – Hand-Painted Elephant Pair.png",
+      "/images/products/Odisha/Royal Heritage – Hand-Painted Elephant Pair.png",
     stock: 4,
     isMadeToOrder: true,
   },

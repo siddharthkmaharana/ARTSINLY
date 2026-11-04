@@ -29,7 +29,7 @@ const FRESH_DROPS: NewDropItem[] = [
       "Elevate your home decor with this exquisite set of 2 modern ceramic vases, featuring a sculptural, abstract design that combines organic warmth with contemporary living room, shelf, and tabletop styling.",
     priceDisplay: "₹127",
     imageUrl:
-      "/images/products/Modern Ethnic Ceramic Vase – Ivory Minimalist Edition.png",
+      "/images/products/Gujarat/Modern Ethnic Ceramic Vase – Ivory Minimalist Edition.png",
   },
   {
     id: "drop-2",
@@ -41,7 +41,7 @@ const FRESH_DROPS: NewDropItem[] = [
       "Painted with squirrel-hair brushes under high magnification. Features the divine cow and lotus pond symbolism of Nathdwara shrines executed with crushed lapis and malachite bound with natural gums.",
     priceDisplay: "₹1,500",
     imageUrl:
-      "/images/products/Sacred Srinathji Gold-Leaf Pichwai Miniature Painting.png",
+      "/images/products/Rajasthan/Sacred Srinathji Gold-Leaf Pichwai Miniature Painting.png",
   },
   {
     id: "drop-3",
@@ -53,7 +53,7 @@ const FRESH_DROPS: NewDropItem[] = [
       "Bring the vibrant artistic heritage of Odisha into your home with this handcrafted Pipili appliqué wall hanging. Featuring an elaborate central floral mandala, colourful elephant and peacock motifs, and decorative borders.",
     priceDisplay: "₹3,200",
     imageUrl:
-      "/images/products/Royal Heritage – Handcrafted Pipili Appliqué Wall Hanging_1.png",
+      "/images/products/Odisha/Royal Heritage – Handcrafted Pipili Appliqué Wall Hanging_1.png",
   },
   {
     id: "drop-4",
@@ -65,7 +65,7 @@ const FRESH_DROPS: NewDropItem[] = [
       "An expressive floral still-life painting featuring white lilies, vibrant red hibiscus, golden-yellow flowers and delicate blue blossoms arranged in a decorative vase with raised dimensional texture.",
     priceDisplay: "₹2,499",
     imageUrl:
-      "/images/products/Textured Ginkgo Branch at Sunset.png",
+      "/images/products/Rajasthan/Textured Ginkgo Branch at Sunset.png",
   },
 ];
 

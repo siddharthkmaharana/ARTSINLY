@@ -232,7 +232,7 @@ const initialFallbackSellerProducts: ResilientSellerProduct[] = [
     images: [
       {
         id: "img_sp_03",
-        url: "/images/products/Royal Heritage – Hand-Painted Elephant Pair.png",
+        url: "/images/products/Odisha/Royal Heritage – Hand-Painted Elephant Pair.png",
         altText: "Carved Wood Panel",
         isPrimary: true,
         displayOrder: 0,

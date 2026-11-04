@@ -28,7 +28,7 @@ const BEST_SELLERS: BestSellerItem[] = [
     ratingText: "4.92 / 5.0 (38 verified collectors)",
     priceDisplay: "₹127",
     imageUrl:
-      "/images/products/Modern Ethnic Ceramic Vase – Ivory Minimalist Edition.png",
+      "/images/products/Gujarat/Modern Ethnic Ceramic Vase – Ivory Minimalist Edition.png",
   },
   {
     id: "seller-2",
@@ -39,7 +39,7 @@ const BEST_SELLERS: BestSellerItem[] = [
     ratingText: "4.96 / 5.0 (32 verified collectors)",
     priceDisplay: "₹3,500",
     imageUrl:
-      "/images/products/Royal Heritage – Hand-Painted Elephant Pair.png",
+      "/images/products/Odisha/Royal Heritage – Hand-Painted Elephant Pair.png",
   },
   {
     id: "seller-3",
@@ -50,7 +50,7 @@ const BEST_SELLERS: BestSellerItem[] = [
     ratingText: "5 / 5.0 (14 verified collectors)",
     priceDisplay: "₹1,500",
     imageUrl:
-      "/images/products/Sacred Srinathji Gold-Leaf Pichwai Miniature Painting.png",
+      "/images/products/Rajasthan/Sacred Srinathji Gold-Leaf Pichwai Miniature Painting.png",
   },
   {
     id: "seller-4",
@@ -61,7 +61,7 @@ const BEST_SELLERS: BestSellerItem[] = [
     ratingText: "4.91 / 5.0 (45 verified collectors)",
     priceDisplay: "₹4,800",
     imageUrl:
-      "/images/products/Tribal Rhythms – Handcrafted Dhokra Musician Sculpture.png",
+      "/images/products/Odisha/Tribal Rhythms – Handcrafted Dhokra Musician Sculpture.png",
   },
   {
     id: "seller-5",
@@ -72,7 +72,7 @@ const BEST_SELLERS: BestSellerItem[] = [
     ratingText: "4.98 / 5.0 (67 verified collectors)",
     priceDisplay: "₹4,500",
     imageUrl:
-      "/images/products/Odisha Pattachitra painting with Frame.png",
+      "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
   },
   {
     id: "seller-6",
@@ -83,7 +83,7 @@ const BEST_SELLERS: BestSellerItem[] = [
     ratingText: "4.95 / 5.0 (42 verified collectors)",
     priceDisplay: "₹8,500",
     imageUrl:
-      "/images/products/Royal Procession – Handcrafted Dhokra Brass Elephant.png",
+      "/images/products/Odisha/Royal Procession – Handcrafted Dhokra Brass Elephant.png",
   },
 ];
 

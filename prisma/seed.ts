@@ -386,7 +386,7 @@ async function main() {
       images: {
         create: [
           {
-            url: "/images/products/Royal Heritage – Hand-Painted Elephant Pair.png",
+            url: "/images/products/Odisha/Royal Heritage – Hand-Painted Elephant Pair.png",
             altText: "Royal Heritage Hand-Painted Wooden Elephant Pair",
             displayOrder: 0,
             isPrimary: true,

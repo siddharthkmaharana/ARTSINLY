@@ -34,7 +34,7 @@ export default function HomePage() {
       ratingText: "4.92 / 5.0 (38 verified collectors)",
       priceDisplay: "₹127",
       imageUrl:
-        "/images/products/Modern Ethnic Ceramic Vase – Ivory Minimalist Edition.png",
+        "/images/products/Gujarat/Modern Ethnic Ceramic Vase – Ivory Minimalist Edition.png",
     },
     {
       id: "top-2",
@@ -45,7 +45,7 @@ export default function HomePage() {
       ratingText: "4.96 / 5.0 (32 verified collectors)",
       priceDisplay: "₹3,500",
       imageUrl:
-        "/images/products/Royal Heritage – Hand-Painted Elephant Pair.png",
+        "/images/products/Odisha/Royal Heritage – Hand-Painted Elephant Pair.png",
     },
     {
       id: "top-3",
@@ -56,7 +56,7 @@ export default function HomePage() {
       ratingText: "5 / 5.0 (14 verified collectors)",
       priceDisplay: "₹1,500",
       imageUrl:
-        "/images/products/Sacred Srinathji Gold-Leaf Pichwai Miniature Painting.png",
+        "/images/products/Rajasthan/Sacred Srinathji Gold-Leaf Pichwai Miniature Painting.png",
     },
   ];
 
@@ -72,7 +72,7 @@ export default function HomePage() {
       editionNote: "Hand-Cut Cloth • Generational Appliqué",
       priceDisplay: "₹3,200",
       imageUrl:
-        "/images/products/Royal Heritage – Handcrafted Pipili Appliqué Wall Hanging_1.png",
+        "/images/products/Odisha/Royal Heritage – Handcrafted Pipili Appliqué Wall Hanging_1.png",
     },
     {
       id: "drop-2",
@@ -83,7 +83,7 @@ export default function HomePage() {
       editionNote: "Generational Clay • Matte White Finish",
       priceDisplay: "₹127",
       imageUrl:
-        "/images/products/Modern Ethnic Ceramic Vase – Ivory Minimalist Edition.png",
+        "/images/products/Gujarat/Modern Ethnic Ceramic Vase – Ivory Minimalist Edition.png",
     },
     {
       id: "drop-3",
@@ -94,7 +94,7 @@ export default function HomePage() {
       editionNote: "Natural Mineral Pigments • 24K Gold Leaf",
       priceDisplay: "₹1,500",
       imageUrl:
-        "/images/products/Sacred Srinathji Gold-Leaf Pichwai Miniature Painting.png",
+        "/images/products/Rajasthan/Sacred Srinathji Gold-Leaf Pichwai Miniature Painting.png",
     },
   ];
 
@@ -147,7 +147,7 @@ export default function HomePage() {
       provenanceTag: "Raghurajpur, Puri • Odisha",
       priceDisplay: "₹4,500",
       slug: "jagannath-divine-heritage-pattachitra",
-      imageUrl: "/images/products/Odisha Pattachitra painting with Frame.png",
+      imageUrl: "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
     },
     {
       id: "reg-craft-palace-pattachitra",
@@ -156,7 +156,7 @@ export default function HomePage() {
       provenanceTag: "Raghurajpur, Puri • Odisha",
       priceDisplay: "₹5,800",
       slug: "divine-court-of-the-gods-pattachitra",
-      imageUrl: "/images/products/Indian Mythological Palace Painting in Framed.png",
+      imageUrl: "/images/products/Odisha/Indian Mythological Palace Painting in Framed.png",
     },
     {
       id: "reg-craft-trinity-pattachitra",
@@ -165,7 +165,7 @@ export default function HomePage() {
       provenanceTag: "Raghurajpur, Puri • Odisha",
       priceDisplay: "₹6,500",
       slug: "jagannath-trinity-divine-heritage-pattachitra",
-      imageUrl: "/images/products/Jagannath Trinity Divine Heritage Pattachitra with Frame.png",
+      imageUrl: "/images/products/Odisha/Jagannath Trinity Divine Heritage Pattachitra with Frame.png",
     },
     {
       id: "reg-craft-krishna-pattachitra",
@@ -174,7 +174,7 @@ export default function HomePage() {
       provenanceTag: "Raghurajpur, Puri • Odisha",
       priceDisplay: "₹7,200",
       slug: "divine-krishna-leela-radha-krishna-pattachitra",
-      imageUrl: "/images/products/Divine Krishna Leela – Radha Krishna Pattachitra with Frame.png",
+      imageUrl: "/images/products/Odisha/Divine Krishna Leela – Radha Krishna Pattachitra with Frame.png",
     },
     {
       id: "reg-craft-sambalpur-lantern",
@@ -183,7 +183,7 @@ export default function HomePage() {
       provenanceTag: "Sambalpur • Western Odisha",
       priceDisplay: "₹1,850",
       slug: "sambalpur-heritage-handcrafted-terracotta-lantern",
-      imageUrl: "/images/products/Sambalpur Terracotta decorative lantern.png",
+      imageUrl: "/images/products/Odisha/Sambalpur Terracotta decorative lantern.png",
     },
     {
       id: "reg-craft-balasore-horses",
@@ -192,7 +192,7 @@ export default function HomePage() {
       provenanceTag: "Balasore • Coastal Odisha",
       priceDisplay: "₹3,200",
       slug: "balasore-heritage-handcrafted-terracotta-horse-pair",
-      imageUrl: "/images/products/Balasore Heritage –Handcrafted  Terracotta Horse Figurines.png",
+      imageUrl: "/images/products/Odisha/Balasore Heritage –Handcrafted  Terracotta Horse Figurines.png",
     },
     {
       id: "reg-craft-puri-masks",
@@ -201,7 +201,7 @@ export default function HomePage() {
       provenanceTag: "Puri • Coastal Odisha",
       priceDisplay: "₹2,800",
       slug: "divine-expressions-kali-tiger-papier-mache-mask-set",
-      imageUrl: "/images/products/Divine Expressions – Handcrafted Traditional Mask Pair.png",
+      imageUrl: "/images/products/Odisha/Divine Expressions – Handcrafted Traditional Mask Pair.png",
     },
     {
       id: "reg-craft-bargarh-elephants",
@@ -210,7 +210,7 @@ export default function HomePage() {
       provenanceTag: "Bargarh • Western Odisha",
       priceDisplay: "₹3,500",
       slug: "royal-heritage-hand-painted-wooden-elephant-pair",
-      imageUrl: "/images/products/Royal Heritage – Hand-Painted Elephant Pair.png",
+      imageUrl: "/images/products/Odisha/Royal Heritage – Hand-Painted Elephant Pair.png",
     },
     {
       id: "reg-craft-dhokra-elephant",
@@ -219,7 +219,7 @@ export default function HomePage() {
       provenanceTag: "Sadeibareni, Dhenkanal • Odisha",
       priceDisplay: "₹8,500",
       slug: "royal-procession-handcrafted-dhokra-elephant-sculpture",
-      imageUrl: "/images/products/Royal Procession – Handcrafted Dhokra Brass Elephant.png",
+      imageUrl: "/images/products/Odisha/Royal Procession – Handcrafted Dhokra Brass Elephant.png",
     },
     {
       id: "reg-craft-dhokra-musician",
@@ -228,7 +228,7 @@ export default function HomePage() {
       provenanceTag: "Sadeibareni, Dhenkanal • Odisha",
       priceDisplay: "₹4,800",
       slug: "tribal-rhythms-handcrafted-dhokra-musician-sculpture",
-      imageUrl: "/images/products/Tribal Rhythms – Handcrafted Dhokra Musician Sculpture.png",
+      imageUrl: "/images/products/Odisha/Tribal Rhythms – Handcrafted Dhokra Musician Sculpture.png",
     },
     {
       id: "reg-craft-pipili-applique",
@@ -237,7 +237,7 @@ export default function HomePage() {
       provenanceTag: "Pipili, Puri • Odisha",
       priceDisplay: "₹3,200",
       slug: "royal-heritage-handcrafted-pipili-applique-wall-hanging",
-      imageUrl: "/images/products/Royal Heritage – Handcrafted Pipili Appliqué Wall Hanging_1.png",
+      imageUrl: "/images/products/Odisha/Royal Heritage – Handcrafted Pipili Appliqué Wall Hanging_1.png",
     },
     {
       id: "reg-craft-vase",
@@ -246,7 +246,7 @@ export default function HomePage() {
       provenanceTag: "Bhuj, Kutch • Gujarat",
       priceDisplay: "₹127",
       slug: "modern-ethnic-ceramic-vase-terracotta-indigenous-pattern",
-      imageUrl: "/images/products/Modern Ethnic Ceramic Vase – Ivory Minimalist Edition.png",
+      imageUrl: "/images/products/Gujarat/Modern Ethnic Ceramic Vase – Ivory Minimalist Edition.png",
     },
     {
       id: "reg-craft-pichwai",
@@ -255,7 +255,7 @@ export default function HomePage() {
       provenanceTag: "Bhilwara • Rajasthan",
       priceDisplay: "₹1,500",
       slug: "sacred-srinathji-gold-leaf-pichwai-miniature",
-      imageUrl: "/images/products/Sacred Srinathji Gold-Leaf Pichwai Miniature Painting.png",
+      imageUrl: "/images/products/Rajasthan/Sacred Srinathji Gold-Leaf Pichwai Miniature Painting.png",
     },
     {
       id: "reg-craft-floral",
@@ -264,7 +264,7 @@ export default function HomePage() {
       provenanceTag: "Jaipur • Rajasthan",
       priceDisplay: "₹2,499",
       slug: "jaipur-textured-floral-bouquet-painting",
-      imageUrl: "/images/products/Textured Ginkgo Branch at Sunset.png",
+      imageUrl: "/images/products/Rajasthan/Textured Ginkgo Branch at Sunset.png",
     },
     {
       id: "reg-craft-jodhpur-floral",
@@ -273,7 +273,7 @@ export default function HomePage() {
       provenanceTag: "Jodhpur • Rajasthan",
       priceDisplay: "₹2,499",
       slug: "jodhpur-textured-floral-bouquet-painting",
-      imageUrl: "/images/products/Textured Oil Bouquet in Ceramic Vase.png",
+      imageUrl: "/images/products/Rajasthan/Textured Oil Bouquet in Ceramic Vase.png",
     },
     {
       id: "reg-craft-magnolia",
@@ -282,7 +282,7 @@ export default function HomePage() {
       provenanceTag: "Jodhpur • Rajasthan",
       priceDisplay: "₹2,799",
       slug: "jodhpur-textured-magnolia-floral-vase-painting",
-      imageUrl: "/images/products/Painterly Magnolia Branch in Glazed Vase.png",
+      imageUrl: "/images/products/Rajasthan/Painterly Magnolia Branch in Glazed Vase.png",
     },
   ];
 
@@ -369,7 +369,7 @@ export default function HomePage() {
             <div className="lg:col-span-5 relative">
               <div className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden border border-[#DDD5C8] shadow-md bg-[#ECE6DC] group">
                 <img
-                  src="/images/products/Modern Ethnic Ceramic Vase – Ivory Minimalist Edition.png"
+                  src="/images/products/Gujarat/Modern Ethnic Ceramic Vase – Ivory Minimalist Edition.png"
                   alt="Modern Ethnic Ceramic Vase – Terracotta Vase with Indigenous Pattern"
                   width={600}
                   height={750}

@@ -729,7 +729,7 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
                   src={
                     currentProduct.artisan?.avatarUrl ||
                     (currentProduct.images && currentProduct.images[0]?.url) ||
-                    "/images/products/Odisha Pattachitra painting with Frame.png"
+                    "/images/products/Odisha/Odisha Pattachitra painting with Frame.png"
                   }
                   alt={currentProduct.artisan?.artisanName || currentProduct.byline || "Master Artisan"}
                   width={40}
@@ -893,7 +893,7 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
                       src={
                         currentProduct.images && currentProduct.images.length > 1
                           ? currentProduct.images[1].url
-                          : "/images/products/Odisha Pattachitra painting.png"
+                          : "/images/products/Odisha/Odisha Pattachitra painting.png"
                       }
                       alt={`${currentProduct.title} canvas detail`}
                       width={1200}
@@ -925,7 +925,7 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
                           ? currentProduct.images[2].url
                           : currentProduct.images && currentProduct.images.length > 1
                           ? currentProduct.images[1].url
-                          : "/images/products/Odisha Pattachitra painting Original.png"
+                          : "/images/products/Odisha/Odisha Pattachitra painting Original.png"
                       }
                       alt={`${currentProduct.title} original scroll`}
                       width={1200}
