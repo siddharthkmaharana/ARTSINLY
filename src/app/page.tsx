@@ -98,7 +98,7 @@ export default function HomePage() {
     },
   ];
 
-  // 4 Featured Artisans matching the Our Artisans page
+  // 3 Featured Artisans matching the Our Artisans page
   const featuredArtisans = [
     {
       id: "artisan-chitrakara",
@@ -123,15 +123,6 @@ export default function HomePage() {
       artisanWithLocation: "Master Folk Artisans • Bargarh",
       giCode: "GI-IN-OD-PMC",
       imageUrl: "/images/Artisans/Papier-Mäché and Wood Carving Artist.png",
-    },
-    {
-      id: "artisan-2",
-      slug: "meenakshi-rathore",
-      craftTitle: "Meenakari Jewellery",
-      artisanWithLocation: "Meenakshi Rathore • Jaipur",
-      giCode: "GI-IN-RJ-102",
-      imageUrl:
-        "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&fm=webp&w=600&q=80",
     },
   ];
 
@@ -712,7 +703,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-7 mb-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 mb-10">
             {featuredArtisans.map((artisan) => (
               <Link
                 key={artisan.id}

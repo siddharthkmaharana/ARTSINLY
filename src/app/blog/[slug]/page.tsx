@@ -58,10 +58,10 @@ const BLOG_POSTS: Record<string, BlogPostItem> = {
     imageUrl:
       "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&fm=webp&w=1200&q=85",
     publishedDate: "September 2026",
-    authorName: "Ismail Mohammed Khatri",
-    authorRole: "UNESCO Seal of Excellence & Master Ajrakh Artisan",
+    authorName: "Khatri Ajrakh Guild",
+    authorRole: "Heritage Master Block Printers",
     authorBio:
-      "Descended from the generational Khatri clan of Dhamadka, Kutch, Ismail is internationally recognized for reviving natural madder and desert indigo resist printing. His practice rigorously maintains 16 stages of river biochemistry.",
+      "Descended from the generational Khatri clan of Dhamadka, Kutch, the artisan guild rigorously maintains 16 stages of river biochemistry, indigo vats, and hand-carved teak block printing.",
     authorAvatar:
       "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&fm=webp&w=300&q=80",
     content: [

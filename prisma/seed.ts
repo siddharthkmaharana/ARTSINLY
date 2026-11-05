@@ -155,31 +155,31 @@ async function main() {
     },
   });
 
-  // Master 2: Meenakshi Rathore (Meenakari & Blue Pottery)
-  const userMeenakshi = await prisma.user.create({
+  // Master 2: Master Chitrakara Artisans (Raghurajpur Pattachitra)
+  const userChitrakara = await prisma.user.create({
     data: {
-      email: "meenakshi.rathore@artsinly.com",
-      name: "Meenakshi Rathore",
+      email: "chitrakara.guild@artsinly.com",
+      name: "Master Chitrakara Artisans",
       passwordHash: hashPassword("password123"),
       role: Role.SELLER,
-      avatar: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=600&q=80",
+      avatar: "/images/Artisans/Pattachitra Painter.png",
     },
   });
 
-  const sellerMeenakshi = await prisma.sellerProfile.create({
+  const sellerChitrakara = await prisma.sellerProfile.create({
     data: {
-      userId: userMeenakshi.id,
-      shopName: "Jaipur Gem & Quartz Studio",
-      slug: "meenakshi-rathore",
-      artisanName: "Meenakshi Rathore",
-      craftTradition: "Meenakari Jewellery",
-      state: "Rajasthan",
-      locality: "Jaipur",
-      giCode: "GI-IN-RJ-102",
+      userId: userChitrakara.id,
+      shopName: "Raghurajpur Heritage Chitrakara Guild",
+      slug: "raghurajpur-chitrakara-guild",
+      artisanName: "Master Chitrakara Artisans",
+      craftTradition: "Pattachitra Painting",
+      state: "Odisha",
+      locality: "Raghurajpur, Puri",
+      giCode: "GI-IN-OD-88",
       isVerified: true,
-      yearsOfExperience: 22,
-      bio: "Renowned jeweler and ceramicist reviving 16th-century Persian enamel faience.",
-      avatarUrl: userMeenakshi.avatar,
+      yearsOfExperience: 34,
+      bio: "Generational master Chitrakara painters preserving centuries-old sacred Pattachitra on treated cotton canvas using natural mineral and stone pigments.",
+      avatarUrl: userChitrakara.avatar,
     },
   });
 

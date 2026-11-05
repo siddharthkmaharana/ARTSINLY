@@ -451,8 +451,8 @@ export default function AboutPage() {
                 <div className="flex items-center gap-4 mb-4">
                   <div className="relative w-16 h-16 rounded-full overflow-hidden bg-[#ECE6DC] shrink-0 border border-[#D5CFC5]">
                     <img
-                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&fm=webp&w=300&q=80"
-                      alt="Ismail Mohammed Khatri, Master Block Printer"
+                      src="/images/Artisans/Pattachitra Painter.png"
+                      alt="Master Chitrakara Artisans, Raghurajpur"
                       width={64}
                       height={64}
                       loading="lazy"
@@ -462,23 +462,23 @@ export default function AboutPage() {
                   </div>
                   <div>
                     <h3 className="font-serif text-base font-semibold text-[#1E1E1C]">
-                      Ismail Mohammed Khatri
+                      Master Chitrakara Artisans
                     </h3>
                     <p className="text-[11px] text-[#C2410C] font-medium">
-                      9th-Gen Ajrakh Master &amp; Padma Shri
+                      Generational Pattachitra Masters
                     </p>
                     <p className="text-[10px] text-[#8C877E]">
-                      Ajrakhpur, Gujarat • Living Legend
+                      Raghurajpur, Odisha • Heritage Guild
                     </p>
                   </div>
                 </div>
                 <p className="text-xs text-[#6E6A62] leading-relaxed font-light">
-                  Pioneer of pure natural dyeing revitalization across the subcontinent. Mentors apprentice circles in mineral resist chemistry, harda washing, and double-sided symmetrical block printing.
+                  Preserving centuries-old sacred Pattachitra on treated cotton canvas using stone-ground mineral pigments, conch shell white, and ancestral tamarind seed adhesives.
                 </p>
               </div>
               <div className="mt-4 pt-3 border-t border-[#F0ECE4] text-[11px]">
-                <Link href="/catalog" className="text-[#C2410C] hover:underline font-medium inline-flex items-center gap-1">
-                  <span>Explore Ajrakh Masterpieces</span>
+                <Link href="/artisans/raghurajpur-chitrakara-guild" className="text-[#C2410C] hover:underline font-medium inline-flex items-center gap-1">
+                  <span>Explore Chitrakara Masterpieces</span>
                   <ArrowRight className="w-3 h-3" />
                 </Link>
               </div>

@@ -53,60 +53,6 @@ const ARTISANS_SHOWCASE: ArtisanShowcaseItem[] = [
     giCode: "GI-IN-OD-PMC",
     imageUrl: "/images/Artisans/Papier-Mäché and Wood Carving Artist.png",
   },
-  {
-    id: "artisan-2",
-    slug: "meenakshi-rathore",
-    craftTitle: "Meenakari Jewellery",
-    artisanWithLocation: "Meenakshi Rathore • Jaipur",
-    giCode: "GI-IN-RJ-102",
-    imageUrl:
-      "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&fm=webp&w=600&q=80",
-  },
-  {
-    id: "artisan-3",
-    slug: "rameshwar-chitrakar",
-    craftTitle: "Kalamkari Painting",
-    artisanWithLocation: "Rameshwar Chitrakar • Srikalahasti",
-    giCode: "GI-IN-AP-018",
-    imageUrl:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&fm=webp&w=600&q=80",
-  },
-  {
-    id: "artisan-4",
-    slug: "bhuri-bai",
-    craftTitle: "Gond Art",
-    artisanWithLocation: "Bhuri Bai • Dindori",
-    giCode: "GI-IN-MP-204",
-    imageUrl:
-      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&fm=webp&w=600&q=80",
-  },
-  {
-    id: "artisan-6",
-    slug: "zarina-begum",
-    craftTitle: "Zardozi Embroidery",
-    artisanWithLocation: "Zarina Begum • Varanasi",
-    giCode: "GI-IN-UP-177",
-    imageUrl:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&fm=webp&w=600&q=80",
-  },
-  {
-    id: "artisan-7",
-    slug: "kalyan-joshi",
-    craftTitle: "Phad Painting",
-    artisanWithLocation: "Kalyan Joshi • Bhilwara",
-    giCode: "GI-IN-RJ-119",
-    imageUrl:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&fm=webp&w=600&q=80",
-  },
-  {
-    id: "artisan-8",
-    slug: "ismail-khatri",
-    craftTitle: "Block Printing",
-    artisanWithLocation: "Ismail Mohammad Khatri • Ajrakhpur",
-    giCode: "GI-IN-GJ-063",
-    imageUrl:
-      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&fm=webp&w=600&q=80",
-  },
 ];
 
 export default function ArtisansPage() {
