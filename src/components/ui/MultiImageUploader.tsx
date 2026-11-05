@@ -287,7 +287,7 @@ export default function MultiImageUploader({
           <div className="grid grid-cols-1 sm:grid-cols-12 gap-2">
             <input
               type="url"
-              placeholder="https://images.unsplash.com/... or cloud image URL"
+              placeholder="Enter image URL or select from local gallery"
               value={urlInput}
               onChange={(e) => setUrlInput(e.target.value)}
               className="sm:col-span-8 text-xs px-3 py-2 bg-white border border-[#D5CFC5] rounded-lg focus:outline-none focus:border-[#C2410C]"

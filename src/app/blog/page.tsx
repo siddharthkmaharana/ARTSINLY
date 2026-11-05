@@ -28,7 +28,7 @@ const BLOG_POSTS: BlogPostItem[] = [
     excerpt:
       "On the banks of river Banas, clay is venerated as divine mother earth. Explore how terracotta votive plaques preserve 900 years of tribal lore.",
     imageUrl:
-      "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?auto=format&fit=crop&fm=webp&w=1000&q=85",
+      "/images/products/Odisha/Sambalpur Terracotta decorative lantern.png",
     publishedDate: "October 2026",
     author: "Curatorial Field Notes • Nathdwara & Molela Guild",
     content: [
@@ -47,7 +47,7 @@ const BLOG_POSTS: BlogPostItem[] = [
     excerpt:
       "Derived from \"Azrak\", meaning blue in Arabic, Ajrakh is not merely textile printing—it is astronomy, river biochemistry, and devotional discipline.",
     imageUrl:
-      "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&fm=webp&w=1000&q=85",
+      "/images/products/Odisha/Royal Heritage – Handcrafted Pipili Appliqué Wall Hanging_1.png",
     publishedDate: "September 2026",
     author: "Editorial Pavilion • Dhamadka & Ajrakhpur Guilds",
     content: [
@@ -66,7 +66,7 @@ const BLOG_POSTS: BlogPostItem[] = [
     excerpt:
       "In an era of synthetic 3D printing, the uneven kiss of firewood kiln smoke and the tremor of an artisan's hand is the ultimate luxury.",
     imageUrl:
-      "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&fm=webp&w=1000&q=85",
+      "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
     publishedDate: "October 2026",
     author: "Design Philosophy • Curatorial Pavilion",
     content: [

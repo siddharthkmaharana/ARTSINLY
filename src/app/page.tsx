@@ -28,13 +28,13 @@ export default function HomePage() {
     {
       id: "top-1",
       rankBadge: "Top #1",
-      slug: "modern-ethnic-ceramic-vase-terracotta-indigenous-pattern",
-      originAndCraft: "GUJARAT • TERRACOTTA POTTERY",
-      title: "Modern Ethnic Ceramic Vase – Terracotta Vase with Indigenous Pattern",
-      ratingText: "4.92 / 5.0 (38 verified collectors)",
-      priceDisplay: "₹127",
+      slug: "sambalpur-heritage-handcrafted-terracotta-lantern",
+      originAndCraft: "ODISHA • TERRACOTTA POTTERY",
+      title: "Sambalpur Heritage – Handcrafted Terracotta Lantern",
+      ratingText: "4.95 / 5.0 (42 verified collectors)",
+      priceDisplay: "₹1,850",
       imageUrl:
-        "/images/products/Gujarat/Modern Ethnic Ceramic Vase – Ivory Minimalist Edition.png",
+        "/images/products/Odisha/Sambalpur Terracotta decorative lantern.png",
     },
     {
       id: "top-2",
@@ -76,14 +76,14 @@ export default function HomePage() {
     },
     {
       id: "drop-2",
-      badgeText: "FRESH FROM LOOM",
-      slug: "modern-ethnic-ceramic-vase-terracotta-indigenous-pattern",
-      originAndCraft: "GUJARAT • TERRACOTTA POTTERY",
-      title: "Modern Ethnic Ceramic Vase – Terracotta Vase with Indigenous Pattern",
-      editionNote: "Generational Clay • Matte White Finish",
-      priceDisplay: "₹127",
+      badgeText: "KILN FIRED",
+      slug: "balasore-heritage-handcrafted-terracotta-horse-pair",
+      originAndCraft: "ODISHA • TERRACOTTA POTTERY",
+      title: "Balasore Heritage – Handcrafted Terracotta Horse Pair",
+      editionNote: "Wood-Fired Red Clay • Traditional Sculpting",
+      priceDisplay: "₹3,200",
       imageUrl:
-        "/images/products/Gujarat/Modern Ethnic Ceramic Vase – Ivory Minimalist Edition.png",
+        "/images/products/Odisha/Balasore Heritage –Handcrafted  Terracotta Horse Figurines.png",
     },
     {
       id: "drop-3",
@@ -186,7 +186,7 @@ export default function HomePage() {
       id: "reg-craft-puri-masks",
       title: "Divine Expressions – Kali & Tiger Papier-Mâché Mask Set",
       craftType: "Papier-Mâché & Mask Craft",
-      provenanceTag: "Puri • Coastal Odisha",
+      provenanceTag: "Bargarh • Western Odisha",
       priceDisplay: "₹2,800",
       slug: "divine-expressions-kali-tiger-papier-mache-mask-set",
       imageUrl: "/images/products/Odisha/Divine Expressions – Handcrafted Traditional Mask Pair.png",
@@ -228,19 +228,10 @@ export default function HomePage() {
       imageUrl: "/images/products/Odisha/Royal Heritage – Handcrafted Pipili Appliqué Wall Hanging_1.png",
     },
     {
-      id: "reg-craft-vase",
-      title: "Modern Ethnic Ceramic Vase – Terracotta Vase with Indigenous Pattern",
-      craftType: "Terracotta Pottery",
-      provenanceTag: "Bhuj, Kutch • Gujarat",
-      priceDisplay: "₹127",
-      slug: "modern-ethnic-ceramic-vase-terracotta-indigenous-pattern",
-      imageUrl: "/images/products/Gujarat/Modern Ethnic Ceramic Vase – Ivory Minimalist Edition.png",
-    },
-    {
       id: "reg-craft-pichwai",
       title: "Sacred Srinathji Gold-Leaf Pichwai Miniature Painting",
       craftType: "Miniature Painting",
-      provenanceTag: "Bhilwara • Rajasthan",
+      provenanceTag: "Nathdwara • Rajasthan",
       priceDisplay: "₹1,500",
       slug: "sacred-srinathji-gold-leaf-pichwai-miniature",
       imageUrl: "/images/products/Rajasthan/Sacred Srinathji Gold-Leaf Pichwai Miniature Painting.png",
@@ -357,8 +348,8 @@ export default function HomePage() {
             <div className="lg:col-span-5 relative">
               <div className="relative aspect-[4/5] w-full rounded-2xl overflow-hidden border border-[#DDD5C8] shadow-md bg-[#ECE6DC] group">
                 <img
-                  src="/images/products/Gujarat/Modern Ethnic Ceramic Vase – Ivory Minimalist Edition.png"
-                  alt="Modern Ethnic Ceramic Vase – Terracotta Vase with Indigenous Pattern"
+                  src="/images/products/Odisha/Sambalpur Terracotta decorative lantern.png"
+                  alt="Sambalpur Heritage – Handcrafted Terracotta Lantern"
                   width={600}
                   height={750}
                   fetchPriority="high"
@@ -369,19 +360,19 @@ export default function HomePage() {
                 {/* Subtle Luxury Plaque Caption Overlay */}
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#1E1E1C]/85 via-[#1E1E1C]/40 to-transparent p-6 text-white flex flex-col justify-end">
                   <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#C2410C]">
-                    FEATURED MASTERPIECE • KUTCH GUILD
+                    FEATURED MASTERPIECE • SAMBALPUR GUILD
                   </span>
                   <h3 className="font-serif text-lg sm:text-xl font-normal text-white mt-1 mb-1">
-                    Modern Ethnic Ceramic Vase
+                    Sambalpur Heritage Terracotta Lantern
                   </h3>
                   <p className="text-xs text-white/80 font-light">
-                    Hand-thrown reduction-fired terracotta with tribal slip motifs by Devendra Prajapati.
+                    Wheel-thrown alluvial red-clay lantern with hand-carved floral lattice cutouts by Master Kumbhar Artisans.
                   </p>
 
                   <div className="mt-3 flex items-center justify-between text-[11px] pt-2 border-t border-white/20">
-                    <span className="text-white/90 font-medium">GI-IN-GJ-449</span>
+                    <span className="text-white/90 font-medium">GI-IN-OD-POT</span>
                     <Link
-                      href="/products/modern-ethnic-ceramic-vase-terracotta-indigenous-pattern"
+                      href="/products/sambalpur-heritage-handcrafted-terracotta-lantern"
                       className="hover:underline text-white font-medium inline-flex items-center gap-1"
                     >
                       <span>Acquire Piece</span>

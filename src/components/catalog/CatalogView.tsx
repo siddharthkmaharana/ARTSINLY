@@ -58,7 +58,6 @@ const ARTISAN_LINEAGE_OPTIONS: ArtisanLineageOption[] = [
   { id: "bargarh", label: "Master Folk Artisans (Bargarh Woodcraft)", artisanName: "Bargarh" },
   { id: "dhokra", label: "Sadeibareni Dhokra Guild (Lost-Wax Bell Metal)", artisanName: "Dhokra" },
   { id: "pipili", label: "Pipili Appliqué Guild (Heritage Patchwork)", artisanName: "Pipili" },
-  { id: "devendra", label: "Devendra Prajapati (Kutch Pottery)", artisanName: "Devendra Prajapati" },
   { id: "pichwai", label: "Nathdwara Pichwai Atelier (Gold Leaf)", artisanName: "Pichwai" },
   { id: "studios", label: "Jodhpur & Jaipur Art Studios", artisanName: "Studio" },
 ];

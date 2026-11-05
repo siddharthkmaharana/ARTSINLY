@@ -8,7 +8,7 @@ function formatProduct(p: any) {
     p.images?.find((img: any) => img.isPrimary)?.url ||
     p.images?.[0]?.url ||
     p.imageUrl ||
-    "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=800&q=80";
+    "/images/products/Odisha/Odisha Pattachitra painting with Frame.png";
 
   const pricePaise =
     typeof p.pricePaise === "number"
@@ -70,7 +70,7 @@ function formatProduct(p: any) {
         p.seller?.avatarUrl ||
         p.artisan?.avatarUrl ||
         p.artisan?.imageUrl ||
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=300&q=80",
+        "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
     },
     materials: p.materials || "",
     dimensions: p.dimensions || "",

@@ -18,7 +18,7 @@ export async function generateMetadata({
   let description =
     "Authentic Indian artisanal creation handcrafted by master makers with verifiable GI credentials.";
   let imageUrl =
-    "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=1200&q=85";
+    "/images/products/Odisha/Odisha Pattachitra painting with Frame.png";
 
   try {
     const dbProduct = await prisma.product.findUnique({
@@ -56,8 +56,6 @@ export async function generateMetadata({
       ? PRODUCTS.find((p) => p.id === "prod-sadeibareni-dhokra-elephant")
       : slug === "tribal-rhythms-handcrafted-dhokra-musician-sculpture" || slug === "tribal-rhythms-dhokra-musician"
       ? PRODUCTS.find((p) => p.id === "prod-sadeibareni-dhokra-musician")
-      : slug === "modern-ethnic-ceramic-vase-ivory-minimalist-edition" || slug === "modern-ethnic-ceramic-vase-terracotta-vase" || slug === "modern-ethnic-ceramic-vase" || slug === "modern-ethnic-ceramic-vase-terracotta"
-      ? PRODUCTS.find((p) => p.id === "prod-vase")
       : slug === "sacred-srinathji-gold-leaf-pichwai-miniature-painting" || slug === "sacred-srinathji-gold-leaf-pichwai" || slug === "sacred-srinathji-pichwai"
       ? PRODUCTS.find((p) => p.id === "prod-pichwai")
       : slug === "jaipur-textured-floral-bouquet-painting" || slug === "textured-ginkgo-branch-at-sunset" || slug === "textured-floral-bouquet-handcrafted-vase-painting" || slug === "textured-floral-bouquet-painting" || slug === "textured-floral-bouquet"

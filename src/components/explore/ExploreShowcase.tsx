@@ -112,8 +112,6 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
       ? PRODUCTS.find((p) => p.id === "prod-sadeibareni-dhokra-elephant")
       : productSlug === "tribal-rhythms-handcrafted-dhokra-musician-sculpture" || productSlug === "tribal-rhythms-dhokra-musician"
       ? PRODUCTS.find((p) => p.id === "prod-sadeibareni-dhokra-musician")
-      : productSlug === "modern-ethnic-ceramic-vase-ivory-minimalist-edition" || productSlug === "modern-ethnic-ceramic-vase-terracotta-vase" || productSlug === "modern-ethnic-ceramic-vase" || productSlug === "modern-ethnic-ceramic-vase-terracotta"
-      ? PRODUCTS.find((p) => p.id === "prod-vase")
       : productSlug === "sacred-srinathji-gold-leaf-pichwai-miniature-painting" || productSlug === "sacred-srinathji-gold-leaf-pichwai" || productSlug === "sacred-srinathji-pichwai"
       ? PRODUCTS.find((p) => p.id === "prod-pichwai")
       : productSlug === "jaipur-textured-floral-bouquet-painting" || productSlug === "textured-ginkgo-branch-at-sunset" || productSlug === "textured-floral-bouquet-handcrafted-vase-painting" || productSlug === "textured-floral-bouquet-painting" || productSlug === "textured-floral-bouquet"
@@ -250,7 +248,7 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
       : [
           {
             id: "img-default-1",
-            url: "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&fm=webp&w=1200&q=85",
+            url: "/images/products/Odisha/Sambalpur Terracotta decorative lantern.png",
             altText: currentProduct.title,
             isPrimary: true,
           },

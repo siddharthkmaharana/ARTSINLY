@@ -118,7 +118,7 @@ export function ProductCard({ product, variant = "default" }: ProductCardProps) 
   const primaryImage =
     product.images.find((img) => img.isPrimary)?.url ||
     product.images[0]?.url ||
-    "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&fm=webp&w=800&q=80";
+    "/images/products/Odisha/Odisha Pattachitra painting with Frame.png";
 
   const displayPrice = product.priceDisplay || `₹${(product.priceDollars || (product.pricePaise / 100)).toFixed(0)}`;
 
