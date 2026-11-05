@@ -101,13 +101,28 @@ export default function HomePage() {
   // 4 Featured Artisans matching the Our Artisans page
   const featuredArtisans = [
     {
-      id: "artisan-1",
-      slug: "devendra-prajapati",
-      craftTitle: "Pottery",
-      artisanWithLocation: "Devendra Prajapati • Kutch",
-      giCode: "GI-IN-GJ-449",
-      imageUrl:
-        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&fm=webp&w=600&q=80",
+      id: "artisan-chitrakara",
+      slug: "raghurajpur-chitrakara-guild",
+      craftTitle: "Pattachitra Painting",
+      artisanWithLocation: "Master Chitrakara Artisans • Raghurajpur",
+      giCode: "GI-IN-OD-88",
+      imageUrl: "/images/Artisans/Pattachitra Painter.png",
+    },
+    {
+      id: "artisan-pottery-odisha",
+      slug: "sambalpur-kumbhakar-pottery",
+      craftTitle: "Terracotta Pottery",
+      artisanWithLocation: "Master Kumbhar Artisans • Sambalpur",
+      giCode: "GI-IN-OD-POT",
+      imageUrl: "/images/Artisans/Pottery Artist.png",
+    },
+    {
+      id: "artisan-papiermache-wood",
+      slug: "bargarh-woodcraft-guild",
+      craftTitle: "Papier-Mâché & Woodcraft",
+      artisanWithLocation: "Master Folk Artisans • Bargarh",
+      giCode: "GI-IN-OD-PMC",
+      imageUrl: "/images/Artisans/Papier-Mäché and Wood Carving Artist.png",
     },
     {
       id: "artisan-2",
@@ -117,24 +132,6 @@ export default function HomePage() {
       giCode: "GI-IN-RJ-102",
       imageUrl:
         "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&fm=webp&w=600&q=80",
-    },
-    {
-      id: "artisan-3",
-      slug: "rameshwar-chitrakar",
-      craftTitle: "Kalamkari Painting",
-      artisanWithLocation: "Rameshwar Chitrakar • Srikalahasti",
-      giCode: "GI-IN-AP-018",
-      imageUrl:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&fm=webp&w=600&q=80",
-    },
-    {
-      id: "artisan-4",
-      slug: "bhuri-bai",
-      craftTitle: "Gond Art",
-      artisanWithLocation: "Bhuri Bai • Dindori",
-      giCode: "GI-IN-MP-204",
-      imageUrl:
-        "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&fm=webp&w=600&q=80",
     },
   ];
 
