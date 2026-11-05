@@ -30,16 +30,16 @@ const FALLBACK_ORDERS = [
     estimatedDelivery: "05 Oct 2026",
     items: [
       {
-        title: "Modern Ethnic Ceramic Vase – Terracotta Vase with Indigenous Pattern",
+        title: "Sambalpur Heritage – Handcrafted Terracotta Lantern",
         quantity: 1,
-        pricePaise: 12699,
-        imageUrl: "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=400&q=80",
-        artisanName: "Devendra Prajapati",
-        state: "Gujarat",
-        slug: "modern-ethnic-ceramic-vase-terracotta-indigenous-pattern",
+        pricePaise: 185000,
+        imageUrl: "/images/products/Odisha/Sambalpur Terracotta decorative lantern.png",
+        artisanName: "Master Kumbhar Artisans",
+        state: "Odisha",
+        slug: "sambalpur-heritage-handcrafted-terracotta-lantern",
       },
     ],
-    totalPaise: 12699,
+    totalPaise: 185000,
   },
 ];
 
@@ -94,7 +94,7 @@ function BuyerDashboardContent() {
                   status: item.status || "PENDING",
                   imageUrl:
                     item.product?.images?.[0]?.url ||
-                    "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=400&q=80",
+                    "/images/products/Odisha/Sambalpur Terracotta decorative lantern.png",
                   artisanName: item.sellerArtisanName || item.seller?.artisanName || "Master Artisan",
                   state: item.seller?.state || "Heritage Craft",
                   slug: item.product?.slug || "handcrafted-piece",

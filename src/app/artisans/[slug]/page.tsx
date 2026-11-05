@@ -24,7 +24,9 @@ export async function generateMetadata({
 }: ArtisanPageProps): Promise<Metadata> {
   const resolvedParams = await params;
   const slug = resolvedParams.slug;
-  const artisan = ARTISANS.find((a) => a.slug === slug || (slug === "puri-papiermache-guild" && a.slug === "bargarh-woodcraft-guild"));
+  const artisan = ARTISANS.find(
+    (a) => a.slug === slug || (slug === "puri-papiermache-guild" && a.slug === "bargarh-woodcraft-guild")
+  );
 
   if (!artisan) {
     return {
@@ -62,7 +64,9 @@ export async function generateMetadata({
 export default async function ArtisanProfilePage({ params }: ArtisanPageProps) {
   const resolvedParams = await params;
   const slug = resolvedParams.slug;
-  const artisan = ARTISANS.find((a) => a.slug === slug);
+  const artisan = ARTISANS.find(
+    (a) => a.slug === slug || (slug === "puri-papiermache-guild" && a.slug === "bargarh-woodcraft-guild")
+  );
 
   if (!artisan) {
     notFound();

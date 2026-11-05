@@ -55,10 +55,10 @@ export default function SellerOnboardingPage() {
   const [bio, setBio] = useState("");
   const [story, setStory] = useState("");
   const [bannerUrl, setBannerUrl] = useState(
-    "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=1200&q=85"
+    "/images/products/Odisha/Odisha Pattachitra painting with Frame.png"
   );
   const [avatarUrl, setAvatarUrl] = useState(
-    "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80"
+    "/images/Artisans/Pottery Artist.png"
   );
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -180,7 +180,7 @@ export default function SellerOnboardingPage() {
                       type="text"
                       value={artisanName}
                       onChange={(e) => setArtisanName(e.target.value)}
-                      placeholder="e.g. Devendra Prajapati"
+                      placeholder="e.g. Master Artisan Name"
                       className="w-full text-xs px-3.5 py-2.5 rounded-lg border border-[#DDD8CE] bg-[#FAF8F5] text-[#1E1E1C] placeholder-[#9E988E] focus:outline-none focus:border-[#C2410C]"
                     />
                   </div>

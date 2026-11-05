@@ -22,13 +22,13 @@ const BEST_SELLERS: BestSellerItem[] = [
   {
     id: "seller-1",
     rankBadge: "Top #1",
-    slug: "modern-ethnic-ceramic-vase-terracotta-indigenous-pattern",
-    originAndCraft: "GUJARAT • TERRACOTTA POTTERY",
-    title: "Modern Ethnic Ceramic Vase – Terracotta Vase with Indigenous Pattern",
-    ratingText: "4.92 / 5.0 (38 verified collectors)",
-    priceDisplay: "₹127",
+    slug: "sambalpur-heritage-handcrafted-terracotta-lantern",
+    originAndCraft: "ODISHA • TERRACOTTA POTTERY",
+    title: "Sambalpur Heritage – Handcrafted Terracotta Lantern",
+    ratingText: "4.95 / 5.0 (42 verified collectors)",
+    priceDisplay: "₹1,850",
     imageUrl:
-      "/images/products/Gujarat/Modern Ethnic Ceramic Vase – Ivory Minimalist Edition.png",
+      "/images/products/Odisha/Sambalpur Terracotta decorative lantern.png",
   },
   {
     id: "seller-2",

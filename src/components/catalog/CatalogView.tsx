@@ -54,14 +54,12 @@ interface ArtisanLineageOption {
 
 const ARTISAN_LINEAGE_OPTIONS: ArtisanLineageOption[] = [
   { id: "chitrakara", label: "Chitrakara Guild (Raghurajpur Pattachitra)", artisanName: "Chitrakara" },
-  { id: "devendra", label: "Devendra Prajapati (Kutch Pottery)", artisanName: "Devendra Prajapati" },
-  { id: "jamnalal", label: "Jamnalal Kumhar (Molela Terracotta)", artisanName: "Jamnalal Kumhar" },
-  { id: "ramswaroop", label: "Ram Swaroop Sharma (Moradabad Brass)", artisanName: "Ram Swaroop Sharma" },
-  { id: "subhash", label: "Subhash Karmakar (Dhokra Bell Metal)", artisanName: "Subhash Karmakar" },
-  { id: "malati", label: "Malati Ghosh (Nakshi Kantha)", artisanName: "Malati Ghosh" },
-  { id: "meenakshi", label: "Meenakshi Rathore (Blue Quartz)", artisanName: "Meenakshi Rathore" },
-  { id: "rameshwar", label: "Rameshwar Chitrakar (Kalamkari)", artisanName: "Rameshwar Chitrakar" },
-  { id: "bhuribai", label: "Bhuri Bai (Gond Art)", artisanName: "Bhuri Bai" },
+  { id: "kumbhar", label: "Master Kumbhar Guild (Terracotta Pottery)", artisanName: "Kumbhar" },
+  { id: "bargarh", label: "Master Folk Artisans (Bargarh Woodcraft)", artisanName: "Bargarh" },
+  { id: "dhokra", label: "Sadeibareni Dhokra Guild (Lost-Wax Bell Metal)", artisanName: "Dhokra" },
+  { id: "pipili", label: "Pipili Appliqué Guild (Heritage Patchwork)", artisanName: "Pipili" },
+  { id: "pichwai", label: "Nathdwara Pichwai Atelier (Gold Leaf)", artisanName: "Pichwai" },
+  { id: "studios", label: "Jodhpur & Jaipur Art Studios", artisanName: "Studio" },
 ];
 
 export function CatalogView() {

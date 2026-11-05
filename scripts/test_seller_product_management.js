@@ -250,7 +250,7 @@ async function runTests() {
       availableQuantity: "1",
       description: "Traditional palm leaf etching created with natural mineral dyes and vegetable lacquer.",
       isMadeToOrder: false,
-      imageUrl: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=600&q=80",
+      imageUrl: "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
     };
 
     const postRes = await fetchUrl("http://localhost:3000/api/seller/products", {
@@ -314,13 +314,13 @@ async function runTests() {
       status: "DRAFT",
       images: [
         {
-          url: "https://images.unsplash.com/photo-1599707367072-cd6ada2bc375?auto=format&fit=crop&w=600&q=80",
+          url: "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
           altText: "Konark Stone Carving Front View",
           isPrimary: true,
           displayOrder: 0,
         },
         {
-          url: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=600&q=80",
+          url: "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
           altText: "Konark Stone Carving Relief Detail",
           isPrimary: false,
           displayOrder: 1,

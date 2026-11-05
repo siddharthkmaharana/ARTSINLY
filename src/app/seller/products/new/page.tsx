@@ -32,7 +32,7 @@ export default function NewProductListingPage() {
     careInstructions: "Wipe gently with damp cotton cloth.",
     description: "",
     story: "",
-    imageUrl: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=800&q=80",
+    imageUrl: "/images/products/Odisha/Sambalpur Terracotta decorative lantern.png",
   });
 
   const handleChange = (

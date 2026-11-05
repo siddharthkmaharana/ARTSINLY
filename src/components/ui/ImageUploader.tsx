@@ -242,7 +242,7 @@ export default function ImageUploader({
           <div className="flex gap-2">
             <input
               type="url"
-              placeholder="https://images.unsplash.com/... or https://res.cloudinary.com/..."
+              placeholder="Enter image URL or select from local gallery"
               value={urlInput}
               onChange={(e) => setUrlInput(e.target.value)}
               className="flex-1 text-xs px-3 py-2 bg-white border border-[#D5CFC5] rounded-md focus:outline-none focus:border-[#1E1E1C]"

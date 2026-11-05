@@ -38,7 +38,7 @@ export default function AboutPage() {
       description:
         "Riverbed clay reduction firing and 16-stage natural indigo mud-resist printing practiced in Dhamadka and Khavda.",
       imageUrl:
-        "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&fm=webp&w=800&q=80",
+        "/images/products/Rajasthan/Painterly Magnolia Branch in Glazed Vase.png",
     },
     {
       region: "Rajasthan • Nathdwara & Jaipur",
@@ -47,7 +47,7 @@ export default function AboutPage() {
       description:
         "Crushed lapis lazuli on hand-loomed khadi with 24K gold leafing, and clay-free quartz faience low-fired in wood kilns.",
       imageUrl:
-        "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&fm=webp&w=800&q=80",
+        "/images/products/Odisha/Sambalpur Terracotta decorative lantern.png",
     },
     {
       region: "Andhra Pradesh • Srikalahasti",
@@ -56,7 +56,7 @@ export default function AboutPage() {
       description:
         "Bamboo reed kalam drawing with fermented iron-jaggery liquor, washed in the sacred Swarnamukhi temple waters.",
       imageUrl:
-        "https://images.unsplash.com/photo-1582560475093-ba66accbc424?auto=format&fit=crop&fm=webp&w=800&q=80",
+        "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
     },
     {
       region: "West Bengal • Bankura & Bikna",
@@ -129,7 +129,7 @@ export default function AboutPage() {
           <div className="lg:col-span-6">
             <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-[#DDD5C8] shadow-md bg-[#ECE6DC]">
               <img
-                src="https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&fm=webp&w=1200&q=85"
+                src="/images/products/Odisha/Royal Heritage – Hand-Painted Elephant Pair.png"
                 alt="Master Artisan shaping clay and minerals in traditional workshop"
                 width={600}
                 height={450}
@@ -375,8 +375,8 @@ export default function AboutPage() {
                 <div className="flex items-center gap-4 mb-4">
                   <div className="relative w-16 h-16 rounded-full overflow-hidden bg-[#ECE6DC] shrink-0 border border-[#D5CFC5]">
                     <img
-                      src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&fm=webp&w=300&q=80"
-                      alt="Pandit Devendra Prajapati, Master Terracotta Sculptor"
+                      src="/images/Artisans/Pottery Artist.png"
+                      alt="Master Kumbhar Artisans, Sambalpur & Balasore"
                       width={64}
                       height={64}
                       loading="lazy"
@@ -386,22 +386,22 @@ export default function AboutPage() {
                   </div>
                   <div>
                     <h3 className="font-serif text-base font-semibold text-[#1E1E1C]">
-                      Pandit Devendra Prajapati
+                      Master Kumbhar Artisans
                     </h3>
                     <p className="text-[11px] text-[#C2410C] font-medium">
-                      Master Ceramicist & Shilp Guru Awardee
+                      Generational Terracotta Masters & Heritage Guild
                     </p>
                     <p className="text-[10px] text-[#8C877E]">
-                      Kutch Terroir Guild • 40+ Years Practice
+                      Sambalpur & Balasore, Odisha • 28+ Years Practice
                     </p>
                   </div>
                 </div>
                 <p className="text-xs text-[#6E6A62] leading-relaxed font-light">
-                  Directs ARTSINLY&apos;s kiln verification council. He oversees raw riverbed clay sourcing, firewood temperature standards, and organic pigment consistency across 24 rural pottery clusters.
+                  Preserving ancient wheel-turned red clay crafts from the Mahanadi river basin, hand-carved floral lattice cutouts, and wood-fired terracotta sculptures across coastal Odisha.
                 </p>
               </div>
               <div className="mt-4 pt-3 border-t border-[#F0ECE4] text-[11px]">
-                <Link href="/artisans/devendra-prajapati" className="text-[#C2410C] hover:underline font-medium inline-flex items-center gap-1">
+                <Link href="/artisans/sambalpur-kumbhakar-pottery" className="text-[#C2410C] hover:underline font-medium inline-flex items-center gap-1">
                   <span>View Artisan Atelier</span>
                   <ArrowRight className="w-3 h-3" />
                 </Link>
@@ -413,7 +413,7 @@ export default function AboutPage() {
                 <div className="flex items-center gap-4 mb-4">
                   <div className="relative w-16 h-16 rounded-full overflow-hidden bg-[#ECE6DC] shrink-0 border border-[#D5CFC5]">
                     <img
-                      src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&fm=webp&w=300&q=80"
+                      src="/images/Artisans/Papier-Mäché and Wood Carving Artist.png"
                       alt="Dr. Radhika Sen, Curator of Heritage Conservation"
                       width={64}
                       height={64}
@@ -451,8 +451,8 @@ export default function AboutPage() {
                 <div className="flex items-center gap-4 mb-4">
                   <div className="relative w-16 h-16 rounded-full overflow-hidden bg-[#ECE6DC] shrink-0 border border-[#D5CFC5]">
                     <img
-                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&fm=webp&w=300&q=80"
-                      alt="Ismail Mohammed Khatri, Master Block Printer"
+                      src="/images/Artisans/Pattachitra Painter.png"
+                      alt="Master Chitrakara Artisans, Raghurajpur"
                       width={64}
                       height={64}
                       loading="lazy"
@@ -462,23 +462,23 @@ export default function AboutPage() {
                   </div>
                   <div>
                     <h3 className="font-serif text-base font-semibold text-[#1E1E1C]">
-                      Ismail Mohammed Khatri
+                      Master Chitrakara Artisans
                     </h3>
                     <p className="text-[11px] text-[#C2410C] font-medium">
-                      9th-Gen Ajrakh Master &amp; Padma Shri
+                      Generational Pattachitra Masters
                     </p>
                     <p className="text-[10px] text-[#8C877E]">
-                      Ajrakhpur, Gujarat • Living Legend
+                      Raghurajpur, Odisha • Heritage Guild
                     </p>
                   </div>
                 </div>
                 <p className="text-xs text-[#6E6A62] leading-relaxed font-light">
-                  Pioneer of pure natural dyeing revitalization across the subcontinent. Mentors apprentice circles in mineral resist chemistry, harda washing, and double-sided symmetrical block printing.
+                  Preserving centuries-old sacred Pattachitra on treated cotton canvas using stone-ground mineral pigments, conch shell white, and ancestral tamarind seed adhesives.
                 </p>
               </div>
               <div className="mt-4 pt-3 border-t border-[#F0ECE4] text-[11px]">
-                <Link href="/catalog" className="text-[#C2410C] hover:underline font-medium inline-flex items-center gap-1">
-                  <span>Explore Ajrakh Masterpieces</span>
+                <Link href="/artisans/raghurajpur-chitrakara-guild" className="text-[#C2410C] hover:underline font-medium inline-flex items-center gap-1">
+                  <span>Explore Chitrakara Masterpieces</span>
                   <ArrowRight className="w-3 h-3" />
                 </Link>
               </div>

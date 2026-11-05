@@ -21,15 +21,15 @@ interface NewDropItem {
 const FRESH_DROPS: NewDropItem[] = [
   {
     id: "drop-1",
-    slug: "modern-ethnic-ceramic-vase-terracotta-indigenous-pattern",
+    slug: "sambalpur-heritage-handcrafted-terracotta-lantern",
     badgeText: "JUST UNFIRED",
-    title: "Modern Ethnic Ceramic Vase – Terracotta Vase with Indigenous Pattern",
-    subtitle: "Minimalist Abstract Matte Decor for Living Room, Shelf & Tabletop Styling",
+    title: "Sambalpur Heritage – Handcrafted Terracotta Lantern",
+    subtitle: "Hand-Carved Floral Lattice Cutout Terracotta Lamp for Ambient Living Space Decor",
     description:
-      "Elevate your home decor with this exquisite set of 2 modern ceramic vases, featuring a sculptural, abstract design that combines organic warmth with contemporary living room, shelf, and tabletop styling.",
-    priceDisplay: "₹127",
+      "Wheel-thrown from alluvial riverbed red clay and individually carved with delicate floral lattice cutouts by Master Kumbhar Artisans in Sambalpur, casting warm sacred geometric shadow patterns.",
+    priceDisplay: "₹1,850",
     imageUrl:
-      "/images/products/Gujarat/Modern Ethnic Ceramic Vase – Ivory Minimalist Edition.png",
+      "/images/products/Odisha/Sambalpur Terracotta decorative lantern.png",
   },
   {
     id: "drop-2",

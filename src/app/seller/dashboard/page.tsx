@@ -174,16 +174,16 @@ export const getFormattedPreviewPrice = (val: string) => {
 const FALLBACK_PRODUCTS: StudioProduct[] = [
   {
     id: "sp-1",
-    slug: "modern-ethnic-ceramic-vase-terracotta-indigenous-pattern",
-    title: "Modern Ethnic Ceramic Vase",
-    category: "Vases",
-    craftAndMaterial: "Terracotta Pottery",
-    regionOfOrigin: "Gujarat",
-    price: 126.99,
-    priceDisplay: "₹126.99",
+    slug: "sambalpur-heritage-handcrafted-terracotta-lantern",
+    title: "Sambalpur Heritage – Handcrafted Terracotta Lantern",
+    category: "Terracotta Pottery",
+    craftAndMaterial: "Terracotta & Red Clay",
+    regionOfOrigin: "Odisha",
+    price: 1850.00,
+    priceDisplay: "₹1,850",
     status: "Live in Marketplace",
     imageUrl:
-      "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=300&q=80",
+      "/images/products/Odisha/Sambalpur Terracotta decorative lantern.png",
     stock: 12,
     isMadeToOrder: false,
   },
@@ -213,7 +213,7 @@ const FALLBACK_PRODUCTS: StudioProduct[] = [
     priceDisplay: "₹1,200.00",
     status: "Live in Marketplace",
     imageUrl:
-      "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=300&q=80",
+      "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
     stock: 1,
     isMadeToOrder: false,
   },
@@ -380,7 +380,7 @@ export default function SellerDashboardPage() {
               status: p.status || "PUBLISHED",
               imageUrl:
                 primaryImg ||
-                "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=300&q=80",
+                "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
               images: p.images || [],
               stock: stockQty,
               isMadeToOrder: Boolean(p.isMadeToOrder),
@@ -454,7 +454,7 @@ export default function SellerDashboardPage() {
             newImages.find((img) => img.isPrimary)?.url ||
             newImages[0]?.url ||
             newImageUrl ||
-            "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80",
+            "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
           images: newImages,
           variants: newHasVariants
             ? newVariants.map((v) => ({
@@ -808,7 +808,7 @@ export default function SellerDashboardPage() {
     }
   };
 
-  const displayShopName = sellerProfile?.shopName || "Devendra Prajapati Pottery Studio";
+  const displayShopName = sellerProfile?.shopName || "Master Kumbhar Pottery Studio";
   const displayLocation = `${sellerProfile?.locality ? sellerProfile.locality + ", " : ""}${
     sellerProfile?.state || "Gujarat"
   }`;

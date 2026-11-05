@@ -76,7 +76,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=1200&q=85",
+        url: "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
         width: 1200,
         height: 630,
         alt: "ARTSINLY Handcrafted Masterpieces",
@@ -87,7 +87,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "ARTSINLY — Regional Artisans Marketplace",
     description: "Authentic, certified regional crafts directly from master makers.",
-    images: ["https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=1200&q=85"],
+    images: ["/images/products/Odisha/Odisha Pattachitra painting with Frame.png"],
   },
 };
 
@@ -99,13 +99,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className={`${inter.variable} ${dmSerif.variable}`}>
       <head>
-        <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://images.unsplash.com" />
         <link rel="preconnect" href="https://res.cloudinary.com" crossOrigin="anonymous" />
         <link
           rel="preload"
           as="image"
-          href="https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&fm=webp&w=1200&q=85"
+          href="/images/products/Odisha/Odisha Pattachitra painting with Frame.png"
           type="image/webp"
           fetchPriority="high"
         />

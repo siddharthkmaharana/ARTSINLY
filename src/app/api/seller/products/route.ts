@@ -99,14 +99,14 @@ const initialFallbackSellerProducts: ResilientSellerProduct[] = [
     images: [
       {
         id: "img_sp_01",
-        url: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=600&q=80",
+        url: "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
         altText: "Sacred Srinathji Miniature Painting Front View",
         isPrimary: true,
         displayOrder: 0,
       },
       {
         id: "img_sp_01_b",
-        url: "https://images.unsplash.com/photo-1582562124811-c09040d0a901?auto=format&fit=crop&w=600&q=80",
+        url: "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
         altText: "Close-up of Natural Mineral Pigment Tempera",
         isPrimary: false,
         displayOrder: 1,
@@ -176,7 +176,7 @@ const initialFallbackSellerProducts: ResilientSellerProduct[] = [
     images: [
       {
         id: "img_sp_02",
-        url: "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=600&q=80",
+        url: "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
         altText: "Terracotta Vase",
         isPrimary: true,
         displayOrder: 0,
@@ -702,7 +702,7 @@ export async function POST(req: NextRequest) {
           : [
               {
                 id: generateSecureId("img_"),
-                url: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=600&q=80",
+                url: "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
                 altText: actualTitle,
                 isPrimary: true,
                 displayOrder: 0,

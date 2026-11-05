@@ -43,7 +43,7 @@ async function main() {
       name: "Terracotta Pottery",
       slug: "terracotta-pottery",
       description: "Hand-thrown earthen vessels, indigenous urns, and sculptural reduction-fired clay crafts.",
-      imageUrl: "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=800&q=80",
+      imageUrl: "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
     },
   });
 
@@ -52,7 +52,7 @@ async function main() {
       name: "Block Print",
       slug: "block-print",
       description: "Authentic Ajrakh mud-resist, Sanganeri florals, and hand-loomed vegetable dyed textiles.",
-      imageUrl: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&w=800&q=80",
+      imageUrl: "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
     },
   });
 
@@ -61,7 +61,7 @@ async function main() {
       name: "Dhokra Metal",
       slug: "dhokra-metal",
       description: "Ancient 4,000-year lost-wax bell metal casting and handcrafted tribal bronze.",
-      imageUrl: "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80",
+      imageUrl: "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
     },
   });
 
@@ -70,7 +70,7 @@ async function main() {
       name: "Blue Pottery",
       slug: "blue-pottery",
       description: "Powdered quartz stone, Egyptian paste, and cobalt Persian floral glazes.",
-      imageUrl: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80",
+      imageUrl: "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
     },
   });
 
@@ -79,7 +79,7 @@ async function main() {
       name: "Wood Carving",
       slug: "wood-carving",
       description: "Hand-chiseled seasoned Sheesham rosewood, architectural palace reliefs, and turnery.",
-      imageUrl: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80",
+      imageUrl: "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
     },
   });
 
@@ -88,9 +88,9 @@ async function main() {
     data: {
       name: "Gujarat",
       slug: "gujarat",
-      state: "Gujarat",
+      state: "Odisha",
       description: "Famed for Kutch terracotta, Ajrakh mud-resist block printing, and Rogan art.",
-      imageUrl: "https://images.unsplash.com/photo-1582510003544-4d00b7f74220?auto=format&fit=crop&w=800&q=80",
+      imageUrl: "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
     },
   });
 
@@ -100,7 +100,7 @@ async function main() {
       slug: "rajasthan",
       state: "Rajasthan",
       description: "Home of Jaipur cobalt quartz blue pottery, Pichwai miniatures, and palace wood carving.",
-      imageUrl: "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=800&q=80",
+      imageUrl: "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
     },
   });
 
@@ -110,7 +110,7 @@ async function main() {
       slug: "west-bengal",
       state: "West Bengal",
       description: "Centuries-old lost-wax Dhokra bell metal casting and terracotta temples.",
-      imageUrl: "https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80",
+      imageUrl: "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
     },
   });
 
@@ -120,20 +120,20 @@ async function main() {
       slug: "andhra-pradesh",
       state: "Andhra Pradesh",
       description: "Ancient temple Srikalahasti freehand bamboo kalam reed pen painting.",
-      imageUrl: "https://images.unsplash.com/photo-1582560475093-ba66accbc424?auto=format&fit=crop&w=800&q=80",
+      imageUrl: "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
     },
   });
 
   // 4. Create Master Users & Sellers
-  // Master 1: Devendra Prajapati (Pottery)
+  // Master 1: Master Kumbhar Artisans (Terracotta Pottery)
   const userDevendra = await prisma.user.create({
     data: {
-      email: "devendra.prajapati@artsinly.com",
-      name: "Devendra Prajapati",
+      email: "kumbhar.guild@artsinly.com",
+      name: "Master Kumbhar Artisans",
       passwordHash: hashPassword("password123"),
       role: Role.SELLER,
       phone: "+91 98250 11234",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=600&q=80",
+      avatar: "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
     },
   });
 
@@ -141,12 +141,12 @@ async function main() {
     data: {
       userId: userDevendra.id,
       shopName: "Kutch Earthen Guild",
-      slug: "devendra-prajapati",
-      artisanName: "Devendra Prajapati",
+      slug: "sambalpur-kumbhakar-pottery",
+      artisanName: "Master Kumbhar Artisans",
       craftTradition: "Terracotta Pottery",
       state: "Gujarat",
       locality: "Kutch",
-      giCode: "GI-IN-GJ-449",
+      giCode: "GI-IN-OD-POT",
       isVerified: true,
       yearsOfExperience: 34,
       bio: "Master terracotta sculptor preserving indigenous wheel-thrown reduction clay crafts of rural Gujarat.",
@@ -155,42 +155,42 @@ async function main() {
     },
   });
 
-  // Master 2: Meenakshi Rathore (Meenakari & Blue Pottery)
-  const userMeenakshi = await prisma.user.create({
+  // Master 2: Master Chitrakara Artisans (Raghurajpur Pattachitra)
+  const userChitrakara = await prisma.user.create({
     data: {
-      email: "meenakshi.rathore@artsinly.com",
-      name: "Meenakshi Rathore",
+      email: "chitrakara.guild@artsinly.com",
+      name: "Master Chitrakara Artisans",
       passwordHash: hashPassword("password123"),
       role: Role.SELLER,
-      avatar: "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=600&q=80",
+      avatar: "/images/Artisans/Pattachitra Painter.png",
     },
   });
 
-  const sellerMeenakshi = await prisma.sellerProfile.create({
+  const sellerChitrakara = await prisma.sellerProfile.create({
     data: {
-      userId: userMeenakshi.id,
-      shopName: "Jaipur Gem & Quartz Studio",
-      slug: "meenakshi-rathore",
-      artisanName: "Meenakshi Rathore",
-      craftTradition: "Meenakari Jewellery",
-      state: "Rajasthan",
-      locality: "Jaipur",
-      giCode: "GI-IN-RJ-102",
+      userId: userChitrakara.id,
+      shopName: "Raghurajpur Heritage Chitrakara Guild",
+      slug: "raghurajpur-chitrakara-guild",
+      artisanName: "Master Chitrakara Artisans",
+      craftTradition: "Pattachitra Painting",
+      state: "Odisha",
+      locality: "Raghurajpur, Puri",
+      giCode: "GI-IN-OD-88",
       isVerified: true,
-      yearsOfExperience: 22,
-      bio: "Renowned jeweler and ceramicist reviving 16th-century Persian enamel faience.",
-      avatarUrl: userMeenakshi.avatar,
+      yearsOfExperience: 34,
+      bio: "Generational master Chitrakara painters preserving centuries-old sacred Pattachitra on treated cotton canvas using natural mineral and stone pigments.",
+      avatarUrl: userChitrakara.avatar,
     },
   });
 
-  // Master 3: Shankar Lal Jangid (Wood Carving)
+  // Master 3: Master Folk Artisans of Bargarh (Papier-Mâché & Woodcraft)
   const userShankar = await prisma.user.create({
     data: {
-      email: "shankar.jangid@artsinly.com",
-      name: "Shankar Lal Jangid",
+      email: "bargarh.guild@artsinly.com",
+      name: "Master Folk Artisans of Bargarh",
       passwordHash: hashPassword("password123"),
       role: Role.SELLER,
-      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=600&q=80",
+      avatar: "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
     },
   });
 
@@ -198,9 +198,9 @@ async function main() {
     data: {
       userId: userShankar.id,
       shopName: "Churu Sheesham Ateliers",
-      slug: "shankar-lal-jangid",
-      artisanName: "Shankar Lal Jangid",
-      craftTradition: "Wood Carving",
+      slug: "bargarh-woodcraft-guild",
+      artisanName: "Master Folk Artisans of Bargarh",
+      craftTradition: "Papier-Mâché & Wood Carving",
       state: "Rajasthan",
       locality: "Churu",
       giCode: "GI-IN-RJ-312",
@@ -219,7 +219,7 @@ async function main() {
       passwordHash: hashPassword("password123"),
       role: Role.BUYER,
       phone: "+91 98300 44556",
-      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80",
+      avatar: "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
     },
   });
 
@@ -244,7 +244,7 @@ async function main() {
       passwordHash: hashPassword("admin123"),
       role: Role.ADMIN,
       phone: "+91 99999 88888",
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80",
+      avatar: "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
     },
   });
 
@@ -256,7 +256,7 @@ async function main() {
       passwordHash: hashPassword("password123"),
       role: Role.SELLER,
       phone: "+91 94190 77112",
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80",
+      avatar: "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
     },
   });
 
@@ -299,13 +299,13 @@ async function main() {
       images: {
         create: [
           {
-            url: "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&w=1200&q=85",
+            url: "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
             altText: "Modern Ethnic Ceramic Vase in contemporary living room",
             displayOrder: 0,
             isPrimary: true,
           },
           {
-            url: "https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=1000&q=85",
+            url: "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
             altText: "Handcrafted terracotta workshop details",
             displayOrder: 1,
           },

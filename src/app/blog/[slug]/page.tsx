@@ -32,14 +32,14 @@ const BLOG_POSTS: Record<string, BlogPostItem> = {
     excerpt:
       "On the banks of river Banas, clay is venerated as divine mother earth. Explore how terracotta votive plaques preserve 900 years of tribal lore.",
     imageUrl:
-      "https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?auto=format&fit=crop&fm=webp&w=1200&q=85",
+      "/images/products/Odisha/Sambalpur Terracotta decorative lantern.png",
     publishedDate: "October 2026",
-    authorName: "Pandit Devendra Prajapati",
-    authorRole: "National Awardee & 7th Generation Molela Terracotta Master",
+    authorName: "Master Kumbhar Guild",
+    authorRole: "Generational Master Terracotta Artisans",
     authorBio:
-      "Devendra Prajapati is a celebrated Shilp Guru and 7th-generation lineage master of Molela terracotta votive plaques on the Banas river. Over four decades, he has preserved ritual hand-pinched hollow relief methods and primitive reduction smoke firing.",
+      "Generational terracotta masters from Odisha preserving traditional wheel-turned red-clay lanterns with hand-carved lattice cutouts and sculpted heritage horse figurines.",
     authorAvatar:
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&fm=webp&w=300&q=80",
+      "/images/Artisans/Pottery Artist.png",
     content: [
       "In the tranquil village of Molela on the banks of the sacred Banas river in southern Rajasthan, clay is not seen merely as raw material—it is revered as divine mother earth (Mati Maya). For over nine centuries, the Prajapati artisans have shaped hollow-relief votive plaques honoring tribal deities, ancestor spirits, and the warrior lord Devnarayan.",
       "The process begins with mixing rich alluvial silt gathered during auspicious seasons with donkey dung and sun-dried husk to achieve optimal elasticity and porous resilience. Without mechanical wheels or molds, the master artisan pinches and hollows the clay using only fingertips and a flat wooden blade.",
@@ -56,14 +56,14 @@ const BLOG_POSTS: Record<string, BlogPostItem> = {
     excerpt:
       "Derived from \"Azrak\", meaning blue in Arabic, Ajrakh is not merely textile printing—it is astronomy, river biochemistry, and devotional discipline.",
     imageUrl:
-      "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&fm=webp&w=1200&q=85",
+      "/images/products/Odisha/Royal Heritage – Handcrafted Pipili Appliqué Wall Hanging_1.png",
     publishedDate: "September 2026",
-    authorName: "Ismail Mohammed Khatri",
-    authorRole: "UNESCO Seal of Excellence & Master Ajrakh Artisan",
+    authorName: "Khatri Ajrakh Guild",
+    authorRole: "Heritage Master Block Printers",
     authorBio:
-      "Descended from the generational Khatri clan of Dhamadka, Kutch, Ismail is internationally recognized for reviving natural madder and desert indigo resist printing. His practice rigorously maintains 16 stages of river biochemistry.",
+      "Descended from the generational Khatri clan of Dhamadka, Kutch, the artisan guild rigorously maintains 16 stages of river biochemistry, indigo vats, and hand-carved teak block printing.",
     authorAvatar:
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&fm=webp&w=300&q=80",
+      "/images/Artisans/Pattachitra Painter.png",
     content: [
       "The word 'Ajrakh' finds its origin in 'Azrak', the Arabic word for celestial blue, mirroring the midnight skies of the Thar desert. Across sixteen distinct stages of washing, scouring, printing, and resist-immersion, the master printers of Kutch orchestrate a delicate alchemy between river waters, desert minerals, and celestial cycles.",
       "Unlike modern machine screen printing where pigment sits on the fiber surface, Ajrakh prints penetrate deep into the yarn from both sides. Intricate hand-carved teak wood blocks apply gaj (lime and gum resist), followed by baths of fermented harde (myrobalan) and rusted iron-jaggery liquor.",
@@ -80,14 +80,14 @@ const BLOG_POSTS: Record<string, BlogPostItem> = {
     excerpt:
       "In an era of synthetic 3D printing, the uneven kiss of firewood kiln smoke and the tremor of an artisan's hand is the ultimate luxury.",
     imageUrl:
-      "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?auto=format&fit=crop&fm=webp&w=1200&q=85",
+      "/images/products/Odisha/Odisha Pattachitra painting with Frame.png",
     publishedDate: "October 2026",
     authorName: "Dr. Radhika Sen",
     authorRole: "Senior Textile Conservator & Curatorial Director",
     authorBio:
       "Dr. Radhika Sen holds a PhD in South Asian Material Culture from Oxford. With 20 years of fieldwork alongside rural craft cooperatives, she oversees curatorial ethics, GI authentication, and fair-trade standards at ARTSINLY.",
     authorAvatar:
-      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&fm=webp&w=300&q=80",
+      "/images/Artisans/Pattachitra Painter.png",
     content: [
       "We live in an age of frictionless industrial perfection. Injection-molded polymers, computer-numerically-controlled stone cutting, and synthetic 3D printing have rendered geometric symmetry ubiquitous and cheap. Yet, in this sea of sterile flawless uniformity, the human spirit longs for character, soul, and evidence of a living human breath.",
       "In traditional Indian generational crafts, what industrial mass production mislabels as 'defects' are cherished as the fingerprint of existence: the subtle asymmetry of a wheel-thrown terracotta rim, the slight bleed of vegetable indigo where a wooden block hesitated for a heartbeat, the flame-licked oxidation mark across low-fired earthenware.",
