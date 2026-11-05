@@ -211,8 +211,8 @@ const initialFallbackSellerProducts: ResilientSellerProduct[] = [
     sellerId: "cmvdxyd9c000lqwxwurax8s29",
     categoryId: "cat_wood_03",
     regionId: "reg_rajasthan_03",
-    title: "Hand-Carved Floral High-Relief Sheesham Panel",
-    slug: "hand-carved-floral-high-relief-sheesham-panel",
+    title: "Royal Heritage – Hand-Painted Wooden Elephant Pair",
+    slug: "royal-heritage-hand-painted-wooden-elephant-pair",
     description: "Deep relief floral motifs hand-chiselled from seasoned Indian rosewood with walnut wax finish.",
     craftType: "Wood Carving",
     craftTechnique: "High-Relief Chisel Carving on Single Timber",
@@ -232,7 +232,7 @@ const initialFallbackSellerProducts: ResilientSellerProduct[] = [
     images: [
       {
         id: "img_sp_03",
-        url: "https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?auto=format&fit=crop&w=600&q=80",
+        url: "/images/products/Odisha/Royal Heritage – Hand-Painted Elephant Pair.png",
         altText: "Carved Wood Panel",
         isPrimary: true,
         displayOrder: 0,

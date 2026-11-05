@@ -30,13 +30,28 @@ interface ArtisanShowcaseItem {
 
 const ARTISANS_SHOWCASE: ArtisanShowcaseItem[] = [
   {
-    id: "artisan-1",
-    slug: "devendra-prajapati",
-    craftTitle: "Pottery",
-    artisanWithLocation: "Devendra Prajapati • Kutch",
-    giCode: "GI-IN-GJ-449",
-    imageUrl:
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&fm=webp&w=600&q=80",
+    id: "artisan-chitrakara",
+    slug: "raghurajpur-chitrakara-guild",
+    craftTitle: "Pattachitra Painting",
+    artisanWithLocation: "Master Chitrakara Artisans • Raghurajpur",
+    giCode: "GI-IN-OD-88",
+    imageUrl: "/images/Artisans/Pattachitra Painter.png",
+  },
+  {
+    id: "artisan-pottery-odisha",
+    slug: "sambalpur-kumbhakar-pottery",
+    craftTitle: "Terracotta Pottery",
+    artisanWithLocation: "Master Kumbhar Artisans • Sambalpur",
+    giCode: "GI-IN-OD-POT",
+    imageUrl: "/images/Artisans/Pottery Artist.png",
+  },
+  {
+    id: "artisan-papiermache-wood",
+    slug: "bargarh-woodcraft-guild",
+    craftTitle: "Papier-Mâché & Wood Carving",
+    artisanWithLocation: "Master Folk Artisans • Bargarh",
+    giCode: "GI-IN-OD-PMC",
+    imageUrl: "/images/Artisans/Papier-Mäché and Wood Carving Artist.png",
   },
   {
     id: "artisan-2",
@@ -64,15 +79,6 @@ const ARTISANS_SHOWCASE: ArtisanShowcaseItem[] = [
     giCode: "GI-IN-MP-204",
     imageUrl:
       "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&fm=webp&w=600&q=80",
-  },
-  {
-    id: "artisan-5",
-    slug: "shankar-lal-jangid",
-    craftTitle: "Wood Carving",
-    artisanWithLocation: "Shankar Lal Jangid • Churu",
-    giCode: "GI-IN-RJ-312",
-    imageUrl:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&fm=webp&w=600&q=80",
   },
   {
     id: "artisan-6",
@@ -128,8 +134,8 @@ export default function ArtisansPage() {
           </p>
         </div>
 
-        {/* 4-Column × 2-Row Artisans Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-7 mb-14">
+        {/* 3-Column Artisans Grid (3x3 Layout) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 mb-14">
           {ARTISANS_SHOWCASE.map((artisan) => (
             <Link
               key={artisan.id}

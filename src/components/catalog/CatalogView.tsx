@@ -37,7 +37,7 @@ interface RegionOption {
 const REGION_OPTIONS: RegionOption[] = [
   { id: "all", label: "All Indian Regions", matchers: [] },
   { id: "odisha", label: "Odisha", matchers: ["odisha", "orissa", "puri", "raghurajpur", "cuttack", "bhubaneswar", "sambalpur", "balasore", "bargarh", "dhenkanal", "sadeibareni", "pipili", "pipli"] },
-  { id: "rajasthan", label: "Rajasthan", matchers: ["rajasthan", "jaipur", "molela", "pokhran"] },
+  { id: "rajasthan", label: "Rajasthan", matchers: ["rajasthan", "jaipur", "jodhpur", "molela", "pokhran"] },
   { id: "uttar-pradesh", label: "Uttar Pradesh", matchers: ["uttar pradesh", "uttar-pradesh", "lucknow", "moradabad", "saharanpur", "gorakhpur"] },
   { id: "gujarat", label: "Gujarat", matchers: ["gujarat", "kutch", "khavda", "bhujodi"] },
   { id: "west-bengal", label: "West Bengal", matchers: ["west bengal", "west-bengal", "bengal", "bankura", "shantiniketan", "bishnupur"] },

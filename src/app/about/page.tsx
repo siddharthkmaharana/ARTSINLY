@@ -65,7 +65,7 @@ export default function AboutPage() {
       description:
         "Non-ferrous bronze cast hollow over clay cores wrapped in pure beeswax threads, preserving 4,000-year Mohenjo-daro metallurgy.",
       imageUrl:
-        "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?auto=format&fit=crop&fm=webp&w=800&q=80",
+        "/images/products/Odisha/Royal Procession – Handcrafted Dhokra Brass Elephant.png",
     },
   ];
 
