@@ -98,7 +98,7 @@ export default function HomePage() {
     },
   ];
 
-  // 3 Featured Artisans matching the Our Artisans page
+  // 5 Featured Artisans matching the Our Artisans page
   const featuredArtisans = [
     {
       id: "artisan-chitrakara",
@@ -123,6 +123,22 @@ export default function HomePage() {
       artisanWithLocation: "Master Folk Artisans • Bargarh",
       giCode: "GI-IN-OD-PMC",
       imageUrl: "/images/Artisans/Papier-Mäché and Wood Carving Artist.png",
+    },
+    {
+      id: "artisan-dhokra-brass",
+      slug: "saptasajya-dhokra-collective",
+      craftTitle: "Dhokra Lost-Wax Brasswork",
+      artisanWithLocation: "Master Dhokra Artisans • Dhenkanal",
+      giCode: "GI-IN-OD-1322",
+      imageUrl: "/images/Artisans/Brasswork in the Artisan Workshop.png",
+    },
+    {
+      id: "artisan-pipili-applique",
+      slug: "pipili-applique-cooperative",
+      craftTitle: "Pipili Appliqué & Patchwork",
+      artisanWithLocation: "Master Pipili Artisans • Pipili, Puri",
+      giCode: "GI-IN-OD-86",
+      imageUrl: "/images/Artisans/Artisan Stitching Colorful Appliqué.png",
     },
   ];
 
@@ -694,7 +710,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 mb-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 sm:gap-7 mb-10">
             {featuredArtisans.map((artisan) => (
               <Link
                 key={artisan.id}
@@ -732,7 +748,7 @@ export default function HomePage() {
               href="/artisans"
               className="inline-flex items-center gap-2 px-6 py-2.5 rounded-md border border-[#DDD5C8] hover:border-[#1E1E1C] bg-white text-xs font-semibold text-[#1E1E1C] transition-colors"
             >
-              <span>Explore All 8 Master Artisans</span>
+              <span>Explore All {featuredArtisans.length} Master Artisans</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>

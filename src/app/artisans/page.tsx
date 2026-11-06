@@ -53,6 +53,22 @@ const ARTISANS_SHOWCASE: ArtisanShowcaseItem[] = [
     giCode: "GI-IN-OD-PMC",
     imageUrl: "/images/Artisans/Papier-Mäché and Wood Carving Artist.png",
   },
+  {
+    id: "artisan-dhokra-brass",
+    slug: "saptasajya-dhokra-collective",
+    craftTitle: "Dhokra Lost-Wax Brasswork",
+    artisanWithLocation: "Master Dhokra Artisans • Dhenkanal",
+    giCode: "GI-IN-OD-1322",
+    imageUrl: "/images/Artisans/Brasswork in the Artisan Workshop.png",
+  },
+  {
+    id: "artisan-pipili-applique",
+    slug: "pipili-applique-cooperative",
+    craftTitle: "Pipili Appliqué & Patchwork",
+    artisanWithLocation: "Master Pipili Artisans • Pipili, Puri",
+    giCode: "GI-IN-OD-86",
+    imageUrl: "/images/Artisans/Artisan Stitching Colorful Appliqué.png",
+  },
 ];
 
 export default function ArtisansPage() {
@@ -80,8 +96,8 @@ export default function ArtisansPage() {
           </p>
         </div>
 
-        {/* 3-Column Artisans Grid (3x3 Layout) */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 mb-14">
+        {/* 5-Column Artisans Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 sm:gap-7 mb-14">
           {ARTISANS_SHOWCASE.map((artisan) => (
             <Link
               key={artisan.id}
@@ -133,12 +149,12 @@ export default function ArtisansPage() {
 
             {/* Feature 2 */}
             <div className="px-4 pt-4 md:pt-0">
-              <ShieldCheck className="w-5 h-5 mx-auto text-[#0D9488] mb-2.5 stroke-[1.75]" />
+              <ShieldCheck className="w-5 h-5 mx-auto text-[#C2410C] mb-2.5 stroke-[1.75]" />
               <h4 className="font-serif text-sm sm:text-base font-semibold text-[#1E1E1C] mb-1">
-                GI Authenticated
+                GI Certified Origin
               </h4>
               <p className="text-xs text-[#6E6A62] leading-relaxed max-w-xs mx-auto">
-                Official Geographical Indication registries validated by curatorial experts.
+                Every craft carries authentic Geographical Indication verification codes.
               </p>
             </div>
 
@@ -146,10 +162,10 @@ export default function ArtisansPage() {
             <div className="px-4 pt-4 md:pt-0">
               <Globe className="w-5 h-5 mx-auto text-[#C2410C] mb-2.5 stroke-[1.75]" />
               <h4 className="font-serif text-sm sm:text-base font-semibold text-[#1E1E1C] mb-1">
-                Global Living Spaces
+                Living Traditions
               </h4>
               <p className="text-xs text-[#6E6A62] leading-relaxed max-w-xs mx-auto">
-                Climate-neutral plastic-free packaging delivered to collectors in 34 countries.
+                Supporting generational lineages fighting against mass-factory replication.
               </p>
             </div>
           </div>
