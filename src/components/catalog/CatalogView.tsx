@@ -20,9 +20,9 @@ const CRAFT_OPTIONS: CraftOption[] = [
   { id: "wood-carving", label: "Wood Carving", matchers: ["wood", "carving", "sheesham", "walnut", "jali", "toy", "toys", "elephant", "gamhari", "bargarh"] },
   { id: "miniature-painting", label: "Miniature Painting", matchers: ["miniature", "pichwai", "painting"] },
   { id: "kalamkari-painting", label: "Kalamkari Painting", matchers: ["kalamkari"] },
-  { id: "applique-textiles", label: "Pipili Appliqu� & Patchwork", matchers: ["applique", "appliqu�", "pipili", "pipli", "chandua", "patchwork"] },
+  { id: "applique-textiles", label: "Pipili Appliqué & Patchwork", matchers: ["applique", "appliqué", "pipili", "pipli", "chandua", "patchwork"] },
   { id: "zardozi-embroidery", label: "Heritage Needlework & Embroidery", matchers: ["zardozi", "embroidery", "kantha", "rabari", "mirrorwork", "bharatkaam"] },
-  { id: "papier-mache", label: "Papier-M�ch� & Folk Masks", matchers: ["papier-m�ch�", "papier-mache", "papiermache", "paper", "mask", "masks", "pulp", "kali", "tiger"] },
+  { id: "papier-mache", label: "Papier-Mâché & Folk Masks", matchers: ["papier-mâché", "papier-mache", "papiermache", "paper", "mask", "masks", "pulp", "kali", "tiger"] },
   { id: "pottery", label: "Terracotta Pottery & Ceramics", matchers: ["pottery", "terracotta", "ceramic", "ceramics", "vase", "plates", "matka", "surahi", "molela", "urn", "khavda", "bishnupur", "lantern", "horse", "figurines", "clay"] },
   { id: "metalwork", label: "Metalwork & Bell Metal", matchers: ["metal", "dhokra", "brass", "bell", "moradabad", "lota", "filigree", "tarakasi", "bidriware", "meenakari", "casting", "lost-wax", "procession", "musician", "drummer"] },
   { id: "block-printing", label: "Block Printing", matchers: ["block", "print", "ajrakh", "indigo"] },
@@ -201,19 +201,19 @@ export function CatalogView() {
 
           {/* Search Pill */}
           <div className="w-full md:w-80 shrink-0">
-            <div className="relative flex items-center bg-[#EDE8E0] hover:bg-[#EAE4DC] border border-[#DDD6CC] rounded-full px-4 py-2 transition-colors">
+            <div className="relative flex items-center bg-[#EDE8E0] dark:bg-[#1E1C19] hover:bg-[#EAE4DC] dark:hover:bg-[#25221E] border border-[#DDD6CC] dark:border-[#33302A] rounded-full px-4 py-2 transition-colors">
               <Search className="w-3.5 h-3.5 text-[#8C877E] mr-2.5 shrink-0" />
               <input
                 type="text"
                 placeholder="Search craft, artisan, region..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-transparent text-xs text-[#1E1E1C] placeholder-[#8C877E] outline-none"
+                className="w-full bg-transparent text-xs text-[#1E1E1C] dark:text-[#FAF7F2] placeholder-[#8C877E] outline-none"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery("")}
-                  className="text-[#8C877E] hover:text-[#1E1E1C] text-xs ml-1"
+                  className="text-[#8C877E] hover:text-[#1E1E1C] dark:hover:text-white text-xs ml-1"
                   aria-label="Clear search"
                 >
                   ✕
@@ -226,15 +226,15 @@ export function CatalogView() {
         {/* 2-Column Main Layout: Left Sidebar + Right 3-Column Cards Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-7 items-start mb-16">
           {/* Left Column: Advanced Filtering Sidebar */}
-          <aside className="lg:col-span-3 w-full bg-[#ECE6DC]/75 border border-[#DDD5C8] rounded-xl p-5 shadow-2xs">
+          <aside className="lg:col-span-3 w-full bg-[#ECE6DC]/75 dark:bg-[#181614] border border-[#DDD5C8] dark:border-[#2D2A25] rounded-xl p-5 shadow-2xs">
             {/* Header */}
-            <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-[#DDD5C8]/80">
-              <h2 className="font-serif text-base font-semibold text-[#1E1E1C]">
+            <div className="flex items-center justify-between pb-3.5 mb-4 border-b border-[#DDD5C8]/80 dark:border-[#2D2A25]">
+              <h2 className="font-serif text-base font-semibold text-[#1E1E1C] dark:text-[#FAF7F2]">
                 Advanced Filtering
               </h2>
               <button
                 onClick={handleReset}
-                className="text-xs text-[#7A756D] hover:text-[#1E1E1C] underline transition-colors cursor-pointer"
+                className="text-xs text-[#7A756D] hover:text-[#1E1E1C] dark:text-[#A8A297] dark:hover:text-white underline transition-colors cursor-pointer"
               >
                 Reset
               </button>
@@ -242,7 +242,7 @@ export function CatalogView() {
 
             {/* CRAFT BY */}
             <div className="mb-5">
-              <span className="text-[10px] font-bold tracking-[0.14em] text-[#555049] uppercase block mb-2">
+              <span className="text-[10px] font-bold tracking-[0.14em] text-[#555049] dark:text-[#A8A297] uppercase block mb-2">
                 CRAFT BY
               </span>
               <div className="space-y-0.5">
@@ -254,13 +254,13 @@ export function CatalogView() {
                       onClick={() => setSelectedCraft(craft.id)}
                       className={`w-full text-left px-3 py-1.5 rounded-md text-xs transition-colors flex items-center justify-between cursor-pointer ${
                         isSelected
-                          ? "bg-[#1E1E1C] text-white font-medium shadow-2xs"
-                          : "text-[#3A3834] hover:bg-black/5"
+                          ? "bg-[#1E1E1C] text-white dark:bg-[#FAF7F2] dark:text-[#141311] font-medium shadow-2xs"
+                          : "text-[#3A3834] dark:text-[#D6D1C7] hover:bg-black/5 dark:hover:bg-white/10"
                       }`}
                     >
                       <span className="truncate">{craft.label}</span>
                       {isSelected && (
-                        <Check className="w-3.5 h-3.5 text-white stroke-[2.5] shrink-0 ml-2" />
+                        <Check className="w-3.5 h-3.5 text-white dark:text-[#141311] stroke-[2.5] shrink-0 ml-2" />
                       )}
                     </button>
                   );
@@ -269,8 +269,8 @@ export function CatalogView() {
             </div>
 
             {/* REGION */}
-            <div className="mb-5 pt-4 border-t border-[#DDD5C8]/80">
-              <span className="text-[10px] font-bold tracking-[0.14em] text-[#555049] uppercase block mb-2">
+            <div className="mb-5 pt-4 border-t border-[#DDD5C8]/80 dark:border-[#2D2A25]">
+              <span className="text-[10px] font-bold tracking-[0.14em] text-[#555049] dark:text-[#A8A297] uppercase block mb-2">
                 REGION
               </span>
               <div className="space-y-0.5">
@@ -282,13 +282,13 @@ export function CatalogView() {
                       onClick={() => setSelectedRegion(region.id)}
                       className={`w-full text-left px-3 py-1.5 rounded-md text-xs transition-colors flex items-center justify-between cursor-pointer ${
                         isSelected
-                          ? "bg-[#1E1E1C] text-white font-medium shadow-2xs"
-                          : "text-[#3A3834] hover:bg-black/5"
+                          ? "bg-[#1E1E1C] text-white dark:bg-[#FAF7F2] dark:text-[#141311] font-medium shadow-2xs"
+                          : "text-[#3A3834] dark:text-[#D6D1C7] hover:bg-black/5 dark:hover:bg-white/10"
                       }`}
                     >
                       <span className="truncate">{region.label}</span>
                       {isSelected && (
-                        <Check className="w-3.5 h-3.5 text-white stroke-[2.5] shrink-0 ml-2" />
+                        <Check className="w-3.5 h-3.5 text-white dark:text-[#141311] stroke-[2.5] shrink-0 ml-2" />
                       )}
                     </button>
                   );
@@ -297,12 +297,12 @@ export function CatalogView() {
             </div>
 
             {/* PRICE CAP */}
-            <div className="mb-5 pt-4 border-t border-[#DDD5C8]/80">
+            <div className="mb-5 pt-4 border-t border-[#DDD5C8]/80 dark:border-[#2D2A25]">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-[10px] font-bold tracking-[0.14em] text-[#555049] uppercase">
+                <span className="text-[10px] font-bold tracking-[0.14em] text-[#555049] dark:text-[#A8A297] uppercase">
                   PRICE CAP
                 </span>
-                <span className="text-xs font-bold text-[#1E1E1C]">
+                <span className="text-xs font-bold text-[#1E1E1C] dark:text-[#FAF7F2]">
                   ₹{priceCap}
                 </span>
               </div>
@@ -313,17 +313,17 @@ export function CatalogView() {
                 step={250}
                 value={priceCap}
                 onChange={(e) => setPriceCap(Number(e.target.value))}
-                className="w-full h-1.5 bg-[#1E1E1C] rounded-lg appearance-none cursor-pointer accent-[#1E1E1C]"
+                className="w-full h-1.5 bg-[#1E1E1C] dark:bg-[#33302A] rounded-lg appearance-none cursor-pointer accent-[#1E1E1C] dark:accent-[#C2410C]"
               />
-              <div className="flex items-center justify-between text-[10px] text-[#8C877E] mt-1.5 font-medium">
+              <div className="flex items-center justify-between text-[10px] text-[#8C877E] dark:text-[#A8A297] mt-1.5 font-medium">
                 <span>₹100</span>
                 <span>₹1,500+</span>
               </div>
             </div>
 
             {/* ARTISAN LINEAGE */}
-            <div className="pt-4 border-t border-[#DDD5C8]/80">
-              <span className="text-[10px] font-bold tracking-[0.14em] text-[#555049] uppercase block mb-2.5">
+            <div className="pt-4 border-t border-[#DDD5C8]/80 dark:border-[#2D2A25]">
+              <span className="text-[10px] font-bold tracking-[0.14em] text-[#555049] dark:text-[#A8A297] uppercase block mb-2.5">
                 ARTISAN LINEAGE
               </span>
               <div className="space-y-2">
@@ -339,11 +339,11 @@ export function CatalogView() {
                       }
                       className={`w-full text-left text-xs transition-colors flex items-start gap-2 group cursor-pointer ${
                         isSelected
-                          ? "text-[#C2410C] font-semibold"
-                          : "text-[#4A463F] hover:text-[#1E1E1C]"
+                          ? "text-[#C2410C] dark:text-[#E06D44] font-semibold"
+                          : "text-[#4A463F] dark:text-[#C5BFB5] hover:text-[#1E1E1C] dark:hover:text-white"
                       }`}
                     >
-                      <span className="text-[#C2410C] text-[10px] mt-0.5">•</span>
+                      <span className="text-[#C2410C] dark:text-[#E06D44] text-[10px] mt-0.5">•</span>
                       <span className="truncate">{artisan.label}</span>
                     </button>
                   );
@@ -355,16 +355,16 @@ export function CatalogView() {
           {/* Right Column: 3-Column Products Grid */}
           <div className="lg:col-span-9">
             {filteredProducts.length === 0 ? (
-              <div className="bg-[#ECE6DC]/50 border border-[#DDD5C8] rounded-xl p-12 text-center space-y-3">
-                <h3 className="font-serif text-lg font-medium text-[#1E1E1C]">
+              <div className="bg-[#ECE6DC]/50 dark:bg-[#181614] border border-[#DDD5C8] dark:border-[#2D2A25] rounded-xl p-12 text-center space-y-3">
+                <h3 className="font-serif text-lg font-medium text-[#1E1E1C] dark:text-[#FAF7F2]">
                   No authenticated crafts match this filter combination
                 </h3>
-                <p className="text-xs text-[#6E6A62]">
+                <p className="text-xs text-[#6E6A62] dark:text-[#A8A297]">
                   Try adjusting your price cap or craft discipline in the sidebar.
                 </p>
                 <button
                   onClick={handleReset}
-                  className="px-4 py-1.5 bg-[#1E1E1C] text-white text-xs font-semibold rounded-full hover:bg-black transition-colors"
+                  className="px-4 py-1.5 bg-[#1E1E1C] text-white dark:bg-[#FAF7F2] dark:text-[#141311] text-xs font-semibold rounded-full hover:bg-black dark:hover:bg-white transition-colors"
                 >
                   Reset All Filters
                 </button>

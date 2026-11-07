@@ -69,6 +69,14 @@ const ARTISANS_SHOWCASE: ArtisanShowcaseItem[] = [
     giCode: "GI-IN-OD-86",
     imageUrl: "/images/Artisans/Artisan Stitching Colorful Appliqué.png",
   },
+  {
+    id: "artisan-miniature-pichwai",
+    slug: "nathdwara-pichwai-atelier",
+    craftTitle: "Miniature Painting & Pichwai",
+    artisanWithLocation: "Master Miniature Artisans • Nathdwara",
+    giCode: "GI-IN-RJ-PCH",
+    imageUrl: "/images/Artisans/Indian Miniature Artist at Work.png",
+  },
 ];
 
 export default function ArtisansPage() {
@@ -96,8 +104,8 @@ export default function ArtisansPage() {
           </p>
         </div>
 
-        {/* 5-Column Artisans Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 sm:gap-7 mb-14">
+        {/* 6-Card Artisans Grid (3x2 Layout) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7 mb-14">
           {ARTISANS_SHOWCASE.map((artisan) => (
             <Link
               key={artisan.id}

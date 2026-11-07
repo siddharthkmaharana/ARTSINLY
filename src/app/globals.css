@@ -179,20 +179,74 @@ h1, h2, h3, .font-serif {
   background-color: #1E1C19 !important;
 }
 
+/* Base Ivory / Parchment Backgrounds -> Deep Obsidian Luxury Black */
 .dark [class*="bg-[#FAF8F5]"],
 .dark [class*="bg-[#FAF7F2]"],
 .dark [class*="bg-[#F8F5EF]"],
-.dark [class*="bg-[#FBF9F5]"] {
+.dark [class*="bg-[#FBF9F5]"],
+.dark [class*="bg-[#FFF8F3]"] {
   background-color: #141311 !important;
 }
 
+/* Warm Cream, Sand & Beige Panels/Cards -> Elevated Warm Charcoal */
 .dark [class*="bg-[#F4EFE6]"],
 .dark [class*="bg-[#EDE9E2]"],
 .dark [class*="bg-[#F3ECE1]"],
 .dark [class*="bg-[#EFEBE4]"],
 .dark [class*="bg-[#F9F6F0]"],
-.dark [class*="bg-[#F5F2EB]"] {
+.dark [class*="bg-[#F5F2EB]"],
+.dark [class*="bg-[#F6F2EB]"],
+.dark [class*="bg-[#ECE6DC]"],
+.dark [class*="bg-[#EDE8E0]"],
+.dark [class*="bg-[#EAE4DC]"],
+.dark [class*="bg-[#EAE4D8]"],
+.dark [class*="bg-[#EAE4D9]"],
+.dark [class*="bg-[#EAE3D6]"],
+.dark [class*="bg-[#E2DBD0]"],
+.dark [class*="bg-[#E2DDD5]"],
+.dark [class*="bg-[#EFECE6]"],
+.dark [class*="bg-[#F0EBE1]"],
+.dark [class*="bg-[#F3ECE5]"],
+.dark [class*="bg-[#F3EFEA]"],
+.dark [class*="bg-[#F4F1EB]"],
+.dark [class*="bg-[#F5EFEB]"],
+.dark [class*="bg-[#F7F4EE]"],
+.dark [class*="bg-[#F8F6F1]"],
+.dark [class*="bg-[#F9F7F2]"],
+.dark [class*="bg-[#FAF0E6]"] {
   background-color: #1A1815 !important;
+}
+
+/* Tinted Highlight Containers */
+.dark [class*="bg-[#FAF2EC]"] {
+  background-color: #2A1D18 !important;
+}
+
+.dark [class*="bg-[#FFFBF0]"] {
+  background-color: #231E12 !important;
+}
+
+.dark [class*="bg-[#EAF5EE]"],
+.dark [class*="bg-[#E8F5E9]"],
+.dark [class*="bg-[#EBF0E9]"] {
+  background-color: #162419 !important;
+}
+
+/* Explicit Dark Button / Text Precedence */
+.dark [class*="dark:bg-[#FAF7F2]"] {
+  background-color: #FAF7F2 !important;
+}
+
+.dark [class*="dark:bg-white"] {
+  background-color: #FFFFFF !important;
+}
+
+.dark [class*="dark:text-[#141311]"] {
+  color: #141311 !important;
+}
+
+.dark [class*="dark:text-[#1E1E1C]"] {
+  color: #1E1E1C !important;
 }
 
 /* Borders & Dividers */
@@ -202,34 +256,101 @@ h1, h2, h3, .font-serif {
 .dark [class*="border-[#D5CFC5]"],
 .dark [class*="border-[#DDD5C8]"],
 .dark [class*="border-[#DDD7CE]"],
+.dark [class*="border-[#DDD6CC]"],
+.dark [class*="border-[#CCC2B2]"],
+.dark [class*="border-[#DCD0BD]"],
 .dark [class*="border-[#EFEBE4]"],
 .dark [class*="border-[#E2DDD5]"],
+.dark [class*="border-[#E2DBD0]"],
+.dark [class*="border-[#E3DCD1]"],
+.dark [class*="border-[#E3DDD1]"],
+.dark [class*="border-[#E5DFD4]"],
+.dark [class*="border-[#E5DFD5]"],
+.dark [class*="border-[#E5E0D6]"],
+.dark [class*="border-[#E5E0D7]"],
+.dark [class*="border-[#E8E1D5]"],
+.dark [class*="border-[#E8E2D6]"],
+.dark [class*="border-[#E8E2D8]"],
+.dark [class*="border-[#E9E4D9]"],
+.dark [class*="border-[#EAE4D8]"],
+.dark [class*="border-[#F0EBE1]"],
+.dark [class*="border-[#F0ECE4]"],
+.dark [class*="border-[#F1ECE4]"],
+.dark [class*="border-[#F3ECE1]"],
 .dark [class*="divide-[#EAE5DD]"],
 .dark [class*="divide-[#DDD8CE]"],
-.dark [class*="divide-[#E8E0D2]"] {
+.dark [class*="divide-[#E8E0D2]"],
+.dark [class*="divide-[#F3ECE1]"] {
   border-color: #2D2A25 !important;
+}
+
+.dark [class*="border-[#E5D7CB]"],
+.dark [class*="border-[#EEDCCF]"],
+.dark [class*="border-[#E8D7C8]"] {
+  border-color: #4A2D24 !important;
+}
+
+.dark [class*="border-[#F3E5C8]"] {
+  border-color: #3E341E !important;
+}
+
+.dark [class*="border-[#C5E5D0]"],
+.dark [class*="border-[#C8E6C9]"] {
+  border-color: #204A2E !important;
 }
 
 /* Primary and Accent Text */
 .dark [class*="text-[#1E1E1C]"],
 .dark [class*="text-[#20201D]"],
-.dark [class*="text-[#1A1816]"] {
+.dark [class*="text-[#1A1816]"],
+.dark [class*="text-[#2A2926]"],
+.dark [class*="text-[#2B2926]"],
+.dark [class*="text-[#2E2C28]"] {
   color: #FAF7F2 !important;
 }
 
+/* Secondary & Medium Dark Text */
+.dark [class*="text-[#3A3834]"],
+.dark [class*="text-[#3C3A35]"],
+.dark [class*="text-[#3D3A35]"],
 .dark [class*="text-[#403E39]"],
+.dark [class*="text-[#4A463F]"],
+.dark [class*="text-[#4A4741]"],
 .dark [class*="text-[#4A4742]"],
-.dark [class*="text-[#524E48]"] {
+.dark [class*="text-[#524E48]"],
+.dark [class*="text-[#555049]"],
+.dark [class*="text-[#55524B]"],
+.dark [class*="text-[#5C564E]"],
+.dark [class*="text-[#5C5850]"] {
   color: #D6D1C7 !important;
 }
 
+/* Muted & Tertiary Text */
 .dark [class*="text-[#6B685F]"],
 .dark [class*="text-[#68645C]"],
+.dark [class*="text-[#6B665E]"],
+.dark [class*="text-[#6E6A62]"],
+.dark [class*="text-[#706C64]"],
+.dark [class*="text-[#736F66]"],
 .dark [class*="text-[#7A756D]"],
+.dark [class*="text-[#807B72]"],
+.dark [class*="text-[#807C74]"],
 .dark [class*="text-[#858076]"],
 .dark [class*="text-[#8C877E]"],
 .dark [class*="text-[#9E988E]"] {
   color: #A8A297 !important;
+}
+
+/* Green accents & badges */
+.dark [class*="text-[#52644B]"],
+.dark [class*="text-[#2E7D32]"] {
+  color: #7E9972 !important;
+}
+
+/* Warm notice text */
+.dark [class*="text-[#6B5620]"],
+.dark [class*="text-[#8C6D1F]"] {
+  color: #E5A83B !important;
 }
 
 /* Form Controls & Inputs */
