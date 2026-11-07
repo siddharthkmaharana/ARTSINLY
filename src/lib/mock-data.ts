@@ -174,6 +174,23 @@ export const ARTISANS: Artisan[] = [
     featuredQuote: "Every stitch in the Chandua radiates the vivid colours and sacred joy of Odisha.",
     productCount: 1,
   },
+  {
+    id: "art-nathdwara-pichwai",
+    shopName: "Nathdwara Pichwai Atelier",
+    slug: "nathdwara-pichwai-atelier",
+    artisanName: "Master Pichwai Artisans",
+    bio: "Generational temple artists from Nathdwara, Rajasthan, preserving the sacred tradition of stone-ground mineral pigments and pure 24-karat gold leaf miniature painting.",
+    story: "Tracing back over four centuries to the sacred shrines of Nathdwara, master miniature painters prepare natural mineral pigments from ground lapis lazuli, malachite, and cinnabar, illuminating devotional Pichwai compositions with pure beaten 24-karat gold leaf.",
+    craftTradition: "Miniature Painting & Pichwai",
+    state: "Rajasthan",
+    locality: "Nathdwara",
+    isVerified: true,
+    avatarUrl: "/images/Artisans/Indian Miniature Artist at Work.png",
+    bannerUrl: "/images/products/Rajasthan/Sacred Srinathji Gold-Leaf Pichwai Miniature Painting.png",
+    yearsOfExperience: 35,
+    featuredQuote: "Every stroke of pure gold leaf is an act of seva, honoring centuries of devotion.",
+    productCount: 4,
+  },
 ];
 
 export const PRODUCTS: Product[] = [
@@ -1814,7 +1831,7 @@ export const PRODUCTS: Product[] = [
     isMadeToOrder: true,
     leadTimeDays: 21,
     status: "PUBLISHED",
-    artisan: ARTISANS[0],
+    artisan: ARTISANS[5],
     initialFavorited: false,
     images: [
       {
@@ -1910,7 +1927,7 @@ export const PRODUCTS: Product[] = [
     isMadeToOrder: true,
     leadTimeDays: 7,
     status: "PUBLISHED",
-    artisan: ARTISANS[0],
+    artisan: ARTISANS[5],
     initialFavorited: false,
     images: [
       {
@@ -2016,7 +2033,7 @@ export const PRODUCTS: Product[] = [
     isMadeToOrder: true,
     leadTimeDays: 7,
     status: "PUBLISHED",
-    artisan: ARTISANS[0],
+    artisan: ARTISANS[5],
     initialFavorited: false,
     images: [
       {
@@ -2123,7 +2140,7 @@ export const PRODUCTS: Product[] = [
     isMadeToOrder: true,
     leadTimeDays: 7,
     status: "PUBLISHED",
-    artisan: ARTISANS[0],
+    artisan: ARTISANS[5],
     initialFavorited: false,
     images: [
       {

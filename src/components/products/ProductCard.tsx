@@ -125,11 +125,11 @@ export function ProductCard({ product, variant = "default" }: ProductCardProps) 
   // Catalog Variant matching uploaded screenshot
   if (variant === "catalog") {
     return (
-      <div className="bg-[#ECE6DC]/60 border border-[#DDD5C8] rounded-xl p-3 flex flex-col group transition-all duration-300 hover:shadow-md hover:border-[#CCC2B2]">
+      <div className="bg-[#ECE6DC]/60 dark:bg-[#1A1815] border border-[#DDD5C8] dark:border-[#2D2A25] rounded-xl p-3 flex flex-col group transition-all duration-300 hover:shadow-md hover:border-[#CCC2B2] dark:hover:border-[#3D3933]">
         {/* Product Image with Region Pill */}
         <Link
           href={`/products/${product.slug}`}
-          className="block relative aspect-square w-full rounded-lg overflow-hidden bg-[#E2DBD0]"
+          className="block relative aspect-square w-full rounded-lg overflow-hidden bg-[#E2DBD0] dark:bg-[#24211D]"
         >
           <img
             src={primaryImage}
@@ -147,7 +147,7 @@ export function ProductCard({ product, variant = "default" }: ProductCardProps) 
 
           {/* Region Tag Pill on top-left of image */}
           <div className="absolute top-2.5 left-2.5">
-            <span className="bg-white/90 backdrop-blur-xs text-[#2A2926] text-[10px] font-medium px-2.5 py-0.5 rounded-full shadow-2xs border border-black/5">
+            <span className="bg-white/90 dark:bg-[#1E1C19]/90 backdrop-blur-xs text-[#2A2926] dark:text-[#FAF7F2] text-[10px] font-medium px-2.5 py-0.5 rounded-full shadow-2xs border border-black/5 dark:border-white/10">
               {getDisplayRegionTag(product)}
             </span>
           </div>
@@ -158,16 +158,16 @@ export function ProductCard({ product, variant = "default" }: ProductCardProps) 
           <div>
             {/* Craft on left | Artisan on right in italic */}
             <div className="flex items-center justify-between text-[11px] mb-1 gap-2 overflow-hidden w-full">
-              <span className="text-[#7A756D] font-normal truncate shrink min-w-0 max-w-[48%]">
+              <span className="text-[#7A756D] dark:text-[#A8A297] font-normal truncate shrink min-w-0 max-w-[48%]">
                 {getDisplayCraft(product.craftType, product.categorySlug, product.title)}
               </span>
-              <span className="text-[#555049] italic truncate shrink min-w-0 max-w-[52%] text-right">
+              <span className="text-[#555049] dark:text-[#C5BFB5] italic truncate shrink min-w-0 max-w-[52%] text-right">
                 {getDisplayByline(product)}
               </span>
             </div>
 
             {/* Title */}
-            <h3 className="font-serif text-[13px] sm:text-[14px] font-medium text-[#1E1E1C] leading-snug truncate hover:text-[#89714F] transition-colors mb-2.5">
+            <h3 className="font-serif text-[13px] sm:text-[14px] font-medium text-[#1E1E1C] dark:text-[#FAF7F2] leading-snug truncate hover:text-[#89714F] dark:hover:text-[#D4AF37] transition-colors mb-2.5">
               <Link href={`/products/${product.slug}`}>
                 {product.shortTitle || product.title}
               </Link>
@@ -176,7 +176,7 @@ export function ProductCard({ product, variant = "default" }: ProductCardProps) 
 
           {/* Bottom Row: Price on left | Heart + Add button on right */}
           <div className="pt-1 flex items-center justify-between gap-2">
-            <div className="text-sm sm:text-base font-semibold text-[#1E1E1C] tracking-tight">
+            <div className="text-sm sm:text-base font-semibold text-[#1E1E1C] dark:text-[#FAF7F2] tracking-tight">
               {displayPrice}
             </div>
 
@@ -184,12 +184,12 @@ export function ProductCard({ product, variant = "default" }: ProductCardProps) 
               {/* Wishlist Button */}
               <button
                 onClick={handleWishlist}
-                className="w-7 h-7 rounded-full border border-[#D5CFC5] bg-white flex items-center justify-center text-[#20201D] hover:border-[#1E1E1C] transition-colors shadow-2xs"
+                className="w-7 h-7 rounded-full border border-[#D5CFC5] dark:border-[#33302A] bg-white dark:bg-[#25221E] flex items-center justify-center text-[#20201D] dark:text-[#FAF7F2] hover:border-[#1E1E1C] dark:hover:border-[#FAF7F2] transition-colors shadow-2xs cursor-pointer"
                 aria-label={inWishlist ? "Remove from wishlist" : "Add to wishlist"}
               >
                 <Heart
                   className={`w-3.5 h-3.5 transition-colors ${
-                    inWishlist ? "fill-[#C2410C] text-[#C2410C]" : "text-[#7A756D]"
+                    inWishlist ? "fill-[#C2410C] text-[#C2410C]" : "text-[#7A756D] dark:text-[#A8A297]"
                   }`}
                 />
               </button>
@@ -197,10 +197,10 @@ export function ProductCard({ product, variant = "default" }: ProductCardProps) 
               {/* Add Black Pill Button */}
               <button
                 onClick={handleAddToCart}
-                className={`px-3.5 py-1 rounded-full text-xs font-semibold transition-all shadow-2xs ${
+                className={`px-3.5 py-1 rounded-full text-xs font-semibold transition-all shadow-2xs cursor-pointer ${
                   isAdded
                     ? "bg-[#52644B] text-white"
-                    : "bg-[#1E1E1C] hover:bg-black text-white"
+                    : "bg-[#1E1E1C] hover:bg-black dark:bg-[#FAF7F2] dark:hover:bg-white text-white dark:text-[#141311]"
                 }`}
               >
                 {isAdded ? "Added" : "Add"}
@@ -214,11 +214,11 @@ export function ProductCard({ product, variant = "default" }: ProductCardProps) 
 
   // Default Variant (e.g. for homepage / other sections)
   return (
-    <div className="bg-[#FAF7F2] border border-[#E5E0D7] rounded-lg overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-md hover:border-[#D5CFC5]">
+    <div className="bg-[#FAF7F2] dark:bg-[#1A1815] border border-[#E5E0D7] dark:border-[#2D2A25] rounded-lg overflow-hidden flex flex-col group transition-all duration-300 hover:shadow-md hover:border-[#D5CFC5] dark:hover:border-[#3D3933]">
       {/* Product Image with Region Pill */}
       <Link
         href={`/products/${product.slug}`}
-        className="block relative aspect-[4/5] w-full overflow-hidden bg-[#EFEBE4]"
+        className="block relative aspect-[4/5] w-full overflow-hidden bg-[#EFEBE4] dark:bg-[#24211D]"
       >
         <img
           src={primaryImage}
@@ -229,39 +229,39 @@ export function ProductCard({ product, variant = "default" }: ProductCardProps) 
 
         {/* Region Tag Pill on top-left of image */}
         <div className="absolute top-3.5 left-3.5">
-          <span className="bg-white/90 backdrop-blur-xs text-[#20201D] text-[11px] font-medium px-2.5 py-0.5 rounded-full shadow-xs border border-black/5">
+          <span className="bg-white/90 dark:bg-[#1E1C19]/90 backdrop-blur-xs text-[#20201D] dark:text-[#FAF7F2] text-[11px] font-medium px-2.5 py-0.5 rounded-full shadow-xs border border-black/5 dark:border-white/10">
             {getDisplayRegionTag(product)}
           </span>
         </div>
       </Link>
 
       {/* Card Content */}
-      <div className="p-5 flex flex-col flex-grow justify-between bg-[#FAF7F2]">
+      <div className="p-5 flex flex-col flex-grow justify-between bg-[#FAF7F2] dark:bg-[#1A1815]">
         <div>
           {/* Category on left | Artisan on right in italic */}
           <div className="flex items-center justify-between text-xs mb-1.5 gap-2 overflow-hidden w-full">
-            <span className="text-[#807C74] font-normal truncate shrink min-w-0 max-w-[48%]">
+            <span className="text-[#807C74] dark:text-[#A8A297] font-normal truncate shrink min-w-0 max-w-[48%]">
               {getDisplayCraft(product.craftType, product.categorySlug, product.title)}
             </span>
-            <span className="text-[#706C64] italic truncate shrink min-w-0 max-w-[52%] text-right">
+            <span className="text-[#706C64] dark:text-[#C5BFB5] italic truncate shrink min-w-0 max-w-[52%] text-right">
               {getDisplayByline(product)}
             </span>
           </div>
 
           {/* Title */}
-          <h3 className="font-serif text-base sm:text-[17px] font-medium text-[#1E1E1C] leading-snug line-clamp-2 hover:text-[#89714F] transition-colors mb-2">
+          <h3 className="font-serif text-base sm:text-[17px] font-medium text-[#1E1E1C] dark:text-[#FAF7F2] leading-snug line-clamp-2 hover:text-[#89714F] dark:hover:text-[#D4AF37] transition-colors mb-2">
             <Link href={`/products/${product.slug}`}>{product.title}</Link>
           </h3>
 
           {/* 2-line snippet */}
-          <p className="text-xs text-[#736F66] line-clamp-2 leading-relaxed mb-4">
+          <p className="text-xs text-[#736F66] dark:text-[#A8A297] line-clamp-2 leading-relaxed mb-4">
             {product.excerpt || product.description}
           </p>
         </div>
 
         {/* Bottom Row: Price on left | Heart + Add to Cart pill on right */}
         <div className="pt-2 flex items-center justify-between gap-3">
-          <div className="text-lg font-semibold text-[#1E1E1C] tracking-tight">
+          <div className="text-lg font-semibold text-[#1E1E1C] dark:text-[#FAF7F2] tracking-tight">
             {displayPrice}
           </div>
 
@@ -269,12 +269,12 @@ export function ProductCard({ product, variant = "default" }: ProductCardProps) 
             {/* Wishlist Button */}
             <button
               onClick={handleWishlist}
-              className="w-8 h-8 rounded-full border border-[#D5CFC5] bg-white flex items-center justify-center text-[#20201D] hover:border-[#89714F] hover:text-[#89714F] transition-colors"
+              className="w-8 h-8 rounded-full border border-[#D5CFC5] dark:border-[#33302A] bg-white dark:bg-[#25221E] flex items-center justify-center text-[#20201D] dark:text-[#FAF7F2] hover:border-[#89714F] hover:text-[#89714F] transition-colors cursor-pointer"
               aria-label={inWishlist ? "Remove from wishlist" : "Add to wishlist"}
             >
               <Heart
                 className={`w-4 h-4 transition-colors ${
-                  inWishlist ? "fill-[#89714F] text-[#89714F]" : "text-[#20201D]"
+                  inWishlist ? "fill-[#89714F] text-[#89714F]" : "text-[#20201D] dark:text-[#FAF7F2]"
                 }`}
               />
             </button>
@@ -282,10 +282,10 @@ export function ProductCard({ product, variant = "default" }: ProductCardProps) 
             {/* Add to Cart Black Pill Button */}
             <button
               onClick={handleAddToCart}
-              className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all shadow-xs ${
+              className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all shadow-xs cursor-pointer ${
                 isAdded
                   ? "bg-[#52644B] text-white"
-                  : "bg-[#1E1E1C] hover:bg-[#3B3A36] text-white"
+                  : "bg-[#1E1E1C] hover:bg-[#3B3A36] dark:bg-[#FAF7F2] dark:hover:bg-white text-white dark:text-[#141311]"
               }`}
             >
               {isAdded ? (

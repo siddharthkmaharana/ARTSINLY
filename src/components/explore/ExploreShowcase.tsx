@@ -310,10 +310,10 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
                 <button
                   key={img.id}
                   onClick={() => setSelectedImageIndex(idx)}
-                  className={`w-14 h-14 sm:w-16 sm:h-16 rounded overflow-hidden transition-all duration-200 bg-[#EFEBE4] shrink-0 ${
+                  className={`w-14 h-14 sm:w-16 sm:h-16 rounded overflow-hidden transition-all duration-200 bg-[#EFEBE4] dark:bg-[#1E1C19] shrink-0 ${
                     selectedImageIndex === idx
-                      ? "ring-2 ring-[#1E1E1C] opacity-100 shadow-xs"
-                      : "opacity-75 hover:opacity-100 border border-[#DDD8CE]"
+                      ? "ring-2 ring-[#1E1E1C] dark:ring-[#FAF7F2] opacity-100 shadow-xs"
+                      : "opacity-75 hover:opacity-100 border border-[#DDD8CE] dark:border-[#2D2A25]"
                   }`}
                 >
                   <img
@@ -331,7 +331,7 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
 
             {/* Main Hero Showcase Container - dynamic layout per product */}
             <div
-              className={`relative flex-grow w-full ${showcaseLayout.containerClass} rounded-xl overflow-hidden bg-[#EFEBE4] group border border-[#E5E0D7] shadow-xs`}
+              className={`relative flex-grow w-full ${showcaseLayout.containerClass} rounded-xl overflow-hidden bg-[#EFEBE4] dark:bg-[#1A1815] group border border-[#E5E0D7] dark:border-[#2D2A25] shadow-xs`}
             >
               <img
                 src={currentImage}
@@ -345,36 +345,36 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
 
               {/* Top-Right: Lighting Mode Switcher Pill */}
               <div className="absolute top-3.5 right-3.5 z-10">
-                <div className="flex items-center gap-1 bg-white/90 backdrop-blur-xs text-[10px] text-[#6E6A62] font-mono px-2 py-1 rounded-full shadow-xs border border-black/5">
-                  <span className="text-[#8C877E] uppercase text-[9px] mr-1">LIGHT :</span>
+                <div className="flex items-center gap-1 bg-white/90 dark:bg-[#1A1815]/90 backdrop-blur-xs text-[10px] text-[#6E6A62] dark:text-[#A8A297] font-mono px-2 py-1 rounded-full shadow-xs border border-black/5 dark:border-white/10">
+                  <span className="text-[#8C877E] dark:text-[#A8A297] uppercase text-[9px] mr-1">LIGHT :</span>
                   <button
                     onClick={() => setLightingMode("day")}
                     className={`px-1.5 py-0.5 rounded transition-all cursor-pointer ${
                       lightingMode === "day"
-                        ? "bg-[#1E1E1C] text-white font-semibold"
-                        : "hover:text-[#1E1E1C]"
+                        ? "bg-[#1E1E1C] text-white dark:bg-[#FAF7F2] dark:text-[#141311] font-semibold"
+                        : "hover:text-[#1E1E1C] dark:hover:text-[#FAF7F2]"
                     }`}
                   >
                     Day
                   </button>
-                  <span className="text-[#DDD8CE]">|</span>
+                  <span className="text-[#DDD8CE] dark:text-[#38342E]">|</span>
                   <button
                     onClick={() => setLightingMode("warm")}
                     className={`px-1.5 py-0.5 rounded transition-all cursor-pointer ${
                       lightingMode === "warm"
-                        ? "bg-[#1E1E1C] text-white font-semibold"
-                        : "hover:text-[#1E1E1C]"
+                        ? "bg-[#1E1E1C] text-white dark:bg-[#FAF7F2] dark:text-[#141311] font-semibold"
+                        : "hover:text-[#1E1E1C] dark:hover:text-[#FAF7F2]"
                     }`}
                   >
                     Warm
                   </button>
-                  <span className="text-[#DDD8CE]">|</span>
+                  <span className="text-[#DDD8CE] dark:text-[#38342E]">|</span>
                   <button
                     onClick={() => setLightingMode("museum")}
                     className={`px-1.5 py-0.5 rounded transition-all cursor-pointer ${
                       lightingMode === "museum"
-                        ? "bg-[#1E1E1C] text-white font-semibold"
-                        : "hover:text-[#1E1E1C]"
+                        ? "bg-[#1E1E1C] text-white dark:bg-[#FAF7F2] dark:text-[#141311] font-semibold"
+                        : "hover:text-[#1E1E1C] dark:hover:text-[#FAF7F2]"
                     }`}
                   >
                     Museum
@@ -384,8 +384,8 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
 
               {/* Bottom-Left: Provenance Tag Pill */}
               <div className="absolute bottom-4 left-4 z-10 max-w-[85%] truncate">
-                <span className="inline-flex items-center gap-1.5 bg-white/95 backdrop-blur-xs text-[#20201D] text-[10px] sm:text-[11px] font-medium tracking-wider uppercase px-3 py-1.5 rounded-full shadow-xs border border-black/5">
-                  <MapPin className="w-3 h-3 text-[#A82626] shrink-0" />
+                <span className="inline-flex items-center gap-1.5 bg-white/95 dark:bg-[#1A1815]/95 backdrop-blur-xs text-[#20201D] dark:text-[#FAF7F2] text-[10px] sm:text-[11px] font-medium tracking-wider uppercase px-3 py-1.5 rounded-full shadow-xs border border-black/5 dark:border-white/10">
+                  <MapPin className="w-3 h-3 text-[#A82626] dark:text-[#E06D53] shrink-0" />
                   <span className="truncate">{provenanceTag}</span>
                 </span>
               </div>
@@ -395,14 +395,14 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
                 <>
                   <button
                     onClick={handlePrevImage}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/70 hover:bg-white text-[#1E1E1C] flex items-center justify-center shadow-xs backdrop-blur-xs transition-all opacity-85 hover:opacity-100 z-10 cursor-pointer"
+                    className="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/70 dark:bg-[#1A1815]/80 hover:bg-white dark:hover:bg-[#25221E] text-[#1E1E1C] dark:text-[#FAF7F2] flex items-center justify-center shadow-xs backdrop-blur-xs transition-all opacity-85 hover:opacity-100 z-10 cursor-pointer"
                     aria-label="Previous image"
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </button>
                   <button
                     onClick={handleNextImage}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/70 hover:bg-white text-[#1E1E1C] flex items-center justify-center shadow-xs backdrop-blur-xs transition-all opacity-85 hover:opacity-100 z-10 cursor-pointer"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/70 dark:bg-[#1A1815]/80 hover:bg-white dark:hover:bg-[#25221E] text-[#1E1E1C] dark:text-[#FAF7F2] flex items-center justify-center shadow-xs backdrop-blur-xs transition-all opacity-85 hover:opacity-100 z-10 cursor-pointer"
                     aria-label="Next image"
                   >
                     <ChevronRight className="w-4 h-4" />
@@ -452,13 +452,13 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
             </p>
 
             {/* SECTION 4: CONFIGURE VARIANTS INTERACTIVE PANEL */}
-            <div className="bg-[#F6F2EB] border border-[#E3DCD1] rounded-xl p-4 sm:p-4.5 mb-5 space-y-4">
-              <div className="flex items-center justify-between border-b border-[#E2DBD0] pb-2">
-                <span className="text-[11px] font-bold tracking-[0.14em] text-[#2A2926] uppercase flex items-center gap-1.5">
-                  <Layers className="w-3.5 h-3.5 text-[#A82626]" />
+            <div className="bg-[#F6F2EB] dark:bg-[#1A1815] border border-[#E3DCD1] dark:border-[#2D2A25] rounded-xl p-4 sm:p-4.5 mb-5 space-y-4">
+              <div className="flex items-center justify-between border-b border-[#E2DBD0] dark:border-[#2D2A25] pb-2">
+                <span className="text-[11px] font-bold tracking-[0.14em] text-[#2A2926] dark:text-[#FAF7F2] uppercase flex items-center gap-1.5">
+                  <Layers className="w-3.5 h-3.5 text-[#A82626] dark:text-[#E06D53]" />
                   4. Configure Variants
                 </span>
-                <span className="text-[10px] font-mono text-[#7A756D]">
+                <span className="text-[10px] font-mono text-[#7A756D] dark:text-[#A8A297]">
                   Handcrafted to order
                 </span>
               </div>
@@ -467,10 +467,10 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
               {hasMultipleSizes ? (
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <label className="text-[11px] font-semibold text-[#3C3A35]">
+                    <label className="text-[11px] font-semibold text-[#3C3A35] dark:text-[#D6D1C7]">
                       Select Size:
                     </label>
-                    <span className="text-[10px] text-[#7A756D] font-mono">
+                    <span className="text-[10px] text-[#7A756D] dark:text-[#A8A297] font-mono">
                       {selectedSize.dimensions}
                     </span>
                   </div>
@@ -484,21 +484,21 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
                           onClick={() => setSelectedSize(size)}
                           className={`p-2.5 rounded-lg text-left transition-all border cursor-pointer ${
                             isSelected
-                              ? "bg-[#1E1E1C] text-white border-[#1E1E1C] shadow-xs"
-                              : "bg-white/80 hover:bg-white text-[#2B2926] border-[#DDD5C8]"
+                              ? "bg-[#1E1E1C] text-white border-[#1E1E1C] dark:bg-[#FAF7F2] dark:text-[#141311] dark:border-[#FAF7F2] shadow-xs"
+                              : "bg-white/80 hover:bg-white dark:bg-[#22201C] dark:hover:bg-[#2B2823] text-[#2B2926] dark:text-[#FAF7F2] border-[#DDD5C8] dark:border-[#33302A]"
                           }`}
                         >
                           <div className="text-[11px] font-bold truncate">{size.name}</div>
                           <div
                             className={`text-[10px] ${
-                              isSelected ? "text-gray-300" : "text-[#7A756D]"
+                              isSelected ? "text-gray-300 dark:text-[#68645C]" : "text-[#7A756D] dark:text-[#A8A297]"
                             } truncate`}
                           >
                             {size.dimensions}
                           </div>
                           <div
                             className={`text-[11px] font-semibold mt-1 ${
-                              isSelected ? "text-white" : "text-[#A82626]"
+                              isSelected ? "text-white dark:text-[#141311]" : "text-[#A82626] dark:text-[#E06D53]"
                             }`}
                           >
                             {size.priceDisplay}
@@ -511,24 +511,24 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
               ) : (
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <label className="text-[11px] font-semibold text-[#3C3A35]">
+                    <label className="text-[11px] font-semibold text-[#3C3A35] dark:text-[#D6D1C7]">
                       Craft Dimensions & Scale:
                     </label>
-                    <span className="text-[10px] text-[#7A756D] font-mono">
+                    <span className="text-[10px] text-[#7A756D] dark:text-[#A8A297] font-mono">
                       Standard Studio Scale
                     </span>
                   </div>
-                  <div className="bg-white/80 border border-[#DDD5C8] rounded-lg p-2.5 sm:p-3 flex items-center justify-between">
+                  <div className="bg-white/80 dark:bg-[#22201C] border border-[#DDD5C8] dark:border-[#33302A] rounded-lg p-2.5 sm:p-3 flex items-center justify-between">
                     <div>
-                      <div className="text-xs font-semibold text-[#1E1E1C]">
+                      <div className="text-xs font-semibold text-[#1E1E1C] dark:text-[#FAF7F2]">
                         {currentProduct.dimensions || "Authentic Handcrafted Dimensions"}
                       </div>
-                      <div className="text-[10px] text-[#7A756D]">
+                      <div className="text-[10px] text-[#7A756D] dark:text-[#A8A297]">
                         Individually hand-shaped by master artisan
                       </div>
                     </div>
                     <div className="text-right">
-                      <span className="text-xs font-bold text-[#1E1E1C]">
+                      <span className="text-xs font-bold text-[#1E1E1C] dark:text-[#FAF7F2]">
                         {currentProduct.priceDisplay}
                       </span>
                     </div>
@@ -540,12 +540,12 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
               {showColorThemes && availableColors.length > 0 && selectedColor && (
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <label className="text-[11px] font-semibold text-[#3C3A35]">
+                    <label className="text-[11px] font-semibold text-[#3C3A35] dark:text-[#D6D1C7]">
                       {availableColors[0]?.name.toLowerCase().includes("design")
                         ? "Select Design Option:"
                         : "Select Colour Theme:"}
                     </label>
-                    <span className="text-[10px] font-mono font-medium text-[#1E1E1C]">
+                    <span className="text-[10px] font-mono font-medium text-[#1E1E1C] dark:text-[#FAF7F2]">
                       {selectedColor.name}
                     </span>
                   </div>
@@ -564,8 +564,8 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
                           }}
                           className={`group relative flex items-center gap-1.5 px-2.5 py-1.5 rounded-full border transition-all cursor-pointer ${
                             isSelected
-                              ? "bg-[#1E1E1C] text-white border-[#1E1E1C] shadow-xs"
-                              : "bg-white/90 text-[#3A3834] border-[#DDD5C8] hover:border-[#1E1E1C]"
+                              ? "bg-[#1E1E1C] text-white border-[#1E1E1C] dark:bg-[#FAF7F2] dark:text-[#141311] dark:border-[#FAF7F2] shadow-xs"
+                              : "bg-white/90 dark:bg-[#22201C] text-[#3A3834] dark:text-[#FAF7F2] border-[#DDD5C8] dark:border-[#33302A] hover:border-[#1E1E1C] dark:hover:border-[#FAF7F2]"
                           }`}
                         >
                           <span
@@ -581,27 +581,27 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
               )}
 
               {/* Quantity Selector & Total Price */}
-              <div className="flex items-center justify-between pt-2 border-t border-[#E2DBD0]">
+              <div className="flex items-center justify-between pt-2 border-t border-[#E2DBD0] dark:border-[#2D2A25]">
                 <div>
-                  <span className="text-[11px] font-semibold text-[#3C3A35] block mb-1">
+                  <span className="text-[11px] font-semibold text-[#3C3A35] dark:text-[#D6D1C7] block mb-1">
                     Quantity:
                   </span>
-                  <div className="flex items-center bg-white border border-[#DDD5C8] rounded-md overflow-hidden">
+                  <div className="flex items-center bg-white dark:bg-[#22201C] border border-[#DDD5C8] dark:border-[#33302A] rounded-md overflow-hidden">
                     <button
                       type="button"
                       onClick={() => setQuantity((q) => Math.max(1, q - 1))}
                       disabled={quantity <= 1}
-                      className="px-2.5 py-1 text-xs text-[#555049] hover:bg-black/5 disabled:opacity-30 cursor-pointer"
+                      className="px-2.5 py-1 text-xs text-[#555049] dark:text-[#A8A297] hover:bg-black/5 dark:hover:bg-white/10 disabled:opacity-30 cursor-pointer"
                     >
                       <Minus className="w-3 h-3" />
                     </button>
-                    <span className="px-3 py-1 text-xs font-semibold font-mono text-[#1E1E1C]">
+                    <span className="px-3 py-1 text-xs font-semibold font-mono text-[#1E1E1C] dark:text-[#FAF7F2]">
                       {quantity}
                     </span>
                     <button
                       type="button"
                       onClick={() => setQuantity((q) => Math.min(10, q + 1))}
-                      className="px-2.5 py-1 text-xs text-[#555049] hover:bg-black/5 cursor-pointer"
+                      className="px-2.5 py-1 text-xs text-[#555049] dark:text-[#A8A297] hover:bg-black/5 dark:hover:bg-white/10 cursor-pointer"
                     >
                       <Plus className="w-3 h-3" />
                     </button>
@@ -609,17 +609,17 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
                 </div>
 
                 <div className="text-right">
-                  <span className="text-[10px] font-mono uppercase text-[#7A756D] block">
+                  <span className="text-[10px] font-mono uppercase text-[#7A756D] dark:text-[#A8A297] block">
                     Total Price ({quantity} {quantity === 1 ? "unit" : "units"}):
                   </span>
-                  <span className="text-xl font-bold text-[#1E1E1C]">
+                  <span className="text-xl font-bold text-[#1E1E1C] dark:text-[#FAF7F2]">
                     {totalPriceDisplay}
                   </span>
                 </div>
               </div>
 
               {/* Selected Variant Summary Pill */}
-              <div className="bg-white/70 rounded-md px-3 py-2 text-[11px] text-[#4A4741] flex flex-wrap items-center justify-between gap-1 border border-[#E5DFD4]">
+              <div className="bg-white/70 dark:bg-[#22201C] rounded-md px-3 py-2 text-[11px] text-[#4A4741] dark:text-[#C5BFB5] flex flex-wrap items-center justify-between gap-1 border border-[#E5DFD4] dark:border-[#33302A]">
                 <span>
                   <strong>Selected:</strong>{" "}
                   {hasMultipleSizes
@@ -644,7 +644,7 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
                 className={`py-3 px-8 rounded-full text-xs font-semibold flex-1 transition-all shadow-xs flex items-center justify-center gap-1.5 cursor-pointer ${
                   isAdded
                     ? "bg-[#2E7D52] text-white"
-                    : "bg-[#1E1E1C] hover:bg-[#3B3A36] text-white"
+                    : "bg-[#1E1E1C] hover:bg-[#3B3A36] dark:bg-[#FAF7F2] dark:hover:bg-white text-white dark:text-[#141311]"
                 }`}
               >
                 {isAdded ? (
@@ -667,8 +667,8 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
                 onClick={() => toggleWishlist(currentProduct.id)}
                 className={`py-3 px-5 rounded-full text-xs font-semibold transition-all flex items-center justify-center gap-1.5 border cursor-pointer ${
                   inWishlist
-                    ? "bg-[#FAF2EC] border-[#E5D7CB] text-[#A82626]"
-                    : "bg-[#FAF2EC] border-[#E5D7CB] text-[#A82626] hover:bg-[#F3ECE5]"
+                    ? "bg-[#FAF2EC] dark:bg-[#2A1D18] border-[#E5D7CB] dark:border-[#4A2D24] text-[#A82626] dark:text-[#E06D53]"
+                    : "bg-[#FAF2EC] dark:bg-[#2A1D18] border-[#E5D7CB] dark:border-[#4A2D24] text-[#A82626] dark:text-[#E06D53] hover:bg-[#F3ECE5] dark:hover:bg-[#35251F]"
                 }`}
               >
                 <Heart
@@ -721,7 +721,7 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
             )}
 
             {/* Dynamic Artisan Card Box */}
-            <div className="bg-[#F7F4EE] border border-[#E8E2D8] rounded-lg p-3 sm:p-3.5 flex items-center justify-between gap-3 mt-4">
+            <div className="bg-[#F7F4EE] dark:bg-[#1A1815] border border-[#E8E2D8] dark:border-[#2D2A25] rounded-lg p-3 sm:p-3.5 flex items-center justify-between gap-3 mt-4">
               <div className="flex items-center gap-3">
                 <img
                   src={
@@ -734,17 +734,17 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
                   height={40}
                   loading="lazy"
                   decoding="async"
-                  className="w-10 h-10 rounded-full object-cover border border-[#D5CFC5] shrink-0"
+                  className="w-10 h-10 rounded-full object-cover border border-[#D5CFC5] dark:border-[#33302A] shrink-0"
                 />
                 <div>
-                  <h4 className="font-semibold text-xs text-[#1E1E1C]">
+                  <h4 className="font-semibold text-xs text-[#1E1E1C] dark:text-[#FAF7F2]">
                     {currentProduct.artisan?.artisanName || currentProduct.byline || "Master Artisan"}
                   </h4>
-                  <p className="text-[10px] text-[#807B72]">
+                  <p className="text-[10px] text-[#807B72] dark:text-[#A8A297]">
                     {currentProduct.artisan?.locality || currentProduct.provenanceTag || currentProduct.state || "India"} •{" "}
                     {currentProduct.craftLineage || "Generational Lineage"}
                   </p>
-                  <p className="text-[10px] text-[#6E6A62] line-clamp-1 mt-0.5">
+                  <p className="text-[10px] text-[#6E6A62] dark:text-[#A8A297] line-clamp-1 mt-0.5">
                     {currentProduct.artisan?.story ||
                       currentProduct.artisan?.bio ||
                       currentProduct.story ||
@@ -759,7 +759,7 @@ export function ExploreShowcase({ productSlug }: ExploreShowcaseProps) {
                     ? `/artisans/${currentProduct.artisan.slug}`
                     : `/catalog?region=${currentProduct.regionSlug || "all"}`
                 }
-                className="text-[11px] font-semibold text-[#A82626] hover:underline shrink-0 flex items-center gap-0.5"
+                className="text-[11px] font-semibold text-[#A82626] dark:text-[#E06D53] hover:underline shrink-0 flex items-center gap-0.5"
               >
                 <span>Artisan Profile</span>
                 <ArrowUpRight className="w-3 h-3" />
