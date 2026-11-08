@@ -284,7 +284,7 @@ export default function HomePage() {
             <div className="lg:col-span-7 space-y-6 sm:space-y-7">
               <div className="inline-flex items-center gap-2 text-[10px] sm:text-[11px] font-semibold text-[#C2410C] tracking-[0.25em] uppercase">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#C2410C]" />
-                <span>EDITION 2026 • THE HERITAGE PAVILION</span>
+                <span>AUTHENTIC HANDCRAFTED HERITAGE</span>
               </div>
 
               <h1 className="font-serif text-3xl sm:text-5xl lg:text-[58px] font-normal leading-[1.12] tracking-tight text-[#1E1E1C]">
@@ -293,10 +293,10 @@ export default function HomePage() {
               </h1>
 
               <p className="text-xs sm:text-sm text-[#6E6A62] leading-relaxed max-w-xl font-light">
-                ARTSINLY connects discerning collectors and architectural patrons directly
-                with certified master artisans across India&apos;s ancestral craft terroirs.
-                Preserving 900 years of living cultural heritage through sovereign direct
-                compensation and authenticated Geographical Indication (GI).
+                ARTSINLY connects art patrons and conscious collectors directly
+                with certified master artisans across India. Discover authentic
+                handmade art, preserved craft traditions, and fair-trade Geographical
+                Indication (GI) certified pieces.
               </p>
 
               <div className="flex flex-wrap items-center gap-3 pt-2">

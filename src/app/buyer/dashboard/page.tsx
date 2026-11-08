@@ -118,7 +118,7 @@ function BuyerDashboardContent() {
     };
   }, [user]);
 
-  const displayName = user?.name || "Aarav Sharma";
+  const displayName = user?.name || (user?.email ? user.email.split("@")[0] : "Customer");
   const initials = displayName
     .split(" ")
     .map((n) => n[0])

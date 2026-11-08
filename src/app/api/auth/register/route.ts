@@ -2,6 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { hashPassword, createSessionToken } from "@/lib/auth";
 import { Role } from "@prisma/client";
+import {
+  getFallbackUserByEmail,
+  registerFallbackUser,
+  withDbTimeout,
+} from "@/lib/auth-store";
 
 export async function POST(req: NextRequest) {
   try {
@@ -23,35 +28,67 @@ export async function POST(req: NextRequest) {
     }
 
     const normalizedEmail = email.toLowerCase().trim();
+    const userRole = role === "SELLER" ? Role.SELLER : Role.BUYER;
 
-    // Check if user already exists
-    const existing = await prisma.user.findUnique({
-      where: { email: normalizedEmail },
-    });
+    let user: any = null;
+    let dbAvailable = true;
 
-    if (existing) {
-      return NextResponse.json(
-        { error: "An account with this email address already exists" },
-        { status: 409 }
+    // 1. Attempt PostgreSQL via Prisma first (with fast timeout protection)
+    try {
+      const existing = await withDbTimeout(
+        prisma.user.findUnique({
+          where: { email: normalizedEmail },
+        }),
+        600
       );
+
+      if (existing) {
+        return NextResponse.json(
+          { error: "An account with this email address already exists" },
+          { status: 409 }
+        );
+      }
+
+      // If user does not exist in DB, create new user in PostgreSQL
+      const passwordHash = hashPassword(password);
+      user = await withDbTimeout(
+        prisma.user.create({
+          data: {
+            email: normalizedEmail,
+            name: name?.trim() || normalizedEmail.split("@")[0],
+            passwordHash,
+            role: userRole,
+            phone,
+          },
+          include: {
+            sellerProfile: true,
+          },
+        }),
+        1000
+      );
+    } catch (dbErr) {
+      // PostgreSQL is offline or unreachable - fall back to resilient local store
+      dbAvailable = false;
     }
 
-    const userRole = role === "SELLER" ? Role.SELLER : Role.BUYER;
-    const passwordHash = hashPassword(password);
+    // 2. If database is offline, use resilient local auth store fallback
+    if (!dbAvailable || !user) {
+      const existingFallback = getFallbackUserByEmail(normalizedEmail);
+      if (existingFallback) {
+        return NextResponse.json(
+          { error: "An account with this email address already exists" },
+          { status: 409 }
+        );
+      }
 
-    // Create user in PostgreSQL
-    const user = await prisma.user.create({
-      data: {
+      user = registerFallbackUser({
         email: normalizedEmail,
-        name: name || normalizedEmail.split("@")[0],
-        passwordHash,
-        role: userRole,
+        password,
+        name,
+        role: userRole as "BUYER" | "SELLER",
         phone,
-      },
-      include: {
-        sellerProfile: true,
-      },
-    });
+      });
+    }
 
     const token = createSessionToken({
       userId: user.id,
@@ -67,8 +104,8 @@ export async function POST(req: NextRequest) {
         email: user.email,
         name: user.name,
         role: user.role,
-        avatar: user.avatar,
-        sellerProfile: user.sellerProfile,
+        avatar: user.avatar || null,
+        sellerProfile: user.sellerProfile || null,
       },
       token,
     });
@@ -86,7 +123,7 @@ export async function POST(req: NextRequest) {
   } catch (error: any) {
     console.error("Registration error:", error);
     return NextResponse.json(
-      { error: error.message || "Failed to register account" },
+      { error: "Unable to complete registration. Please check your details and try again." },
       { status: 500 }
     );
   }

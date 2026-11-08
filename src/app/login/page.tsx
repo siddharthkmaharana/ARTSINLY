@@ -11,7 +11,6 @@ import {
   Eye,
   EyeOff,
   ArrowRight,
-  Sparkles,
   ShieldCheck,
   CheckCircle2,
   AlertCircle,
@@ -19,110 +18,36 @@ import {
   ArrowLeft,
   Check,
   Award,
-  Globe2,
+  Sparkles,
 } from "lucide-react";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import { useAuth } from "@/context/AuthContext";
 
 function getPasswordStrength(password: string) {
-  if (!password) return { score: 0, label: "", color: "bg-white/20", text: "text-white/40" };
+  if (!password) return { score: 0, label: "", color: "bg-gray-200 dark:bg-gray-700", text: "text-gray-400" };
   let score = 0;
   if (password.length >= 8) score += 1;
   if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score += 1;
   if (/\d/.test(password)) score += 1;
   if (/[^A-Za-z0-9]/.test(password)) score += 1;
 
-  if (score <= 1) return { score: 1, label: "Weak", color: "bg-rose-500", text: "text-rose-400" };
-  if (score === 2) return { score: 2, label: "Fair", color: "bg-orange-500", text: "text-orange-400" };
-  if (score === 3) return { score: 3, label: "Good", color: "bg-amber-500", text: "text-amber-400" };
-  return { score: 4, label: "Strong", color: "bg-emerald-500", text: "text-emerald-400" };
+  if (score <= 1) return { score: 1, label: "Weak", color: "bg-rose-500", text: "text-rose-600 dark:text-rose-400" };
+  if (score === 2) return { score: 2, label: "Fair", color: "bg-amber-500", text: "text-amber-600 dark:text-amber-400" };
+  if (score === 3) return { score: 3, label: "Good", color: "bg-emerald-500", text: "text-emerald-600 dark:text-emerald-400" };
+  return { score: 4, label: "Strong", color: "bg-emerald-600", text: "text-emerald-700 dark:text-emerald-300" };
 }
 
-interface FloatingInputProps {
-  id: string;
-  type?: string;
-  label: string;
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  error?: string;
-  icon?: React.ElementType;
-  rightElement?: React.ReactNode;
-  autoComplete?: string;
-  required?: boolean;
-}
-
-function FloatingInput({
-  id,
-  type = "text",
-  label,
-  value,
-  onChange,
-  error,
-  icon: Icon,
-  rightElement,
-  autoComplete,
-  required,
-}: FloatingInputProps) {
-  const [isFocused, setIsFocused] = useState(false);
-  const isFloating = isFocused || (value && value.length > 0);
-
-  return (
-    <div className="relative w-full">
-      <div
-        className={`relative flex items-center rounded-xl border transition-all duration-200 backdrop-blur-md ${
-          error
-            ? "border-rose-500/70 bg-rose-500/10 shadow-[0_0_15px_rgba(244,63,94,0.18)]"
-            : isFocused
-            ? "border-amber-400/80 bg-white/10 shadow-[0_0_20px_rgba(251,191,36,0.2)] -translate-y-0.5"
-            : "border-white/15 bg-white/5 hover:border-white/30 hover:bg-white/[0.08] hover:-translate-y-0.5"
-        }`}
-      >
-        {Icon && (
-          <div className="pl-3.5 pr-1 text-white/50">
-            <Icon className={`w-4 h-4 transition-colors ${isFocused ? "text-amber-300" : "text-white/50"}`} />
-          </div>
-        )}
-        <input
-          id={id}
-          type={type}
-          value={value}
-          onChange={onChange}
-          onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
-          autoComplete={autoComplete}
-          required={required}
-          className="w-full bg-transparent px-3 py-3.5 text-sm text-white placeholder-transparent focus:outline-none"
-          placeholder={label}
-        />
-        <label
-          htmlFor={id}
-          className={`absolute transition-all duration-200 pointer-events-none select-none ${
-            Icon ? "left-10" : "left-3"
-          } ${
-            isFloating
-              ? "-top-2.5 px-1.5 py-0.5 rounded text-[10px] font-semibold tracking-wide bg-slate-900/90 text-amber-300 border border-amber-400/30 backdrop-blur-sm"
-              : "top-3.5 text-xs text-white/50"
-          }`}
-        >
-          {label}
-        </label>
-        {rightElement && <div className="pr-3 flex items-center">{rightElement}</div>}
-      </div>
-      <AnimatePresence>
-        {error && (
-          <motion.p
-            initial={{ opacity: 0, y: -4, height: 0 }}
-            animate={{ opacity: 1, y: 0, height: "auto" }}
-            exit={{ opacity: 0, y: -4, height: 0 }}
-            className="text-xs text-rose-400 flex items-center gap-1 mt-1 pl-1"
-          >
-            <AlertCircle className="w-3.5 h-3.5 shrink-0" />
-            <span>{error}</span>
-          </motion.p>
-        )}
-      </AnimatePresence>
-    </div>
-  );
+function sanitizeAuthError(err?: string, fallback = "Authentication error"): string {
+  if (!err) return fallback;
+  if (
+    err.includes("Can't reach database") ||
+    err.includes("TURBOPACK") ||
+    err.includes("invocation") ||
+    err.includes("localhost:5432")
+  ) {
+    return "Database server is offline. Please try again with offline demo mode.";
+  }
+  return err;
 }
 
 function LoginPageContent() {
@@ -150,7 +75,6 @@ function LoginPageContent() {
 
   // Validation errors
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [shakeKey, setShakeKey] = useState(0);
 
   // Submission state
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -183,7 +107,7 @@ function LoginPageContent() {
   const validateSignup = () => {
     const errs: { [key: string]: string } = {};
     if (!signupName.trim()) {
-      errs.signupName = "Full name is required";
+      errs.signupName = "Name is required";
     } else if (signupName.trim().length < 2) {
       errs.signupName = "Name must be at least 2 characters";
     }
@@ -217,7 +141,6 @@ function LoginPageContent() {
     const errs = validateLogin();
     if (Object.keys(errs).length > 0) {
       setErrors(errs);
-      setShakeKey((prev) => prev + 1);
       return;
     }
     setErrors({});
@@ -227,13 +150,13 @@ function LoginPageContent() {
     setIsSubmitting(false);
 
     if (!result.success) {
-      setErrors({ loginEmail: result.error || "Invalid email or password" });
-      setShakeKey((prev) => prev + 1);
+      const msg = sanitizeAuthError(result.error, "Invalid email or password");
+      setErrors({ loginEmail: msg });
       return;
     }
 
     setIsSuccess(true);
-    setSuccessMessage(`Welcome back, ${result.user?.name || loginEmail.split("@")[0]}! Connecting to Pavilion...`);
+    setSuccessMessage(`Welcome back, ${result.user?.name || loginEmail.split("@")[0]}!`);
 
     setTimeout(() => {
       if (result.user?.role === "SELLER") {
@@ -245,7 +168,7 @@ function LoginPageContent() {
       } else {
         router.push("/buyer/dashboard");
       }
-    }, 1200);
+    }, 1100);
   };
 
   const handleSignupSubmit = async (e: React.FormEvent) => {
@@ -253,7 +176,6 @@ function LoginPageContent() {
     const errs = validateSignup();
     if (Object.keys(errs).length > 0) {
       setErrors(errs);
-      setShakeKey((prev) => prev + 1);
       return;
     }
     setErrors({});
@@ -268,13 +190,13 @@ function LoginPageContent() {
     setIsSubmitting(false);
 
     if (!result.success) {
-      setErrors({ signupEmail: result.error || "Failed to create account" });
-      setShakeKey((prev) => prev + 1);
+      const msg = sanitizeAuthError(result.error, "Failed to create account");
+      setErrors({ signupEmail: msg });
       return;
     }
 
     setIsSuccess(true);
-    setSuccessMessage(`Atelier Account created for ${signupName}! Redirecting...`);
+    setSuccessMessage(`Account created for ${signupName}! Redirecting...`);
 
     setTimeout(() => {
       if (signupRole === "SELLER") {
@@ -282,7 +204,7 @@ function LoginPageContent() {
       } else {
         router.push("/buyer/dashboard");
       }
-    }, 1200);
+    }, 1100);
   };
 
   const handleForgotSubmit = (e: React.FormEvent) => {
@@ -293,189 +215,125 @@ function LoginPageContent() {
   };
 
   return (
-    <div className="relative min-h-screen w-full flex items-center justify-center p-4 sm:p-6 lg:p-8 overflow-hidden bg-[#0A0D14]">
-      {/* 1. Animated Gradient Mesh & Floating Blurred Orbs */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Ambient base radial glow */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.25),rgba(255,255,255,0))]" />
-
-        {/* Floating Orb 1: Deep Indigo */}
-        <motion.div
-          animate={{
-            x: [0, 45, -35, 0],
-            y: [0, -50, 40, 0],
-            scale: [1, 1.18, 0.92, 1],
-          }}
-          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute -top-32 -left-32 w-[420px] h-[420px] rounded-full bg-indigo-600/25 blur-[120px]"
-        />
-
-        {/* Floating Orb 2: Warm Terracotta */}
-        <motion.div
-          animate={{
-            x: [0, -40, 45, 0],
-            y: [0, 60, -35, 0],
-            scale: [1, 1.15, 0.95, 1],
-          }}
-          transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-1/4 -right-32 w-[440px] h-[440px] rounded-full bg-amber-600/20 blur-[130px]"
-        />
-
-        {/* Floating Orb 3: Craft Emerald / Teal */}
-        <motion.div
-          animate={{
-            x: [0, 50, -40, 0],
-            y: [0, -35, 50, 0],
-            scale: [1, 1.12, 0.9, 1],
-          }}
-          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute -bottom-32 left-1/4 w-[460px] h-[460px] rounded-full bg-teal-600/20 blur-[130px]"
-        />
-
-        {/* Floating Orb 4: Rose / Crimson */}
-        <motion.div
-          animate={{
-            x: [0, -30, 40, 0],
-            y: [0, 45, -45, 0],
-            scale: [1, 1.22, 0.94, 1],
-          }}
-          transition={{ duration: 24, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[380px] h-[380px] rounded-full bg-rose-600/15 blur-[110px]"
-        />
-
-        {/* Micro-dot subtle pattern */}
-        <div
-          className="absolute inset-0 opacity-[0.07]"
-          style={{
-            backgroundImage: `radial-gradient(rgba(255, 255, 255, 0.8) 1px, transparent 1px)`,
-            backgroundSize: "28px 28px",
-          }}
-        />
-      </div>
-
-      {/* 2. Top Navigation Bar for Login Screen */}
-      <div className="absolute top-4 left-4 sm:top-6 sm:left-8 z-30 flex items-center gap-3">
+    <div className="min-h-screen bg-[#F8F5EF] dark:bg-[#141311] text-[#1E1E1C] dark:text-[#FAF7F2] flex flex-col justify-between py-6 sm:py-8 px-4 sm:px-6 lg:px-8 transition-colors">
+      {/* 1. Header Bar: Pavilion Back Link + Brand Wordmark + Theme Toggle */}
+      <header className="max-w-5xl w-full mx-auto flex items-center justify-between pb-6">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/15 bg-white/5 hover:bg-white/10 text-white/80 hover:text-white text-xs font-medium backdrop-blur-md transition-all group cursor-pointer"
+          className="inline-flex items-center gap-2 text-xs font-medium text-[#6E6A62] dark:text-[#A8A297] hover:text-[#1E1E1C] dark:hover:text-white transition-colors cursor-pointer group"
         >
           <ArrowLeft className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" />
-          <span>Back to Pavilion</span>
+          <span>Back to Home</span>
         </Link>
-      </div>
 
-      <div className="absolute top-4 right-4 sm:top-6 sm:right-8 z-30">
-        <ThemeToggle variant="icon" />
-      </div>
+        <Link href="/" className="font-serif text-xl sm:text-2xl tracking-[0.08em] uppercase text-[#1E1E1C] dark:text-[#FAF7F2]">
+          ARTISANLY
+        </Link>
 
-      {/* 3. Main Glassmorphism Card */}
-      <motion.div
-        initial={{ opacity: 0, y: 32, scale: 0.98 }}
-        animate={{ opacity: 1, y: 0, scale: 1 }}
-        transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
-        className="relative z-10 w-full max-w-4xl my-8 rounded-3xl border border-white/20 bg-white/[0.06] backdrop-blur-2xl shadow-[0_25px_60px_-15px_rgba(0,0,0,0.6),inset_0_1px_1px_0_rgba(255,255,255,0.2)] overflow-hidden"
-      >
-        <div className="grid grid-cols-1 lg:grid-cols-12 min-h-[580px]">
-          {/* LEFT COLUMN: Editorial Branding & Heritage Showcase */}
-          <div className="relative lg:col-span-5 p-8 lg:p-10 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-white/10 bg-gradient-to-b from-white/[0.08] via-white/[0.03] to-transparent">
-            {/* Top Branding */}
-            <div>
-              <div className="flex items-center gap-2 mb-6">
-                <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse" />
-                <span className="font-serif text-2xl tracking-[0.1em] text-white font-normal uppercase">
-                  ARTISANLY
+        <div className="flex items-center gap-3">
+          <ThemeToggle variant="pill" />
+        </div>
+      </header>
+
+      {/* 2. Main Editorial Dual-Column Card */}
+      <main className="max-w-5xl w-full mx-auto my-auto">
+        <div className="bg-white dark:bg-[#1E1C19] border border-[#E5E0D7] dark:border-[#2D2A25] rounded-2xl shadow-sm overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-12">
+            {/* LEFT COLUMN: Editorial Heritage Narrative & Craft Showcase */}
+            <div className="lg:col-span-5 bg-[#FAF7F2] dark:bg-[#181614] p-6 sm:p-8 lg:p-10 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-[#E5E0D7] dark:border-[#2D2A25]">
+              <div>
+                <span className="text-[10px] sm:text-[11px] font-semibold text-[#C2410C] uppercase tracking-[0.2em] block mb-2.5">
+                  AUTHENTIC INDIAN CRAFTS
                 </span>
-              </div>
 
-              <div className="space-y-3">
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-wider uppercase text-amber-300 border border-amber-400/30 bg-amber-400/10 backdrop-blur-xs">
-                  <Sparkles className="w-3 h-3 text-amber-300" />
-                  Sovereign Craft Ledger
-                </span>
-                <h1 className="font-serif text-2xl sm:text-3xl font-normal text-white leading-tight">
-                  Where Generational Mastery Meets Patrons Worldwide.
+                <h1 className="font-serif text-2xl sm:text-3xl font-normal text-[#1E1E1C] dark:text-[#FAF7F2] tracking-tight leading-snug">
+                  Handcrafted Indian Art, Direct from Master Artisans.
                 </h1>
-                <p className="text-xs text-white/70 leading-relaxed pt-1">
-                  Connect directly with verified master artisans across India&apos;s ancestral craft terroirs. Direct fair-trade compensation, certified Geographical Indication (GI), and sovereign craft authentication.
+
+                <p className="text-xs sm:text-[13px] text-[#6E6A62] dark:text-[#A8A297] leading-relaxed pt-2.5 font-light">
+                  Discover genuine handmade crafts directly from verified artisans across India. Backed by certified Geographical Indication (GI) and direct fair-trade pricing.
                 </p>
-              </div>
-            </div>
 
-            {/* Middle Feature Highlights */}
-            <div className="py-6 space-y-3 hidden sm:block">
-              <div className="flex items-center gap-3 p-3 rounded-xl border border-white/10 bg-white/5 backdrop-blur-xs">
-                <ShieldCheck className="w-5 h-5 text-amber-300 shrink-0" />
+                {/* Heritage Craft Hero Visual Card */}
+                <div className="relative aspect-[4/3] w-full rounded-xl overflow-hidden bg-[#ECE6DC] dark:bg-[#24211D] border border-[#DDD5C8] dark:border-[#2D2A25] shadow-2xs mt-6 mb-5">
+                  <img
+                    src="/images/products/Odisha/Sambalpur Terracotta decorative lantern.png"
+                    alt="Sambalpur Heritage Terracotta Lantern"
+                    width={500}
+                    height={375}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent flex flex-col justify-end p-4 text-white">
+                    <span className="text-[9px] font-mono tracking-widest uppercase text-amber-300 block mb-0.5">
+                      FEATURED CRAFT
+                    </span>
+                    <span className="font-serif text-sm font-medium leading-snug text-white">
+                      Sambalpur Heritage Terracotta Lantern
+                    </span>
+                    <div className="flex items-center justify-between pt-1.5 text-[10px] text-white/85">
+                      <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-emerald-950/80 border border-emerald-400/50 text-emerald-300 font-mono text-[9px]">
+                        GI-IN-OD-POT
+                      </span>
+                      <span className="font-light">Master Kumbhar Artisans</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Verified Trust Metrics */}
+              <div className="pt-4 border-t border-[#E5E0D7] dark:border-[#2D2A25] grid grid-cols-3 gap-2 text-center">
                 <div>
-                  <h4 className="text-xs font-semibold text-white">Authentic GI Certification</h4>
-                  <p className="text-[11px] text-white/60">Every artifact backed by government craft verification</p>
+                  <span className="font-serif text-base font-semibold text-[#1E1E1C] dark:text-[#FAF7F2] block">88%+</span>
+                  <span className="text-[10px] text-[#807B72] dark:text-[#A8A297] block leading-tight">Direct Artisan Payout</span>
                 </div>
-              </div>
-              <div className="flex items-center gap-3 p-3 rounded-xl border border-white/10 bg-white/5 backdrop-blur-xs">
-                <Award className="w-5 h-5 text-emerald-300 shrink-0" />
                 <div>
-                  <h4 className="text-xs font-semibold text-white">Direct Guild Settlement</h4>
-                  <p className="text-[11px] text-white/60">Fair-trade remuneration going straight to the maker&apos;s hands</p>
+                  <span className="font-serif text-base font-semibold text-[#1E1E1C] dark:text-[#FAF7F2] block">GI Tagged</span>
+                  <span className="text-[10px] text-[#807B72] dark:text-[#A8A297] block leading-tight">Certified Origin</span>
+                </div>
+                <div>
+                  <span className="font-serif text-base font-semibold text-[#1E1E1C] dark:text-[#FAF7F2] block">100%</span>
+                  <span className="text-[10px] text-[#807B72] dark:text-[#A8A297] block leading-tight">Secure Payments</span>
                 </div>
               </div>
             </div>
 
-            {/* Bottom Proof Metric */}
-            <div className="pt-4 border-t border-white/10 flex items-center justify-between text-[11px] text-white/60">
-              <span className="flex items-center gap-1.5">
-                <Globe2 className="w-3.5 h-3.5 text-amber-400" />
-                28 Craft Terroirs
-              </span>
-              <span>3,400+ Master Guilds</span>
-            </div>
-          </div>
-
-          {/* RIGHT COLUMN: Interactive Glassmorphism Form */}
-          <div className="lg:col-span-7 p-6 sm:p-10 flex flex-col justify-center">
-            {isSuccess ? (
-              /* Success State Screen */
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="py-8 px-4 text-center space-y-5"
-              >
-                <div className="inline-flex items-center justify-center w-20 h-20 rounded-full border border-emerald-400/40 bg-emerald-500/10 shadow-[0_0_40px_rgba(16,185,129,0.3)]">
-                  <CheckCircle2 className="w-10 h-10 text-emerald-400 animate-bounce" />
-                </div>
-                <div className="space-y-2">
-                  <h3 className="text-2xl font-serif text-white">Authentication Successful</h3>
-                  <p className="text-sm text-white/70 max-w-sm mx-auto">{successMessage}</p>
-                </div>
-                <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
-                  <button
-                    type="button"
-                    onClick={() => router.push("/buyer/dashboard")}
-                    className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 text-white text-xs font-semibold shadow-lg shadow-amber-900/30 transition-all cursor-pointer"
-                  >
-                    Open Collector Dashboard
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => router.push("/catalog")}
-                    className="w-full sm:w-auto px-6 py-2.5 rounded-xl border border-white/20 bg-white/5 hover:bg-white/10 text-white text-xs font-semibold backdrop-blur-md transition-all cursor-pointer"
-                  >
-                    Explore Masterpieces
-                  </button>
-                </div>
-              </motion.div>
-            ) : (
-              /* Form State Screen with Toggle */
-              <div className="space-y-6">
-                {/* Segmented Glass Pill Switcher */}
-                <div className="flex items-center justify-between">
-                  <div className="relative flex items-center p-1 rounded-2xl border border-white/15 bg-white/5 backdrop-blur-md w-full max-w-xs">
+            {/* RIGHT COLUMN: Sign In / Registration Form */}
+            <div className="lg:col-span-7 p-6 sm:p-8 lg:p-10 flex flex-col justify-center bg-white dark:bg-[#1E1C19]">
+              {isSuccess ? (
+                /* Success State */
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.96 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="py-10 text-center space-y-4"
+                >
+                  <div className="w-16 h-16 rounded-full bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-400 flex items-center justify-center mx-auto shadow-2xs">
+                    <CheckCircle2 className="w-8 h-8" />
+                  </div>
+                  <h2 className="font-serif text-2xl font-normal text-[#1E1E1C] dark:text-[#FAF7F2]">
+                    Authentication Successful
+                  </h2>
+                  <p className="text-xs sm:text-sm text-[#6E6A62] dark:text-[#A8A297] max-w-sm mx-auto leading-relaxed">
+                    {successMessage}
+                  </p>
+                  <div className="pt-3 flex items-center justify-center gap-3">
+                    <Loader2 className="w-4 h-4 animate-spin text-[#C2410C]" />
+                    <span className="text-xs text-[#7A756D] dark:text-[#A8A297]">Redirecting...</span>
+                  </div>
+                </motion.div>
+              ) : (
+                <div className="space-y-6">
+                  {/* Segmented Tab Pill */}
+                  <div className="inline-flex items-center p-1 rounded-lg bg-[#EFECE6] dark:bg-[#161513] border border-[#DDD5C8] dark:border-[#2D2A25] w-full max-w-xs">
                     <button
                       type="button"
                       onClick={() => {
                         setMode("login");
                         setErrors({});
                       }}
-                      className={`relative z-10 flex-1 py-1.5 text-xs font-semibold text-center transition-colors cursor-pointer ${
-                        mode === "login" ? "text-slate-900" : "text-white/60 hover:text-white"
+                      className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-all cursor-pointer ${
+                        mode === "login"
+                          ? "bg-white dark:bg-[#282622] text-[#1E1E1C] dark:text-[#FAF7F2] shadow-2xs"
+                          : "text-[#6E6A62] dark:text-[#A8A297] hover:text-[#1E1E1C] dark:hover:text-[#FAF7F2]"
                       }`}
                     >
                       Sign In
@@ -486,430 +344,484 @@ function LoginPageContent() {
                         setMode("signup");
                         setErrors({});
                       }}
-                      className={`relative z-10 flex-1 py-1.5 text-xs font-semibold text-center transition-colors cursor-pointer ${
-                        mode === "signup" ? "text-slate-900" : "text-white/60 hover:text-white"
+                      className={`flex-1 py-1.5 text-xs font-semibold rounded-md transition-all cursor-pointer ${
+                        mode === "signup"
+                          ? "bg-white dark:bg-[#282622] text-[#1E1E1C] dark:text-[#FAF7F2] shadow-2xs"
+                          : "text-[#6E6A62] dark:text-[#A8A297] hover:text-[#1E1E1C] dark:hover:text-[#FAF7F2]"
                       }`}
                     >
                       Create Account
                     </button>
-
-                    {/* Sliding indicator pill */}
-                    <motion.div
-                      className="absolute inset-y-1 rounded-xl bg-white shadow-md"
-                      layoutId="activeFormTab"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                      style={{
-                        width: "calc(50% - 4px)",
-                        left: mode === "login" ? "4px" : "calc(50%)",
-                      }}
-                    />
                   </div>
-                </div>
 
-                {/* Form Content Animated Presence */}
-                <motion.div
-                  key={shakeKey}
-                  animate={errors && Object.keys(errors).length > 0 ? { x: [-8, 8, -6, 6, -3, 3, 0] } : {}}
-                  transition={{ duration: 0.4 }}
-                >
-                  <AnimatePresence mode="wait">
-                    {mode === "login" ? (
-                      /* ================= LOGIN FORM ================= */
-                      <motion.form
-                        key="login"
-                        initial={{ opacity: 0, x: -22, scale: 0.98 }}
-                        animate={{ opacity: 1, x: 0, scale: 1 }}
-                        exit={{ opacity: 0, x: 22, scale: 0.98 }}
-                        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                        onSubmit={handleLoginSubmit}
-                        className="space-y-4"
-                        noValidate
-                      >
-                        <div className="space-y-1">
-                          <h2 className="text-xl font-semibold text-white tracking-tight">
-                            Collector Sign In
-                          </h2>
-                          <p className="text-xs text-white/60">
-                            Enter your credentials to access your acquired art collection.
-                          </p>
+                  {/* Section Title */}
+                  <div className="space-y-1">
+                    <h2 className="font-serif text-2xl font-normal text-[#1E1E1C] dark:text-[#FAF7F2] tracking-tight">
+                      {mode === "login" ? "Sign In" : "Create Account"}
+                    </h2>
+                    <p className="text-xs text-[#6E6A62] dark:text-[#A8A297]">
+                      {mode === "login"
+                        ? "Enter your credentials to access your account."
+                        : "Join as a buyer to purchase crafts or register as an artisan to sell."}
+                    </p>
+                  </div>
+
+                  {/* ================= LOGIN FORM ================= */}
+                  {mode === "login" ? (
+                    <form onSubmit={handleLoginSubmit} className="space-y-4" noValidate>
+                      {/* Email Address */}
+                      <div>
+                        <label
+                          htmlFor="login-email"
+                          className="block text-xs font-semibold text-[#3C3A35] dark:text-[#D6D1C7] mb-1.5"
+                        >
+                          Email Address
+                        </label>
+                        <div className="relative">
+                          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#8C877E]">
+                            <Mail className="w-4 h-4" />
+                          </div>
+                          <input
+                            id="login-email"
+                            type="email"
+                            value={loginEmail}
+                            onChange={(e) => {
+                              setLoginEmail(e.target.value);
+                              if (errors.loginEmail) setErrors((prev) => ({ ...prev, loginEmail: "" }));
+                            }}
+                            placeholder="Enter your email"
+                            autoComplete="email"
+                            className={`w-full pl-10 pr-4 py-2.5 bg-[#FAF8F5] dark:bg-[#161513] border rounded-lg text-xs sm:text-sm text-[#1E1E1C] dark:text-[#FAF7F2] placeholder-[#8C877E] focus:outline-none transition-colors ${
+                              errors.loginEmail
+                                ? "border-rose-400 focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
+                                : "border-[#DDD5C8] dark:border-[#33302A] focus:border-[#C2410C] focus:ring-1 focus:ring-[#C2410C]"
+                            }`}
+                          />
                         </div>
+                        {errors.loginEmail && (
+                          <p className="text-xs text-rose-500 dark:text-rose-400 flex items-center gap-1 mt-1">
+                            <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                            <span>{errors.loginEmail}</span>
+                          </p>
+                        )}
+                      </div>
 
-                        {/* Email Input */}
-                        <FloatingInput
-                          id="login-email"
-                          type="email"
-                          label="Email Address"
-                          value={loginEmail}
-                          onChange={(e) => {
-                            setLoginEmail(e.target.value);
-                            if (errors.loginEmail) setErrors((prev) => ({ ...prev, loginEmail: "" }));
-                          }}
-                          error={errors.loginEmail}
-                          icon={Mail}
-                          autoComplete="email"
-                          required
-                        />
-
-                        {/* Password Input */}
-                        <FloatingInput
-                          id="login-password"
-                          type={showPassword ? "text" : "password"}
-                          label="Password"
-                          value={loginPassword}
-                          onChange={(e) => {
-                            setLoginPassword(e.target.value);
-                            if (errors.loginPassword) setErrors((prev) => ({ ...prev, loginPassword: "" }));
-                          }}
-                          error={errors.loginPassword}
-                          icon={Lock}
-                          autoComplete="current-password"
-                          required
-                          rightElement={
-                            <button
-                              type="button"
-                              onClick={() => setShowPassword(!showPassword)}
-                              className="text-white/50 hover:text-white transition-colors cursor-pointer"
-                              tabIndex={-1}
-                              aria-label={showPassword ? "Hide password" : "Show password"}
-                            >
-                              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                            </button>
-                          }
-                        />
-
-                        {/* Remember Me & Forgot Password */}
-                        <div className="flex items-center justify-between text-xs pt-1">
-                          <label className="flex items-center gap-2 text-white/70 hover:text-white cursor-pointer select-none">
-                            <input
-                              type="checkbox"
-                              checked={rememberMe}
-                              onChange={(e) => setRememberMe(e.target.checked)}
-                              className="sr-only"
-                            />
-                            <span
-                              className={`w-4 h-4 rounded-md border flex items-center justify-center transition-colors ${
-                                rememberMe
-                                  ? "bg-amber-500 border-amber-400 text-slate-950"
-                                  : "border-white/30 bg-white/5"
-                              }`}
-                            >
-                              {rememberMe && <Check className="w-3 h-3 stroke-[3]" />}
-                            </span>
-                            <span>Remember me</span>
+                      {/* Password */}
+                      <div>
+                        <div className="flex items-center justify-between mb-1.5">
+                          <label
+                            htmlFor="login-password"
+                            className="block text-xs font-semibold text-[#3C3A35] dark:text-[#D6D1C7]"
+                          >
+                            Password
                           </label>
-
                           <button
                             type="button"
                             onClick={() => setShowForgotModal(true)}
-                            className="relative group text-amber-300/90 hover:text-amber-200 font-medium transition-colors cursor-pointer"
+                            className="text-xs text-[#C2410C] hover:underline cursor-pointer"
                           >
-                            <span>Forgot Password?</span>
-                            <span className="absolute left-0 bottom-0 w-0 h-px bg-amber-300 transition-all duration-300 group-hover:w-full" />
+                            Forgot password?
                           </button>
                         </div>
-
-                        {/* Submit Button */}
-                        <motion.button
-                          type="submit"
-                          disabled={isSubmitting}
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                          className="relative w-full py-3.5 px-6 rounded-xl font-semibold text-xs tracking-wide uppercase text-white bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-500 hover:to-amber-400 shadow-[0_10px_25px_-5px_rgba(217,119,6,0.4)] transition-all cursor-pointer overflow-hidden disabled:opacity-75 disabled:cursor-not-allowed group mt-2"
-                        >
-                          <span className="relative z-10 flex items-center justify-center gap-2">
-                            {isSubmitting ? (
-                              <>
-                                <Loader2 className="w-4 h-4 animate-spin" />
-                                <span>Authenticating...</span>
-                              </>
-                            ) : (
-                              <>
-                                <span>Sign In</span>
-                                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                              </>
-                            )}
-                          </span>
-                          {/* Button shimmer reflection */}
-                          <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
-                        </motion.button>
-
-                        {/* Switch to Signup */}
-                        <div className="text-center text-xs text-white/60 pt-2">
-                          Don&apos;t have an account?{" "}
+                        <div className="relative">
+                          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#8C877E]">
+                            <Lock className="w-4 h-4" />
+                          </div>
+                          <input
+                            id="login-password"
+                            type={showPassword ? "text" : "password"}
+                            value={loginPassword}
+                            onChange={(e) => {
+                              setLoginPassword(e.target.value);
+                              if (errors.loginPassword) setErrors((prev) => ({ ...prev, loginPassword: "" }));
+                            }}
+                            placeholder="••••••••"
+                            autoComplete="current-password"
+                            className={`w-full pl-10 pr-10 py-2.5 bg-[#FAF8F5] dark:bg-[#161513] border rounded-lg text-xs sm:text-sm text-[#1E1E1C] dark:text-[#FAF7F2] placeholder-[#8C877E] focus:outline-none transition-colors ${
+                              errors.loginPassword
+                                ? "border-rose-400 focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
+                                : "border-[#DDD5C8] dark:border-[#33302A] focus:border-[#C2410C] focus:ring-1 focus:ring-[#C2410C]"
+                            }`}
+                          />
                           <button
                             type="button"
-                            onClick={() => {
-                              setMode("signup");
-                              setErrors({});
-                            }}
-                            className="relative group font-semibold text-amber-300 hover:text-amber-200 transition-colors cursor-pointer ml-1"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[#8C877E] hover:text-[#1E1E1C] dark:hover:text-[#FAF7F2] cursor-pointer"
+                            aria-label={showPassword ? "Hide password" : "Show password"}
                           >
-                            <span>Sign Up</span>
-                            <span className="absolute left-0 bottom-0 w-0 h-px bg-amber-300 transition-all duration-300 group-hover:w-full" />
+                            {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                           </button>
                         </div>
-                      </motion.form>
-                    ) : (
-                      /* ================= SIGNUP FORM ================= */
-                      <motion.form
-                        key="signup"
-                        initial={{ opacity: 0, x: 22, scale: 0.98 }}
-                        animate={{ opacity: 1, x: 0, scale: 1 }}
-                        exit={{ opacity: 0, x: -22, scale: 0.98 }}
-                        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                        onSubmit={handleSignupSubmit}
-                        className="space-y-3.5"
-                        noValidate
-                      >
-                        <div className="space-y-1">
-                          <h2 className="text-xl font-semibold text-white tracking-tight">
-                            Create Atelier Account
-                          </h2>
-                          <p className="text-xs text-white/60">
-                            Join the sovereign network of patrons and generational craft guardians.
+                        {errors.loginPassword && (
+                          <p className="text-xs text-rose-500 dark:text-rose-400 flex items-center gap-1 mt-1">
+                            <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                            <span>{errors.loginPassword}</span>
                           </p>
-                        </div>
+                        )}
+                      </div>
 
-                        {/* Role Selector: Collector vs Master Artisan */}
-                        <div className="grid grid-cols-2 gap-2 p-1 rounded-xl bg-white/5 border border-white/10">
+                      {/* Remember Me */}
+                      <div className="flex items-center pt-1">
+                        <label className="flex items-center gap-2 text-xs text-[#555049] dark:text-[#A8A297] cursor-pointer select-none">
+                          <input
+                            type="checkbox"
+                            checked={rememberMe}
+                            onChange={(e) => setRememberMe(e.target.checked)}
+                            className="w-4 h-4 rounded border-[#DDD5C8] text-[#C2410C] focus:ring-[#C2410C] cursor-pointer"
+                          />
+                          <span>Keep me signed in on this device</span>
+                        </label>
+                      </div>
+
+                      {/* Primary Submit Button */}
+                      <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="w-full py-3 px-6 rounded-lg font-semibold text-xs tracking-wider uppercase text-white bg-[#1E1E1C] hover:bg-[#33302A] dark:bg-[#FAF7F2] dark:hover:bg-white dark:text-[#141311] transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 mt-2"
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            <span>Signing In...</span>
+                          </>
+                        ) : (
+                          <>
+                            <span>Sign In</span>
+                            <ArrowRight className="w-3.5 h-3.5" />
+                          </>
+                        )}
+                      </button>
+
+                      {/* Footer toggle */}
+                      <div className="text-center text-xs text-[#6E6A62] dark:text-[#A8A297] pt-2">
+                        Don&apos;t have an account yet?{" "}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setMode("signup");
+                            setErrors({});
+                          }}
+                          className="font-semibold text-[#C2410C] hover:underline cursor-pointer ml-1"
+                        >
+                          Create Account
+                        </button>
+                      </div>
+                    </form>
+                  ) : (
+                    /* ================= SIGNUP FORM ================= */
+                    <form onSubmit={handleSignupSubmit} className="space-y-4" noValidate>
+                      {/* Role Selector */}
+                      <div>
+                        <span className="block text-xs font-semibold text-[#3C3A35] dark:text-[#D6D1C7] mb-1.5">
+                          I am joining as:
+                        </span>
+                        <div className="grid grid-cols-2 gap-3">
                           <button
                             type="button"
                             onClick={() => setSignupRole("BUYER")}
-                            className={`py-2 px-3 rounded-lg text-xs font-medium transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                            className={`p-3 rounded-lg border text-left transition-all cursor-pointer ${
                               signupRole === "BUYER"
-                                ? "bg-amber-500 text-slate-950 font-semibold shadow-xs"
-                                : "text-white/70 hover:text-white"
+                                ? "bg-[#FAF2EC] dark:bg-[#2A1D18] border-[#C2410C] shadow-2xs"
+                                : "bg-[#FAF8F5] dark:bg-[#161513] border-[#DDD5C8] dark:border-[#33302A] hover:border-[#89714F]"
                             }`}
                           >
-                            <User className="w-3.5 h-3.5" />
-                            <span>Collector (Buyer)</span>
+                            <div className="flex items-center gap-1.5 text-xs font-semibold text-[#1E1E1C] dark:text-[#FAF7F2]">
+                              <User className={`w-3.5 h-3.5 ${signupRole === "BUYER" ? "text-[#C2410C]" : "text-[#8C877E]"}`} />
+                              <span>Customer (Buyer)</span>
+                            </div>
+                            <p className="text-[10px] text-[#7A756D] dark:text-[#A8A297] mt-1">
+                              Browse and purchase authentic crafts
+                            </p>
                           </button>
                           <button
                             type="button"
                             onClick={() => setSignupRole("SELLER")}
-                            className={`py-2 px-3 rounded-lg text-xs font-medium transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
+                            className={`p-3 rounded-lg border text-left transition-all cursor-pointer ${
                               signupRole === "SELLER"
-                                ? "bg-amber-500 text-slate-950 font-semibold shadow-xs"
-                                : "text-white/70 hover:text-white"
+                                ? "bg-[#FAF2EC] dark:bg-[#2A1D18] border-[#C2410C] shadow-2xs"
+                                : "bg-[#FAF8F5] dark:bg-[#161513] border-[#DDD5C8] dark:border-[#33302A] hover:border-[#89714F]"
                             }`}
                           >
-                            <Award className="w-3.5 h-3.5" />
-                            <span>Master Artisan</span>
+                            <div className="flex items-center gap-1.5 text-xs font-semibold text-[#1E1E1C] dark:text-[#FAF7F2]">
+                              <Award className={`w-3.5 h-3.5 ${signupRole === "SELLER" ? "text-[#C2410C]" : "text-[#8C877E]"}`} />
+                              <span>Artisan (Seller)</span>
+                            </div>
+                            <p className="text-[10px] text-[#7A756D] dark:text-[#A8A297] mt-1">
+                              Showcase and sell your handcrafted work
+                            </p>
                           </button>
                         </div>
+                      </div>
 
-                        {/* Full Name */}
-                        <FloatingInput
-                          id="signup-name"
-                          type="text"
-                          label="Full Name"
-                          value={signupName}
-                          onChange={(e) => {
-                            setSignupName(e.target.value);
-                            if (errors.signupName) setErrors((prev) => ({ ...prev, signupName: "" }));
-                          }}
-                          error={errors.signupName}
-                          icon={User}
-                          autoComplete="name"
-                          required
-                        />
+                      {/* Name */}
+                      <div>
+                        <label
+                          htmlFor="signup-name"
+                          className="block text-xs font-semibold text-[#3C3A35] dark:text-[#D6D1C7] mb-1.5"
+                        >
+                          Name
+                        </label>
+                        <div className="relative">
+                          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#8C877E]">
+                            <User className="w-4 h-4" />
+                          </div>
+                          <input
+                            id="signup-name"
+                            type="text"
+                            value={signupName}
+                            onChange={(e) => {
+                              setSignupName(e.target.value);
+                              if (errors.signupName) setErrors((prev) => ({ ...prev, signupName: "" }));
+                            }}
+                            placeholder="Name"
+                            autoComplete="name"
+                            className={`w-full pl-10 pr-4 py-2.5 bg-[#FAF8F5] dark:bg-[#161513] border rounded-lg text-xs sm:text-sm text-[#1E1E1C] dark:text-[#FAF7F2] placeholder-[#8C877E] focus:outline-none transition-colors ${
+                              errors.signupName
+                                ? "border-rose-400 focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
+                                : "border-[#DDD5C8] dark:border-[#33302A] focus:border-[#C2410C] focus:ring-1 focus:ring-[#C2410C]"
+                            }`}
+                          />
+                        </div>
+                        {errors.signupName && (
+                          <p className="text-xs text-rose-500 dark:text-rose-400 flex items-center gap-1 mt-1">
+                            <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                            <span>{errors.signupName}</span>
+                          </p>
+                        )}
+                      </div>
 
-                        {/* Email */}
-                        <FloatingInput
-                          id="signup-email"
-                          type="email"
-                          label="Email Address"
-                          value={signupEmail}
-                          onChange={(e) => {
-                            setSignupEmail(e.target.value);
-                            if (errors.signupEmail) setErrors((prev) => ({ ...prev, signupEmail: "" }));
-                          }}
-                          error={errors.signupEmail}
-                          icon={Mail}
-                          autoComplete="email"
-                          required
-                        />
+                      {/* Email Address */}
+                      <div>
+                        <label
+                          htmlFor="signup-email"
+                          className="block text-xs font-semibold text-[#3C3A35] dark:text-[#D6D1C7] mb-1.5"
+                        >
+                          Email Address
+                        </label>
+                        <div className="relative">
+                          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#8C877E]">
+                            <Mail className="w-4 h-4" />
+                          </div>
+                          <input
+                            id="signup-email"
+                            type="email"
+                            value={signupEmail}
+                            onChange={(e) => {
+                              setSignupEmail(e.target.value);
+                              if (errors.signupEmail) setErrors((prev) => ({ ...prev, signupEmail: "" }));
+                            }}
+                            placeholder="Email address"
+                            autoComplete="email"
+                            className={`w-full pl-10 pr-4 py-2.5 bg-[#FAF8F5] dark:bg-[#161513] border rounded-lg text-xs sm:text-sm text-[#1E1E1C] dark:text-[#FAF7F2] placeholder-[#8C877E] focus:outline-none transition-colors ${
+                              errors.signupEmail
+                                ? "border-rose-400 focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
+                                : "border-[#DDD5C8] dark:border-[#33302A] focus:border-[#C2410C] focus:ring-1 focus:ring-[#C2410C]"
+                            }`}
+                          />
+                        </div>
+                        {errors.signupEmail && (
+                          <p className="text-xs text-rose-500 dark:text-rose-400 flex items-center gap-1 mt-1">
+                            <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                            <span>{errors.signupEmail}</span>
+                          </p>
+                        )}
+                      </div>
 
-                        {/* Password */}
-                        <FloatingInput
-                          id="signup-password"
-                          type={showPassword ? "text" : "password"}
-                          label="Password (min 8 chars)"
-                          value={signupPassword}
-                          onChange={(e) => {
-                            setSignupPassword(e.target.value);
-                            if (errors.signupPassword) setErrors((prev) => ({ ...prev, signupPassword: "" }));
-                          }}
-                          error={errors.signupPassword}
-                          icon={Lock}
-                          autoComplete="new-password"
-                          required
-                          rightElement={
-                            <button
-                              type="button"
-                              onClick={() => setShowPassword(!showPassword)}
-                              className="text-white/50 hover:text-white transition-colors cursor-pointer"
-                              tabIndex={-1}
-                              aria-label={showPassword ? "Hide password" : "Show password"}
-                            >
-                              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                            </button>
-                          }
-                        />
+                      {/* Password */}
+                      <div>
+                        <label
+                          htmlFor="signup-password"
+                          className="block text-xs font-semibold text-[#3C3A35] dark:text-[#D6D1C7] mb-1.5"
+                        >
+                          Password (min. 8 characters)
+                        </label>
+                        <div className="relative">
+                          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#8C877E]">
+                            <Lock className="w-4 h-4" />
+                          </div>
+                          <input
+                            id="signup-password"
+                            type={showPassword ? "text" : "password"}
+                            value={signupPassword}
+                            onChange={(e) => {
+                              setSignupPassword(e.target.value);
+                              if (errors.signupPassword) setErrors((prev) => ({ ...prev, signupPassword: "" }));
+                            }}
+                            placeholder="••••••••"
+                            autoComplete="new-password"
+                            className={`w-full pl-10 pr-10 py-2.5 bg-[#FAF8F5] dark:bg-[#161513] border rounded-lg text-xs sm:text-sm text-[#1E1E1C] dark:text-[#FAF7F2] placeholder-[#8C877E] focus:outline-none transition-colors ${
+                              errors.signupPassword
+                                ? "border-rose-400 focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
+                                : "border-[#DDD5C8] dark:border-[#33302A] focus:border-[#C2410C] focus:ring-1 focus:ring-[#C2410C]"
+                            }`}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[#8C877E] hover:text-[#1E1E1C] dark:hover:text-[#FAF7F2] cursor-pointer"
+                            aria-label={showPassword ? "Hide password" : "Show password"}
+                          >
+                            {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                          </button>
+                        </div>
+                        {errors.signupPassword && (
+                          <p className="text-xs text-rose-500 dark:text-rose-400 flex items-center gap-1 mt-1">
+                            <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                            <span>{errors.signupPassword}</span>
+                          </p>
+                        )}
 
-                        {/* Password Strength Indicator Bar */}
+                        {/* Password Strength Indicator */}
                         {signupPassword && (
-                          <div className="space-y-1.5 px-1">
-                            <div className="flex items-center justify-between text-[11px]">
-                              <span className="text-white/60">Password Strength:</span>
+                          <div className="mt-2 space-y-1">
+                            <div className="flex justify-between text-[10px]">
+                              <span className="text-[#807B72] dark:text-[#A8A297]">Strength:</span>
                               <span className={`font-semibold ${passwordStrength.text}`}>
                                 {passwordStrength.label}
                               </span>
                             </div>
-                            <div className="grid grid-cols-4 gap-1.5 h-1.5 w-full bg-white/10 rounded-full overflow-hidden p-0.5">
-                              {[1, 2, 3, 4].map((step) => (
-                                <motion.div
-                                  key={step}
-                                  initial={{ scaleX: 0 }}
-                                  animate={{ scaleX: step <= passwordStrength.score ? 1 : 0 }}
-                                  transition={{ duration: 0.3 }}
-                                  className={`h-full rounded-full ${
-                                    step <= passwordStrength.score ? passwordStrength.color : "bg-transparent"
+                            <div className="grid grid-cols-4 gap-1 h-1 bg-[#EAE5DD] dark:bg-[#2D2A25] rounded-full overflow-hidden">
+                              {[1, 2, 3, 4].map((level) => (
+                                <div
+                                  key={level}
+                                  className={`h-full rounded-full transition-colors ${
+                                    level <= passwordStrength.score ? passwordStrength.color : "bg-transparent"
                                   }`}
                                 />
                               ))}
                             </div>
                           </div>
                         )}
+                      </div>
 
-                        {/* Confirm Password */}
-                        <FloatingInput
-                          id="signup-confirm-password"
-                          type={showConfirmPassword ? "text" : "password"}
-                          label="Confirm Password"
-                          value={signupConfirmPassword}
-                          onChange={(e) => {
-                            setSignupConfirmPassword(e.target.value);
-                            if (errors.signupConfirmPassword)
-                              setErrors((prev) => ({ ...prev, signupConfirmPassword: "" }));
-                          }}
-                          error={errors.signupConfirmPassword}
-                          icon={Lock}
-                          autoComplete="new-password"
-                          required
-                          rightElement={
-                            <button
-                              type="button"
-                              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                              className="text-white/50 hover:text-white transition-colors cursor-pointer"
-                              tabIndex={-1}
-                              aria-label={showConfirmPassword ? "Hide password" : "Show password"}
-                            >
-                              {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                            </button>
-                          }
-                        />
-
-                        {/* Terms & Conditions Checkbox */}
-                        <div>
-                          <label className="flex items-start gap-2.5 text-xs text-white/70 hover:text-white cursor-pointer select-none">
-                            <input
-                              type="checkbox"
-                              checked={agreeTerms}
-                              onChange={(e) => {
-                                setAgreeTerms(e.target.checked);
-                                if (errors.agreeTerms) setErrors((prev) => ({ ...prev, agreeTerms: "" }));
-                              }}
-                              className="sr-only"
-                            />
-                            <span
-                              className={`w-4 h-4 rounded-md border shrink-0 mt-0.5 flex items-center justify-center transition-colors ${
-                                agreeTerms
-                                  ? "bg-amber-500 border-amber-400 text-slate-950"
-                                  : "border-white/30 bg-white/5"
-                              }`}
-                            >
-                              {agreeTerms && <Check className="w-3 h-3 stroke-[3]" />}
-                            </span>
-                            <span className="leading-tight">
-                              I agree to the{" "}
-                              <Link
-                                href="/about"
-                                className="text-amber-300 hover:underline underline-offset-2"
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                Terms of Service
-                              </Link>{" "}
-                              and{" "}
-                              <Link
-                                href="/about"
-                                className="text-amber-300 hover:underline underline-offset-2"
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                Fair Trade Privacy Policy
-                              </Link>
-                              .
-                            </span>
-                          </label>
-                          {errors.agreeTerms && (
-                            <p className="text-xs text-rose-400 mt-1 pl-1">{errors.agreeTerms}</p>
-                          )}
-                        </div>
-
-                        {/* Submit Button */}
-                        <motion.button
-                          type="submit"
-                          disabled={isSubmitting}
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                          className="relative w-full py-3.5 px-6 rounded-xl font-semibold text-xs tracking-wide uppercase text-white bg-gradient-to-r from-amber-600 via-amber-500 to-amber-600 hover:from-amber-500 hover:to-amber-400 shadow-[0_10px_25px_-5px_rgba(217,119,6,0.4)] transition-all cursor-pointer overflow-hidden disabled:opacity-75 disabled:cursor-not-allowed group mt-2"
+                      {/* Confirm Password */}
+                      <div>
+                        <label
+                          htmlFor="signup-confirm"
+                          className="block text-xs font-semibold text-[#3C3A35] dark:text-[#D6D1C7] mb-1.5"
                         >
-                          <span className="relative z-10 flex items-center justify-center gap-2">
-                            {isSubmitting ? (
-                              <>
-                                <Loader2 className="w-4 h-4 animate-spin" />
-                                <span>Creating Account...</span>
-                              </>
-                            ) : (
-                              <>
-                                <span>Create Account</span>
-                                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-                              </>
-                            )}
-                          </span>
-                          <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent pointer-events-none" />
-                        </motion.button>
-
-                        {/* Switch to Login */}
-                        <div className="text-center text-xs text-white/60 pt-2">
-                          Already have an account?{" "}
+                          Confirm Password
+                        </label>
+                        <div className="relative">
+                          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#8C877E]">
+                            <Lock className="w-4 h-4" />
+                          </div>
+                          <input
+                            id="signup-confirm"
+                            type={showConfirmPassword ? "text" : "password"}
+                            value={signupConfirmPassword}
+                            onChange={(e) => {
+                              setSignupConfirmPassword(e.target.value);
+                              if (errors.signupConfirmPassword)
+                                setErrors((prev) => ({ ...prev, signupConfirmPassword: "" }));
+                            }}
+                            placeholder="••••••••"
+                            autoComplete="new-password"
+                            className={`w-full pl-10 pr-10 py-2.5 bg-[#FAF8F5] dark:bg-[#161513] border rounded-lg text-xs sm:text-sm text-[#1E1E1C] dark:text-[#FAF7F2] placeholder-[#8C877E] focus:outline-none transition-colors ${
+                              errors.signupConfirmPassword
+                                ? "border-rose-400 focus:border-rose-500 focus:ring-1 focus:ring-rose-500"
+                                : "border-[#DDD5C8] dark:border-[#33302A] focus:border-[#C2410C] focus:ring-1 focus:ring-[#C2410C]"
+                            }`}
+                          />
                           <button
                             type="button"
-                            onClick={() => {
-                              setMode("login");
-                              setErrors({});
-                            }}
-                            className="relative group font-semibold text-amber-300 hover:text-amber-200 transition-colors cursor-pointer ml-1"
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-[#8C877E] hover:text-[#1E1E1C] dark:hover:text-[#FAF7F2] cursor-pointer"
+                            aria-label={showConfirmPassword ? "Hide password" : "Show password"}
                           >
-                            <span>Sign In</span>
-                            <span className="absolute left-0 bottom-0 w-0 h-px bg-amber-300 transition-all duration-300 group-hover:w-full" />
+                            {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                           </button>
                         </div>
-                      </motion.form>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-              </div>
-            )}
+                        {errors.signupConfirmPassword && (
+                          <p className="text-xs text-rose-500 dark:text-rose-400 flex items-center gap-1 mt-1">
+                            <AlertCircle className="w-3.5 h-3.5 shrink-0" />
+                            <span>{errors.signupConfirmPassword}</span>
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Terms and Conditions Checkbox */}
+                      <div>
+                        <label className="flex items-start gap-2.5 text-xs text-[#555049] dark:text-[#A8A297] cursor-pointer select-none">
+                          <input
+                            type="checkbox"
+                            checked={agreeTerms}
+                            onChange={(e) => {
+                              setAgreeTerms(e.target.checked);
+                              if (errors.agreeTerms) setErrors((prev) => ({ ...prev, agreeTerms: "" }));
+                            }}
+                            className="w-4 h-4 mt-0.5 rounded border-[#DDD5C8] text-[#C2410C] focus:ring-[#C2410C] cursor-pointer shrink-0"
+                          />
+                          <span className="leading-relaxed">
+                            I agree to the{" "}
+                            <Link href="/terms" className="text-[#C2410C] hover:underline">
+                              Terms of Service
+                            </Link>{" "}
+                            and{" "}
+                            <Link href="/privacy" className="text-[#C2410C] hover:underline">
+                              Privacy Policy
+                            </Link>
+                            .
+                          </span>
+                        </label>
+                        {errors.agreeTerms && (
+                          <p className="text-xs text-rose-500 dark:text-rose-400 mt-1 pl-6">
+                            {errors.agreeTerms}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Signup Submit Button */}
+                      <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="w-full py-3 px-6 rounded-lg font-semibold text-xs tracking-wider uppercase text-white bg-[#1E1E1C] hover:bg-[#33302A] dark:bg-[#FAF7F2] dark:hover:bg-white dark:text-[#141311] transition-all shadow-xs flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 mt-2"
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            <span>Creating Account...</span>
+                          </>
+                        ) : (
+                          <>
+                            <span>Create Account</span>
+                            <ArrowRight className="w-3.5 h-3.5" />
+                          </>
+                        )}
+                      </button>
+
+                      {/* Footer toggle */}
+                      <div className="text-center text-xs text-[#6E6A62] dark:text-[#A8A297] pt-2">
+                        Already have an account?{" "}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setMode("login");
+                            setErrors({});
+                          }}
+                          className="font-semibold text-[#C2410C] hover:underline cursor-pointer ml-1"
+                        >
+                          Sign In
+                        </button>
+                      </div>
+                    </form>
+                  )}
+                </div>
+              )}
+            </div>
           </div>
         </div>
-      </motion.div>
+      </main>
 
-      {/* 4. Forgot Password Modal (Glassmorphism) */}
+      {/* 3. Footer Line */}
+      <footer className="max-w-5xl w-full mx-auto text-center pt-6 text-[11px] text-[#8C877E] dark:text-[#7A756D]">
+        © 2026 ARTSINLY · Authentic Handcrafted Art Direct From Master Artisans
+      </footer>
+
+      {/* 4. Forgot Password Modal */}
       <AnimatePresence>
         {showForgotModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -918,25 +830,24 @@ function LoginPageContent() {
                 setShowForgotModal(false);
                 setForgotSent(false);
               }}
-              className="absolute inset-0 bg-black/70 backdrop-blur-md"
+              className="absolute inset-0 bg-black/60 backdrop-blur-xs"
             />
 
-            {/* Modal Card */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: 16 }}
+              initial={{ opacity: 0, scale: 0.95, y: 12 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: 16 }}
-              className="relative z-10 w-full max-w-md p-6 sm:p-8 rounded-3xl border border-white/20 bg-slate-900/90 backdrop-blur-2xl shadow-2xl text-white space-y-4"
+              exit={{ opacity: 0, scale: 0.95, y: 12 }}
+              className="relative z-10 w-full max-w-md p-6 sm:p-7 rounded-2xl border border-[#DDD5C8] dark:border-[#2D2A25] bg-white dark:bg-[#1E1C19] shadow-xl text-[#1E1E1C] dark:text-[#FAF7F2] space-y-4"
             >
-              <div className="flex items-center justify-between pb-2 border-b border-white/10">
-                <h3 className="font-serif text-xl font-normal">Reset Password</h3>
+              <div className="flex items-center justify-between pb-3 border-b border-[#EAE5DD] dark:border-[#2D2A25]">
+                <h3 className="font-serif text-lg font-normal">Reset Your Password</h3>
                 <button
                   type="button"
                   onClick={() => {
                     setShowForgotModal(false);
                     setForgotSent(false);
                   }}
-                  className="text-white/60 hover:text-white text-sm cursor-pointer p-1"
+                  className="text-[#8C877E] hover:text-[#1E1E1C] dark:hover:text-[#FAF7F2] text-sm cursor-pointer p-1"
                 >
                   ✕
                 </button>
@@ -944,12 +855,12 @@ function LoginPageContent() {
 
               {forgotSent ? (
                 <div className="py-4 text-center space-y-3">
-                  <div className="w-12 h-12 rounded-full border border-emerald-400/30 bg-emerald-500/10 flex items-center justify-center mx-auto text-emerald-400">
+                  <div className="w-12 h-12 rounded-full border border-emerald-300 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 flex items-center justify-center mx-auto">
                     <CheckCircle2 className="w-6 h-6" />
                   </div>
-                  <h4 className="text-sm font-semibold">Verification Link Dispatched</h4>
-                  <p className="text-xs text-white/70">
-                    We have dispatched password recovery instructions to <span className="text-amber-300 font-medium">{forgotEmail}</span>.
+                  <h4 className="text-sm font-semibold">Instructions Dispatched</h4>
+                  <p className="text-xs text-[#6E6A62] dark:text-[#A8A297] leading-relaxed">
+                    We have dispatched password recovery instructions to <span className="font-semibold text-[#1E1E1C] dark:text-[#FAF7F2]">{forgotEmail}</span>.
                   </p>
                   <button
                     type="button"
@@ -957,36 +868,46 @@ function LoginPageContent() {
                       setShowForgotModal(false);
                       setForgotSent(false);
                     }}
-                    className="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold text-xs mt-3 cursor-pointer"
+                    className="w-full py-2.5 rounded-lg bg-[#1E1E1C] hover:bg-[#33302A] dark:bg-[#FAF7F2] dark:hover:bg-white text-white dark:text-[#141311] font-semibold text-xs mt-3 cursor-pointer"
                   >
-                    Return to Login
+                    Return to Sign In
                   </button>
                 </div>
               ) : (
                 <form onSubmit={handleForgotSubmit} className="space-y-4">
-                  <p className="text-xs text-white/70">
-                    Enter your collector email and our secure registry will send you a reset link.
+                  <p className="text-xs text-[#6E6A62] dark:text-[#A8A297] leading-relaxed">
+                    Enter the email address registered with your collector or artisan account and we will dispatch a secure recovery link.
                   </p>
-                  <FloatingInput
-                    id="forgot-email"
-                    type="email"
-                    label="Account Email"
-                    value={forgotEmail}
-                    onChange={(e) => setForgotEmail(e.target.value)}
-                    icon={Mail}
-                    required
-                  />
+                  <div>
+                    <label htmlFor="forgot-email" className="block text-xs font-semibold text-[#3C3A35] dark:text-[#D6D1C7] mb-1.5">
+                      Account Email
+                    </label>
+                    <div className="relative">
+                      <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#8C877E]">
+                        <Mail className="w-4 h-4" />
+                      </div>
+                      <input
+                        id="forgot-email"
+                        type="email"
+                        value={forgotEmail}
+                        onChange={(e) => setForgotEmail(e.target.value)}
+                        placeholder="name@example.com"
+                        required
+                        className="w-full pl-10 pr-4 py-2.5 bg-[#FAF8F5] dark:bg-[#161513] border border-[#DDD5C8] dark:border-[#33302A] rounded-lg text-xs sm:text-sm text-[#1E1E1C] dark:text-[#FAF7F2] placeholder-[#8C877E] focus:outline-none focus:border-[#C2410C] focus:ring-1 focus:ring-[#C2410C]"
+                      />
+                    </div>
+                  </div>
                   <div className="flex items-center justify-end gap-2 pt-2">
                     <button
                       type="button"
                       onClick={() => setShowForgotModal(false)}
-                      className="px-4 py-2 rounded-xl text-xs text-white/70 hover:text-white cursor-pointer"
+                      className="px-4 py-2 rounded-lg text-xs font-medium text-[#6E6A62] dark:text-[#A8A297] hover:text-[#1E1E1C] dark:hover:text-[#FAF7F2] cursor-pointer"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
-                      className="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-semibold text-xs cursor-pointer"
+                      className="px-5 py-2.5 rounded-lg bg-[#C2410C] hover:bg-[#9A3412] text-white font-semibold text-xs cursor-pointer shadow-xs transition-colors"
                     >
                       Send Instructions
                     </button>
@@ -1005,8 +926,8 @@ export default function LoginPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen w-full flex items-center justify-center bg-[#0A0D14] text-white">
-          <Loader2 className="w-8 h-8 animate-spin text-amber-400" />
+        <div className="min-h-screen w-full flex items-center justify-center bg-[#F8F5EF] dark:bg-[#141311] text-[#1E1E1C] dark:text-[#FAF7F2]">
+          <Loader2 className="w-8 h-8 animate-spin text-[#C2410C]" />
         </div>
       }
     >

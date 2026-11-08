@@ -122,7 +122,7 @@ export function Footer() {
                 id="newsletter-email"
                 type="email"
                 required
-                placeholder="collector@domain.com"
+                placeholder="Enter your email"
                 className="w-full px-3 py-1.5 text-xs bg-white border border-[#DDD7CE] rounded text-[#1E1E1C] placeholder-[#9E988E] focus:outline-none focus:border-[#89714F] focus:ring-1 focus:ring-[#89714F]"
               />
               <button
@@ -166,10 +166,10 @@ export function Footer() {
         {/* Bottom Bar: Copyright & Theme Toggle */}
         <div className="mt-6 pt-4 border-t border-[#E5E0D6] dark:border-[#24211D] flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[#858076] dark:text-[#A39D91]">
           <div>
-            © 2026 ARTSINLY CRAFT PAVILION PVT. LTD. • Registered Fair Trade Platform &amp; Sovereign Craft Ledger
+            © 2026 ARTSINLY • Authentic Indian Crafts &amp; Fair Trade Platform
           </div>
           <div className="flex items-center gap-2">
-            <span>Ambient Lighting:</span>
+            <span>Theme:</span>
             <ThemeToggle variant="pill" />
           </div>
         </div>
