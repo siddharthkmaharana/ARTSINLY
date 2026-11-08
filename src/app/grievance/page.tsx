@@ -171,7 +171,7 @@ export default function GrievancePage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="fullName" className="block text-xs font-medium text-[#403E39] dark:text-[#D5CFC5] mb-1">
-                    Your Full Name *
+                    Name *
                   </label>
                   <input
                     id="fullName"
@@ -179,7 +179,7 @@ export default function GrievancePage() {
                     required
                     value={formData.fullName}
                     onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                    placeholder="e.g. Radhika Sen"
+                    placeholder="Name"
                     className="w-full px-3 py-2 bg-[#FAF8F5] dark:bg-[#1E1C18] border border-[#DDD7CE] dark:border-[#38342E] rounded-md text-xs focus:ring-1 focus:ring-[#C2410C] focus:outline-none"
                   />
                 </div>
@@ -193,7 +193,7 @@ export default function GrievancePage() {
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="e.g. collector@domain.com"
+                    placeholder="Email address"
                     className="w-full px-3 py-2 bg-[#FAF8F5] dark:bg-[#1E1C18] border border-[#DDD7CE] dark:border-[#38342E] rounded-md text-xs focus:ring-1 focus:ring-[#C2410C] focus:outline-none"
                   />
                 </div>
@@ -209,7 +209,7 @@ export default function GrievancePage() {
                     type="tel"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    placeholder="+91 98765 43210"
+                    placeholder="Phone number"
                     className="w-full px-3 py-2 bg-[#FAF8F5] dark:bg-[#1E1C18] border border-[#DDD7CE] dark:border-[#38342E] rounded-md text-xs focus:ring-1 focus:ring-[#C2410C] focus:outline-none"
                   />
                 </div>
@@ -222,7 +222,7 @@ export default function GrievancePage() {
                     type="text"
                     value={formData.orderNumber}
                     onChange={(e) => setFormData({ ...formData, orderNumber: e.target.value })}
-                    placeholder="e.g. ORD-1729000-XYZ"
+                    placeholder="Order number (if applicable)"
                     className="w-full px-3 py-2 bg-[#FAF8F5] dark:bg-[#1E1C18] border border-[#DDD7CE] dark:border-[#38342E] rounded-md text-xs focus:ring-1 focus:ring-[#C2410C] focus:outline-none"
                   />
                 </div>

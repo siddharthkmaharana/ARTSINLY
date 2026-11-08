@@ -36,7 +36,7 @@ export function Header() {
       <div className="bg-[#FAF8F5] border-b border-[#EFEBE4] text-[11px] text-[#7A756D] py-1 px-4 sm:px-8 flex items-center justify-between">
         <div className="flex items-center gap-1.5 font-normal tracking-wide">
           <span className="w-1.5 h-1.5 rounded-full bg-[#C2410C]" />
-          <span>ARTSINLY • Modern Editorial Pavilion for Indian Generational Masters</span>
+          <span>ARTSINLY • Authentic Handmade Indian Crafts</span>
         </div>
 
         <nav aria-label="Role Mode Navigation" className="hidden md:flex items-center gap-4">
@@ -50,7 +50,7 @@ export function Header() {
                 : "text-[#6E6A62] hover:text-[#1E1E1C]"
             }`}
           >
-            Collector (Buyer)
+            Buyer
           </Link>
           <Link
             href="/seller/dashboard"
@@ -72,7 +72,7 @@ export function Header() {
                 : "text-[#6E6A62] hover:text-[#1E1E1C]"
             }`}
           >
-            Admin / GI Ledger
+            Admin Portal
           </Link>
           <span className="h-3 w-px bg-[#E2DDD5] dark:bg-[#38342E]" />
           <ThemeToggle variant="pill" />
