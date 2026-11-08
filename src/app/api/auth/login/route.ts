@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { verifyPassword, createSessionToken, hashPassword } from "@/lib/auth";
+import { verifyPassword, createSessionToken } from "@/lib/auth";
 import { checkRateLimit } from "@/lib/rate-limit";
+import {
+  getFallbackUserByEmail,
+  withDbTimeout,
+} from "@/lib/auth-store";
 
 export async function POST(req: NextRequest) {
   try {
@@ -38,96 +42,25 @@ export async function POST(req: NextRequest) {
 
     const normalizedEmail = email.toLowerCase().trim();
 
-    // Find user in PostgreSQL, with development demo fallback if DB server is offline
-    const DEMO_USERS: Record<string, any> = {
-      "admin@artsinly.com": {
-        id: "usr_admin_001",
-        email: "admin@artsinly.com",
-        name: "Master Curator & Administrator",
-        role: "ADMIN",
-        passwordHash: hashPassword("admin123"),
-      },
-      "seller@artsinly.com": {
-        id: "usr_seller_001",
-        email: "seller@artsinly.com",
-        name: "Devendra Kumbhar",
-        role: "SELLER",
-        passwordHash: hashPassword("seller123"),
-        sellerProfile: {
-          id: "seller_devendra_01",
-          shopName: "Devendra Terracotta Works",
-          slug: "devendra-terracotta-works",
-          artisanName: "Devendra Kumbhar",
-          craftTradition: "Terracotta Pottery",
-          state: "Gujarat",
-          locality: "Kutch",
-          giCode: "GI-IN-GJ-449",
-          isVerified: true,
-        },
-      },
-      "devendra.prajapati@artsinly.com": {
-        id: "usr_seller_002",
-        email: "devendra.prajapati@artsinly.com",
-        name: "Devendra Prajapati",
-        role: "SELLER",
-        passwordHash: hashPassword("password123"),
-        sellerProfile: {
-          id: "cmvdxyd9c000lqwxwurax8s29",
-          shopName: "Devendra Terracotta Works",
-          slug: "devendra-terracotta-works",
-          artisanName: "Devendra Prajapati",
-          craftTradition: "Terracotta Pottery",
-          state: "Gujarat",
-          locality: "Kutch",
-          giCode: "GI-IN-GJ-449",
-          isVerified: true,
-        },
-      },
-      "artisan@artsinly.com": {
-        id: "usr_seller_001",
-        email: "artisan@artsinly.com",
-        name: "Devendra Kumbhar",
-        role: "SELLER",
-        passwordHash: hashPassword("artisan123"),
-        sellerProfile: {
-          id: "seller_devendra_01",
-          shopName: "Devendra Terracotta Works",
-          slug: "devendra-terracotta-works",
-          artisanName: "Devendra Kumbhar",
-          craftTradition: "Terracotta Pottery",
-          state: "Gujarat",
-          locality: "Kutch",
-          giCode: "GI-IN-GJ-449",
-          isVerified: true,
-        },
-      },
-      "buyer@artsinly.com": {
-        id: "usr_buyer_001",
-        email: "buyer@artsinly.com",
-        name: "Aarav Sharma",
-        role: "BUYER",
-        passwordHash: hashPassword("buyer123"),
-      },
-    };
-
     let user: any = null;
-    if (DEMO_USERS[normalizedEmail]) {
-      user = DEMO_USERS[normalizedEmail];
-    } else {
-      try {
-        const queryPromise = prisma.user.findUnique({
-          where: { email: normalizedEmail },
-          include: {
-            sellerProfile: true,
-          },
-        });
-        const timeoutPromise = new Promise((_, reject) =>
-          setTimeout(() => reject(new Error("DB timeout")), 400)
-        );
-        user = await Promise.race([queryPromise, timeoutPromise]);
-      } catch (dbErr) {
-        // Fast offline fallback
-      }
+
+    // 1. Try PostgreSQL via Prisma first if database is reachable
+    try {
+      const queryPromise = prisma.user.findUnique({
+        where: { email: normalizedEmail },
+        include: {
+          sellerProfile: true,
+        },
+      });
+      user = await withDbTimeout(queryPromise, 500);
+    } catch (dbErr) {
+      // Database offline or slow, fall back to resilient local store
+    }
+
+    // 2. If not found in DB or DB is offline, check the resilient local fallback store
+    // (This includes built-in demo accounts and all registered accounts during dev)
+    if (!user) {
+      user = getFallbackUserByEmail(normalizedEmail);
     }
 
     if (!user || !user.passwordHash) {
@@ -159,8 +92,8 @@ export async function POST(req: NextRequest) {
         email: user.email,
         name: user.name,
         role: user.role,
-        avatar: user.avatar,
-        sellerProfile: user.sellerProfile,
+        avatar: user.avatar || null,
+        sellerProfile: user.sellerProfile || null,
       },
       token,
     });
@@ -177,7 +110,7 @@ export async function POST(req: NextRequest) {
   } catch (error: any) {
     console.error("Login error:", error);
     return NextResponse.json(
-      { error: error.message || "Failed to log in" },
+      { error: "Unable to log in. Please check your credentials and try again." },
       { status: 500 }
     );
   }

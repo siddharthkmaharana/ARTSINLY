@@ -29,14 +29,14 @@ export default function CheckoutPage() {
   const { user } = useAuth();
 
   const [formData, setFormData] = useState({
-    fullName: "Aarav Sharma",
-    email: "aarav.sharma@example.com",
-    phone: "+91 98765 43210",
-    addressLine1: "42, Shanti Niketan, Civil Lines",
-    addressLine2: "Near Heritage Clock Tower",
-    city: "Jaipur",
-    state: "Rajasthan",
-    postalCode: "302006",
+    fullName: "",
+    email: "",
+    phone: "",
+    addressLine1: "",
+    addressLine2: "",
+    city: "",
+    state: "",
+    postalCode: "",
   });
 
   // Pre-fill user data if logged in
@@ -208,7 +208,7 @@ export default function CheckoutPage() {
 
           <div>
             <span className="text-xs font-semibold text-[#89714F] uppercase tracking-widest block mb-1">
-              Flowchart Step 6: Payment Result Verified & Order Confirmed
+              Order Confirmed
             </span>
             <h1 className="font-serif text-3xl font-medium text-[#20201D]">
               Thank You for Supporting Master Craftsmen!
@@ -237,7 +237,7 @@ export default function CheckoutPage() {
             <div className="flex justify-between items-center">
               <span className="text-[#6B685F]">Stock Reservation:</span>
               <span className="text-[#52644B] font-medium">
-                Atomically Decremented & Reserved in DB
+                Items Reserved & Confirmed
               </span>
             </div>
             <div className="flex justify-between items-center border-t border-[#E8E0D2] pt-2">
@@ -251,7 +251,7 @@ export default function CheckoutPage() {
           {/* Multi-Vendor Packages Notification Status */}
           <div className="space-y-3 text-left">
             <span className="text-xs font-semibold text-[#20201D] uppercase tracking-wider block">
-              Flowchart Step 7: Relevant Sellers Notified for Dispatch
+              Artisan Dispatch Status
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               {artisanPackages.map((pkg, idx) => (
@@ -312,7 +312,7 @@ export default function CheckoutPage() {
 
           <div>
             <span className="text-xs font-semibold text-red-700 uppercase tracking-widest block mb-1">
-              Flowchart Step 6 Branch: Verified Payment Failure
+              Payment Failed
             </span>
             <h1 className="font-serif text-3xl font-medium text-[#20201D]">
               Payment Authorization Unsuccessful
@@ -320,14 +320,14 @@ export default function CheckoutPage() {
           </div>
 
           <div className="p-4 bg-red-50 rounded-xl border border-red-100 text-left text-xs text-red-800 space-y-2">
-            <p className="font-semibold">Production Payment Rule Enforcement:</p>
+            <p className="font-semibold">Payment Details:</p>
             <p className="leading-relaxed">
               {errorMessage}
             </p>
             <ul className="list-disc pl-4 space-y-1 text-[11px] text-red-700">
-              <li>Order state remains: <strong>PENDING (UNPAID)</strong></li>
-              <li>Workshop inventory: <strong>0 units deducted / preserved</strong></li>
-              <li>Artisan alerts: <strong>Suppressed / Not dispatched</strong></li>
+              <li>Your order has not been placed.</li>
+              <li>No amount has been deducted from your account.</li>
+              <li>You can review your details and try again.</li>
             </ul>
           </div>
 
@@ -411,11 +411,12 @@ export default function CheckoutPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
                 <div>
-                  <label className="block text-[#6B685F] mb-1 font-medium">Full Name</label>
+                  <label className="block text-[#6B685F] mb-1 font-medium">Name</label>
                   <input
                     type="text"
                     name="fullName"
                     required
+                    placeholder="Name"
                     value={formData.fullName}
                     onChange={handleInputChange}
                     className="w-full px-3 py-2 bg-[#F8F5EF] border border-[#DCD0BD] rounded text-[#20201D] focus:outline-none focus:border-[#89714F]"
@@ -428,6 +429,7 @@ export default function CheckoutPage() {
                     type="tel"
                     name="phone"
                     required
+                    placeholder="Name"
                     value={formData.phone}
                     onChange={handleInputChange}
                     className="w-full px-3 py-2 bg-[#F8F5EF] border border-[#DCD0BD] rounded text-[#20201D] focus:outline-none focus:border-[#89714F]"
@@ -440,6 +442,7 @@ export default function CheckoutPage() {
                     type="email"
                     name="email"
                     required
+                    placeholder="Name"
                     value={formData.email}
                     onChange={handleInputChange}
                     className="w-full px-3 py-2 bg-[#F8F5EF] border border-[#DCD0BD] rounded text-[#20201D] focus:outline-none focus:border-[#89714F]"
@@ -452,6 +455,7 @@ export default function CheckoutPage() {
                     type="text"
                     name="addressLine1"
                     required
+                    placeholder="Name"
                     value={formData.addressLine1}
                     onChange={handleInputChange}
                     className="w-full px-3 py-2 bg-[#F8F5EF] border border-[#DCD0BD] rounded text-[#20201D] focus:outline-none focus:border-[#89714F]"
@@ -464,6 +468,7 @@ export default function CheckoutPage() {
                     type="text"
                     name="city"
                     required
+                    placeholder="Name"
                     value={formData.city}
                     onChange={handleInputChange}
                     className="w-full px-3 py-2 bg-[#F8F5EF] border border-[#DCD0BD] rounded text-[#20201D] focus:outline-none focus:border-[#89714F]"
@@ -476,6 +481,7 @@ export default function CheckoutPage() {
                     type="text"
                     name="state"
                     required
+                    placeholder="Name"
                     value={formData.state}
                     onChange={handleInputChange}
                     className="w-full px-3 py-2 bg-[#F8F5EF] border border-[#DCD0BD] rounded text-[#20201D] focus:outline-none focus:border-[#89714F]"
@@ -488,6 +494,7 @@ export default function CheckoutPage() {
                     type="text"
                     name="postalCode"
                     required
+                    placeholder="Name"
                     value={formData.postalCode}
                     onChange={handleInputChange}
                     className="w-full px-3 py-2 bg-[#F8F5EF] border border-[#DCD0BD] rounded text-[#20201D] focus:outline-none focus:border-[#89714F]"
@@ -496,7 +503,7 @@ export default function CheckoutPage() {
               </div>
             </div>
 
-            {/* Payment Method & Flowchart Simulator Section (Flowchart Step 5) */}
+            {/* Payment Method & Gateway Authorization */}
             <div className="bg-white border border-[#E8E0D2] rounded-xl p-6 sm:p-8 space-y-6 shadow-xs">
               <div className="flex items-center gap-2 pb-3 border-b border-[#F3ECE1]">
                 <ShieldCheck className="w-5 h-5 text-[#89714F]" />
