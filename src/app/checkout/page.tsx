@@ -48,6 +48,40 @@ export default function CheckoutPage() {
         email: user.email || prev.email,
         phone: user.phone || prev.phone,
       }));
+      const loadUserAddress = async () => {
+        try {
+          let addrs: any[] = [];
+          const res = await fetch("/api/user/addresses");
+          if (res.ok) {
+            const data = await res.json();
+            if (data.addresses && Array.isArray(data.addresses)) {
+              addrs = data.addresses;
+            }
+          }
+          if (addrs.length === 0 && typeof window !== "undefined") {
+            const cached = localStorage.getItem(`artsinly_addresses_${user.id}`);
+            if (cached) addrs = JSON.parse(cached);
+          }
+          if (addrs.length > 0) {
+            const def = addrs.find((a: any) => a.isDefault) || addrs[0];
+            if (def) {
+              setFormData((prev) => ({
+                ...prev,
+                fullName: def.fullName || user.name || prev.fullName,
+                phone: def.phone || user.phone || prev.phone,
+                addressLine1: def.addressLine1 || prev.addressLine1,
+                addressLine2: def.addressLine2 || prev.addressLine2,
+                city: def.city || prev.city,
+                state: def.state || prev.state,
+                postalCode: def.postalCode || prev.postalCode,
+              }));
+            }
+          }
+        } catch {
+          // Non-fatal fallback
+        }
+      };
+      loadUserAddress();
     }
   }, [user]);
 

@@ -257,7 +257,7 @@ export const PRODUCTS: Product[] = [
       featuredQuote: "Every brushstroke on the sacred Patta honors the divine presence of Lord Jagannath, Balabhadra, and Subhadra.",
       productCount: 4,
     },
-    initialFavorited: true,
+    initialFavorited: false,
     images: [
       {
         id: "img-jagannath-1",

@@ -19,6 +19,21 @@ export interface FallbackSellerProfile {
   avatarUrl?: string | null;
 }
 
+export interface FallbackAddress {
+  id: string;
+  userId: string;
+  fullName: string;
+  addressLine1: string;
+  addressLine2?: string | null;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+  phone: string;
+  isDefault: boolean;
+  createdAt: string;
+}
+
 export interface FallbackUser {
   id: string;
   email: string;
@@ -28,6 +43,7 @@ export interface FallbackUser {
   phone?: string | null;
   avatar?: string | null;
   sellerProfile?: FallbackSellerProfile | null;
+  addresses?: FallbackAddress[];
   createdAt?: string;
   updatedAt?: string;
 }
@@ -242,4 +258,144 @@ export async function withDbTimeout<T>(promise: Promise<T>, timeoutMs = 500): Pr
     clearTimeout(timer!);
   }
 }
+
+/**
+ * Retrieve user addresses from the resilient fallback store
+ */
+export function getUserAddresses(userId: string): FallbackAddress[] {
+  const user = getFallbackUserById(userId);
+  if (!user || !user.addresses) return [];
+  return user.addresses;
+}
+
+/**
+ * Add a new user delivery address in the resilient fallback store
+ */
+export function addUserAddress(
+  userId: string,
+  data: Omit<FallbackAddress, "id" | "userId" | "createdAt">
+): FallbackAddress {
+  const store = getUserStore();
+  let targetUserKey: string | null = null;
+  for (const key of Object.keys(store)) {
+    if (store[key].id === userId) {
+      targetUserKey = key;
+      break;
+    }
+  }
+
+  const addressId = `addr_${generateUUID()}`;
+  const now = new Date().toISOString();
+
+  if (!targetUserKey) {
+    return {
+      id: addressId,
+      userId,
+      ...data,
+      country: data.country || "India",
+      addressLine2: data.addressLine2 || null,
+      createdAt: now,
+    };
+  }
+
+  const user = store[targetUserKey];
+  if (!user.addresses) {
+    user.addresses = [];
+  }
+
+  const isFirst = user.addresses.length === 0;
+  const isDefault = data.isDefault || isFirst;
+
+  if (isDefault) {
+    user.addresses.forEach((a) => {
+      a.isDefault = false;
+    });
+  }
+
+  const newAddress: FallbackAddress = {
+    id: addressId,
+    userId,
+    fullName: data.fullName,
+    addressLine1: data.addressLine1,
+    addressLine2: data.addressLine2 || null,
+    city: data.city,
+    state: data.state,
+    postalCode: data.postalCode,
+    country: data.country || "India",
+    phone: data.phone,
+    isDefault,
+    createdAt: now,
+  };
+
+  user.addresses.unshift(newAddress);
+  persistUsers(store);
+  return newAddress;
+}
+
+/**
+ * Update an existing delivery address in the resilient fallback store
+ */
+export function updateUserAddress(
+  userId: string,
+  addressId: string,
+  data: Partial<FallbackAddress>
+): FallbackAddress | null {
+  const store = getUserStore();
+  let targetUserKey: string | null = null;
+  for (const key of Object.keys(store)) {
+    if (store[key].id === userId) {
+      targetUserKey = key;
+      break;
+    }
+  }
+  if (!targetUserKey) return null;
+  const user = store[targetUserKey];
+  if (!user.addresses) return null;
+
+  const addrIndex = user.addresses.findIndex((a) => a.id === addressId);
+  if (addrIndex === -1) return null;
+
+  if (data.isDefault) {
+    user.addresses.forEach((a) => {
+      a.isDefault = false;
+    });
+  }
+
+  user.addresses[addrIndex] = {
+    ...user.addresses[addrIndex],
+    ...data,
+  };
+
+  persistUsers(store);
+  return user.addresses[addrIndex];
+}
+
+/**
+ * Delete a delivery address in the resilient fallback store
+ */
+export function deleteUserAddress(userId: string, addressId: string): boolean {
+  const store = getUserStore();
+  let targetUserKey: string | null = null;
+  for (const key of Object.keys(store)) {
+    if (store[key].id === userId) {
+      targetUserKey = key;
+      break;
+    }
+  }
+  if (!targetUserKey) return false;
+  const user = store[targetUserKey];
+  if (!user.addresses) return false;
+
+  const initialLen = user.addresses.length;
+  user.addresses = user.addresses.filter((a) => a.id !== addressId);
+  if (user.addresses.length < initialLen) {
+    if (user.addresses.length > 0 && !user.addresses.some((a) => a.isDefault)) {
+      user.addresses[0].isDefault = true;
+    }
+    persistUsers(store);
+    return true;
+  }
+  return false;
+}
+
 

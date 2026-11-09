@@ -97,8 +97,7 @@ function getDisplayRegionTag(product: Product): string {
 export function ProductCard({ product, variant = "default" }: ProductCardProps) {
   const { addToCart, toggleWishlist, isInWishlist } = useCart();
   const [isAdded, setIsAdded] = useState(false);
-  const [localFavorited, setLocalFavorited] = useState(product.initialFavorited ?? false);
-  const inWishlist = isInWishlist(product.id) || localFavorited;
+  const inWishlist = isInWishlist(product.id);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -111,7 +110,6 @@ export function ProductCard({ product, variant = "default" }: ProductCardProps) 
   const handleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setLocalFavorited(!inWishlist);
     toggleWishlist(product.id);
   };
 
